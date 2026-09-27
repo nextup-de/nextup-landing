@@ -1,0 +1,63 @@
+# CI for the public NextUp site. Both jobs must pass before a PR can merge.
+#   guard — no secrets / forbidden files (this repo is public)
+#   site  — npm ci, lint, typecheck, unit tests, production build
+#
+# Kevin owns this file.
+
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    name: guard · secrets & forbidden files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Block forbidden files
+        shell: bash
+        run: |
+          fail=0
+          FORBIDDEN='(^|/)\.env($|\.)|\.pem$|\.key$|\.p12$|\.pfx$|(^|/)id_rsa|(^|/)id_ed25519|credentials.*\.json$|service-?account.*\.json$|(^|/)node_modules/|\.sqlite3?$|\.db$'
+          while IFS= read -r f; do
+            [ "$f" = ".env.example" ] && continue
+            if echo "$f" | grep -Eiq "$FORBIDDEN"; then
+              echo "::error file=$f::Forbidden file: $f (this repo is public)"
+              fail=1
+            fi
+          done < <(git ls-files)
+          exit $fail
+
+      - name: Secret scan (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  site:
+    name: site · lint, typecheck, test, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build

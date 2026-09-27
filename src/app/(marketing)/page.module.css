@@ -1,0 +1,70 @@
+/* Landing page. Two measures: 640px for reading, 1200px for the screens. Lots of air between sections. */
+
+.hero {
+  max-width: 760px; margin: 0 auto;
+  padding: clamp(72px, 11vw, 144px) var(--nh-page-x) 0;
+  display: grid; gap: 24px; justify-items: center; text-align: center;
+}
+.hero h1 { font-size: clamp(42px, 7vw, 84px); font-weight: 700; letter-spacing: -0.035em; line-height: 1.02; }
+.lead { font-size: clamp(17px, 1.7vw, 21px); color: var(--nh-ink-2); max-width: 44ch; line-height: 1.5; }
+.cta { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 4px; }
+
+/* The product: the real overview, one frame, a caption. */
+.product { max-width: 1200px; margin: clamp(56px, 8vw, 96px) auto 0; padding: 0 var(--nh-page-x); display: grid; gap: 18px; }
+.product img, .stepShot img { display: block; width: 100%; height: auto; }
+.product img { border-radius: var(--nh-r-xl); box-shadow: var(--nh-card-shadow), 0 40px 80px -40px rgb(20 20 20 / 0.25); }
+.product figcaption { font-size: 14px; color: var(--nh-mute); max-width: 60ch; margin: 0 auto; text-align: center; line-height: 1.5; display: grid; gap: 6px; justify-items: center; }
+
+/* The clock: the problem in two bars, no box. */
+.clock {
+  max-width: 640px; margin: clamp(80px, 11vw, 144px) auto 0;
+  padding: 0 var(--nh-page-x);
+  display: grid; gap: 4px;
+}
+.clockRow { display: grid; grid-template-columns: 200px 1fr 80px; align-items: center; gap: 20px; padding: 18px 0; border-top: 1px solid var(--nh-line); }
+.clockRow:nth-child(2) { border-bottom: 1px solid var(--nh-line); }
+.clockLabel { font-size: 14px; font-weight: 600; }
+.bar { height: 8px; background: var(--nh-line-soft); border-radius: 999px; overflow: hidden; }
+.barFill { height: 100%; background: var(--nh-ink); border-radius: 999px; }
+.barAccent { background: var(--nh-accent); }
+.clockVal { text-align: right; font-size: 15px; font-weight: 600; }
+.clockNote { font-size: 15px; color: var(--nh-mute); margin-top: 14px; }
+
+/* How it works: three steps. Each is a hairline, a two-column header (title left, body and why right), the real screen full width under it. */
+.how { max-width: 1200px; margin: 0 auto; padding: clamp(96px, 13vw, 176px) var(--nh-page-x) 0; display: grid; gap: clamp(56px, 7vw, 96px); }
+.how h2 { font-size: clamp(30px, 4vw, 48px); letter-spacing: -0.03em; text-align: center; }
+.step { display: grid; gap: clamp(28px, 4vw, 44px); padding-top: clamp(28px, 4vw, 40px); border-top: 1px solid var(--nh-line); }
+.stepText { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 24px clamp(32px, 5vw, 72px); align-items: start; }
+.stepHead { display: grid; gap: 12px; }
+.stepWho { font-family: var(--nh-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--nh-mute); }
+.stepText h3 { font-size: clamp(26px, 3.2vw, 38px); letter-spacing: -0.025em; line-height: 1.1; max-width: 14ch; }
+.stepCopy { display: grid; gap: 18px; max-width: 58ch; }
+.stepCopy p { color: var(--nh-ink-2); font-size: 16.5px; line-height: 1.55; }
+/* The why: the one design reason behind the screen, set apart by a thin blue rule so it reads as the reason, not more copy. */
+.stepWhy { display: grid; gap: 4px; font-size: 14.5px; padding-left: 16px; border-left: 2px solid var(--nh-brand-line); }
+.stepWhy :global(.nh-eyebrow) { color: var(--nh-brand); }
+.stepShot { width: 100%; border-radius: var(--nh-r-xl); overflow: hidden; box-shadow: var(--nh-card-shadow), 0 30px 60px -36px rgb(20 20 20 / 0.22); }
+.stepShot[data-tight="true"] { max-width: 880px; justify-self: center; }
+/* The raise box sits in a lot of empty ground in its screenshot: crop to the box. */
+.stepShot[data-tight="true"] img { aspect-ratio: 16 / 7; object-fit: cover; object-position: center; }
+
+/* Close: one line, one button. */
+.close {
+  max-width: 560px; margin: 0 auto; padding: clamp(96px, 13vw, 176px) var(--nh-page-x) 40px;
+  display: grid; gap: 16px; justify-items: center; text-align: center;
+}
+.close h2 { font-size: clamp(28px, 3.6vw, 44px); letter-spacing: -0.03em; }
+.close p { color: var(--nh-ink-2); font-size: 16px; line-height: 1.55; max-width: 48ch; }
+.close :global(.nh-btn) { margin-top: 8px; }
+
+@media (max-width: 760px) {
+  .stepText { grid-template-columns: 1fr; }
+  .stepText h3 { max-width: none; }
+}
+@media (max-width: 640px) {
+  .product img, .stepShot { border-radius: var(--nh-r-lg); }
+  /* Whole screens are unreadable on a phone: show the left half at a legible size. */
+  .stepShot:not([data-tight="true"]) img, .product img { aspect-ratio: 5 / 4; object-fit: cover; object-position: left top; }
+  .clockRow { grid-template-columns: 1fr 64px; }
+  .clockRow .bar { grid-column: 1 / -1; order: 3; }
+}
