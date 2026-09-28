@@ -30,7 +30,7 @@ export function readCompany(input: string): string {
 export function companyError(slug: string): string | null {
   if (slug === "") return "Enter your company's NextUp name.";
   if (!SLUG.test(slug) || (RESERVED_SLUGS as readonly string[]).includes(slug)) {
-    return "That isn't a company name. It's the first part of your NextUp address, e.g. acme in acme.sellux.ch.";
+    return "That isn't a company name. It's the first part of your NextUp address: yourcompany.sellux.ch";
   }
   return null;
 }
