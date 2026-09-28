@@ -16,7 +16,9 @@ const csp = [
   "connect-src 'self'",
   "object-src 'none'",
   "base-uri 'self'",
-  "form-action 'self'",
+  // /login redirects to the company's own NextUp (src/server/actions/login.ts); without JS that
+  // redirect is part of the form submission, so those addresses must be allowed here.
+  "form-action 'self' https://*.sellux.ch",
   // Nobody may frame the app: a login or a "delete company" button inside someone else's page
   // is how clickjacking works.
   "frame-ancestors 'none'",

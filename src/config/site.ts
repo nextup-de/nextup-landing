@@ -5,10 +5,11 @@ export const SITE = {
   promiseDays: 5, // the "answer within 5 days" promise used by the wait ledger (same as the demo seed)
 } as const;
 
-// The product lives elsewhere: this repo is only the public site. "Log in" sends people to the
-// app's "find your company" page. NEXT_PUBLIC_ because the link is rendered into the page.
-export const APP_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "");
-export const LOGIN_URL = `${APP_URL}/login`;
+// The product lives elsewhere: each company runs its own NextUp at its own address. "Log in"
+// opens this site's /login, which asks for the company and sends people there
+// (src/server/actions/login.ts). COMPANY_URL is read on the server; {slug} is the company.
+export const COMPANY_URL = process.env.COMPANY_URL ?? "https://{slug}.sellux.ch";
+export const LOGIN_URL = "/login";
 
 // Who runs this site. Rendered on /imprint, /privacy, /contact and in the footer - change it here only.
 // Required by § 5 DDG (Impressum) and Art. 13 GDPR (controller). Keep it accurate before the site goes public.
