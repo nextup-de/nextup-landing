@@ -25,14 +25,15 @@ npm run dev                  # http://localhost:3000
 ## The contact form
 
 `/contact` validates in the browser and again on the server (`src/server/actions/pilot.ts`), then
-forwards the request to the app's `POST /api/pilot-requests` with a shared bearer token. The app
-saves it, and it appears in the app's `/admin` → Requests.
+forwards the request to the dev admin's `POST /api/pilot-requests` (`admin.sellux.ch`, repo
+`selluxhenner/nextup-admin`) with a bearer token. Admin saves it, and it appears on its `/requests`
+page. No e-mail is sent.
 
 | Env var | Where | What |
 |---|---|---|
 | `COMPANY_URL` | server only, optional | Where `/login` sends people: `https://{slug}.sellux.ch` by default |
-| `PILOT_INTAKE_URL` | server only | The app's intake endpoint |
-| `PILOT_INTAKE_TOKEN` | server only, **secret** | Must equal `PILOT_INTAKE_TOKEN` in the app |
+| `PILOT_INTAKE_URL` | server only | Admin's intake endpoint, `https://admin.sellux.ch/api/pilot-requests` |
+| `PILOT_INTAKE_TOKEN` | server only, **secret** | Its sha256 is `PILOT_INTAKE_TOKEN_SHA256` in admin |
 
 Without the two intake variables the form falls back to a pre-filled `mailto:`.
 
@@ -59,4 +60,4 @@ over too.
 
 | Setting | Where | What |
 |---|---|---|
-| `PILOT_INTAKE_URL`, `PILOT_INTAKE_TOKEN` | `~/nextup/landing/.env` on the box | The contact form forwarding. Unset for now: the form opens a pre-filled e-mail until `admin.sellux.ch` takes pilot requests |
+| `PILOT_INTAKE_URL`, `PILOT_INTAKE_TOKEN` | `~/nextup/landing/.env` on the box | The contact form forwarding to `admin.sellux.ch` ([deploy/README.md](deploy/README.md#contact-form--admin)). Unset = the form opens a pre-filled e-mail |

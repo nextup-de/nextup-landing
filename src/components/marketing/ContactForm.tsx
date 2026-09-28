@@ -1,7 +1,7 @@
 "use client";
 // Pilot request form. Validation runs here first, with our own messages under each field, and
 // again in the server action (src/server/actions/pilot.ts), which forwards a real request to the
-// app, where it is saved as a PilotRequest row. With no app configured it falls back to a
+// dev admin (admin.sellux.ch /requests). With no intake configured it falls back to a
 // pre-filled mailto: draft. The privacy policy describes both - keep them in sync.
 import { useActionState, useEffect, useRef, useState } from "react";
 import Link from "next/link";

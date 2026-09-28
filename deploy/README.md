@@ -38,6 +38,35 @@ scp deploy/nginx-sellux.ch.conf hetzner:/tmp/
 ssh -t hetzner 'sudo cp /tmp/nginx-sellux.ch.conf /etc/nginx/sites-available/nextup-landing && sudo ln -sf /etc/nginx/sites-available/nextup-landing /etc/nginx/sites-enabled/ && sudo nginx -t && sudo systemctl reload nginx && sudo certbot --nginx -d sellux.ch -d www.sellux.ch'
 ```
 
+## Contact form → admin
+
+The `/contact` form forwards each pilot request to `https://admin.sellux.ch/api/pilot-requests`,
+where it lands on admin's `/requests` page (selluxhenner/nextup-admin). One token: in full here,
+as a sha256 (`PILOT_INTAKE_TOKEN_SHA256`) in admin.
+
+Order: admin's pilot-requests release is deployed first; then, once, on the box:
+
+```bash
+ssh hetzner 'bash -s' <<'SH'
+set -eu
+umask 077
+cd ~/nextup/landing && touch .env
+t=$(sed -n 's/^PILOT_INTAKE_TOKEN=//p' .env)
+[ -n "$t" ] || { t=$(openssl rand -hex 32); echo "PILOT_INTAKE_TOKEN=$t" >> .env; }
+sed -i '/^PILOT_INTAKE_URL=/d' .env
+echo "PILOT_INTAKE_URL=https://admin.sellux.ch/api/pilot-requests" >> .env
+sed -i '/^PILOT_INTAKE_TOKEN_SHA256=/d' ~/nextup/admin/.env
+echo "PILOT_INTAKE_TOKEN_SHA256=$(printf %s "$t" | sha256sum | cut -d' ' -f1)" >> ~/nextup/admin/.env
+~/nextup/admin/deploy.sh deploy "$(cat ~/nextup/admin/tag)"
+~/nextup/landing/deploy.sh deploy "$(cat ~/nextup/landing/tag)"
+SH
+```
+
+It keeps a token that is already there and can be run again. Check: send the form on
+https://sellux.ch/contact, and the request shows on admin's `/requests`. Admin answers 404 until
+its hash is set, so the form shows "could not send" with the mail address - never a lost request.
+Without the two variables here the form opens the visitor's mail program instead.
+
 ## Deploys
 
 A merge to `main` runs `.github/workflows/deploy.yml`. It builds, scans with Trivy, pushes

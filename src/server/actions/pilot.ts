@@ -1,8 +1,9 @@
 "use server";
-// The /contact form's submit. This site has no database: a real request is forwarded to the app
-// (POST <PILOT_INTAKE_URL>, bearer PILOT_INTAKE_TOKEN), which saves it as a PilotRequest row that
-// shows up in its /admin. With no app configured the form falls back to the visitor's own mail
-// program, which is what it did before there was a backend.
+// The /contact form's submit. This site has no database: a real request is forwarded to our dev
+// admin (POST <PILOT_INTAKE_URL> = https://admin.sellux.ch/api/pilot-requests, bearer
+// PILOT_INTAKE_TOKEN), which saves it as a PilotRequest row on its /requests page. With no intake
+// configured the form falls back to the visitor's own mail program, which is what it did before
+// there was a backend.
 //
 // "Real" means two things: the same checks the client ran (src/features/pilot/request.ts) pass
 // again here, because the client is not trusted; and the honeypot field is empty, because a
@@ -43,7 +44,7 @@ export async function requestPilot(_prev: PilotState, form: FormData): Promise<P
   if (!url || !token) return { status: "mailto", href: pilotMailto(LEGAL.email, values) };
 
   // A public form that writes rows: a handful per address per hour, so a script cannot fill the
-  // app's table. "failed" keeps what they typed and offers the mail address - a real person is not stuck.
+  // admin's table. "failed" keeps what they typed and offers the mail address - a real person is not stuck.
   const visitor = await clientKey();
   if (throttlePilotRequest(visitor)) return { status: "failed", values };
 
@@ -53,7 +54,7 @@ export async function requestPilot(_prev: PilotState, form: FormData): Promise<P
       headers: {
         "content-type": "application/json",
         authorization: `Bearer ${token}`,
-        // The app throttles per visitor too; without this it would only ever see this server.
+        // Admin throttles per visitor too; without this it would only ever see this server.
         "x-visitor-address": visitor,
       },
       body: JSON.stringify(values),
