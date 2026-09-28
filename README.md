@@ -28,9 +28,9 @@ saves it, and it appears in the app's `/admin` → Requests.
 
 | Env var | Where | What |
 |---|---|---|
-| `NEXT_PUBLIC_APP_URL` | Vercel, all environments | Base URL of the app, for "Log in" |
-| `PILOT_INTAKE_URL` | Vercel, server only | The app's intake endpoint |
-| `PILOT_INTAKE_TOKEN` | Vercel, server only, **secret** | Must equal `PILOT_INTAKE_TOKEN` in the app |
+| `NEXT_PUBLIC_APP_URL` | build time (Docker build arg) | Base URL of the app, for "Log in" |
+| `PILOT_INTAKE_URL` | server only | The app's intake endpoint |
+| `PILOT_INTAKE_TOKEN` | server only, **secret** | Must equal `PILOT_INTAKE_TOKEN` in the app |
 
 Without the two intake variables the form falls back to a pre-filled `mailto:`.
 
@@ -51,14 +51,11 @@ over too.
 
 ## Deploy
 
-Vercel project `nextup-landing`, production branch `main` (every merge deploys), framework
-Next.js, root directory `/`, server functions in `fra1` (Frankfurt). Test domain `sellux.ch`;
-`www.sellux.ch` redirects there (308).
+`sellux.ch` runs as a Docker container on our Hetzner box (Nuremberg), behind the box's nginx.
+`www` redirects to it. A merge to `main` builds and scans the image and puts it live
+(`.github/workflows/deploy.yml`). The runbook is [deploy/README.md](deploy/README.md).
 
-DNS for `sellux.ch` is at hostserv.eu. The apex `A` records and the `www` `CNAME` point to Vercel
-(values: Project → Settings → Domains). Every other `*.sellux.ch` name stays on the wildcard to
-the Hetzner box, where the company stacks run.
-
-Production env: only `NEXT_PUBLIC_APP_URL` (`https://acme.sellux.ch` while we test). The intake
-variables are unset, so the form opens a pre-filled e-mail until `admin.sellux.ch` takes pilot
-requests.
+| Setting | Where | What |
+|---|---|---|
+| `APP_URL` | GitHub repo variable | "Log in" target, baked into the image (default `https://acme.sellux.ch`) |
+| `PILOT_INTAKE_URL`, `PILOT_INTAKE_TOKEN` | `~/nextup/landing/.env` on the box | The contact form forwarding. Unset for now: the form opens a pre-filled e-mail until `admin.sellux.ch` takes pilot requests |

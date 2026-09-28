@@ -1,0 +1,28 @@
+# The public site on the shared Hetzner box: one container on loopback, nginx in front
+# (deploy/README.md). Lives on the box as ~/nextup/landing/compose.yml.
+#
+# The image tag comes from ./tag (written by deploy.sh). Server-only settings - the contact
+# form's PILOT_INTAKE_URL / PILOT_INTAKE_TOKEN - go in ./.env on the box, never in git.
+name: nextup-landing
+
+services:
+  web:
+    image: ghcr.io/selluxhenner/nextup-landing:${LANDING_TAG:-main}
+    restart: unless-stopped
+    # 3151: the port registry in selluxhenner/nextup stack/nginx/ports.md. Loopback only - the
+    # outside world reaches it through nginx.
+    ports: ["127.0.0.1:3151:3000"]
+    env_file:
+      - path: .env
+        required: false
+    read_only: true
+    tmpfs:
+      - /tmp
+      # next/image writes its optimised copies here.
+      - /app/.next/cache:uid=1001,gid=1001
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    mem_limit: 256m
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }

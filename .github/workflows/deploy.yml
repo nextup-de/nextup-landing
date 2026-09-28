@@ -1,0 +1,163 @@
+# Publish the site image and put it live on the shared Hetzner box (deploy/README.md).
+#
+# Every push to main: build the Dockerfile, scan it with Trivy (a fixable HIGH/CRITICAL fails the
+# run before anything is pushed), push ghcr.io/selluxhenner/nextup-landing :main + :sha-<short>,
+# then ssh to the box, where a forced command (deploy/deploy.sh) switches the container to that tag.
+# A PR only builds and scans. A manual run with a tag rolls back to it.
+#
+# Environment `hetzner`:
+#   secret DEPLOY_SSH_KEY      private half of the forced-command key (ed25519)
+#   secret DEPLOY_KNOWN_HOSTS  the box's host key line(s)
+#   var    DEPLOY_HOST         178.104.253.90
+#   var    DEPLOY_USER         kschmid
+# Repo variable APP_URL (optional): "Log in" target baked into the image; default https://acme.sellux.ch.
+# Until DEPLOY_SSH_KEY is set the deploy job skips itself with a notice.
+#
+# Kevin owns this file.
+
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Image tag to put live (main or sha-xxxxxxx) - skips the build"
+        required: true
+        default: main
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  image:
+    name: build, scan, push
+    if: github.event_name != 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      tag: ${{ steps.tags.outputs.short }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        if: github.event_name == 'push'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tags
+        id: tags
+        shell: bash
+        run: |
+          echo "image=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/nextup-landing" >> "$GITHUB_OUTPUT"
+          echo "short=sha-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Build for scanning
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: nextup-landing:scan
+          build-args: NEXT_PUBLIC_APP_URL=${{ vars.APP_URL || 'https://acme.sellux.ch' }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Trivy (gate)
+        # Pinned to a commit: this action's tags were once moved to malicious code (Mar 2025).
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          image-ref: nextup-landing:scan
+          scanners: vuln
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+          format: table
+
+      - name: Push
+        if: github.event_name == 'push'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          build-args: NEXT_PUBLIC_APP_URL=${{ vars.APP_URL || 'https://acme.sellux.ch' }}
+          tags: |
+            ${{ steps.tags.outputs.image }}:main
+            ${{ steps.tags.outputs.image }}:${{ steps.tags.outputs.short }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.description=NextUp public site (sellux.ch)
+          cache-from: type=gha
+
+  deploy:
+    name: put live on the box
+    needs: image
+    # Runs after a push to main, or alone on a manual run (then `image` is skipped).
+    if: always() && (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && needs.image.result == 'success'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: hetzner
+    env:
+      KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+      KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+      HOST: ${{ vars.DEPLOY_HOST }}
+      USER_NAME: ${{ vars.DEPLOY_USER }}
+      TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || needs.image.outputs.tag }}
+    steps:
+      - name: Configured?
+        id: cfg
+        shell: bash
+        run: |
+          if [ -z "$KEY" ] || [ -z "$HOST" ]; then
+            echo "::notice::DEPLOY_SSH_KEY / DEPLOY_HOST not set - skipping the deploy."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate tag
+        if: steps.cfg.outputs.ok == 'true'
+        shell: bash
+        run: '[[ "$TAG" =~ ^(main|sha-[0-9a-f]{7})$ ]] || { echo "::error::bad tag: $TAG"; exit 1; }'
+
+      - name: SSH key
+        if: steps.cfg.outputs.ok == 'true'
+        shell: bash
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts && chmod 644 ~/.ssh/known_hosts
+
+      - name: Deploy
+        if: steps.cfg.outputs.ok == 'true'
+        shell: bash
+        run: |
+          ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes \
+            "$USER_NAME@$HOST" deploy "$TAG"
+
+      - name: Check https://sellux.ch
+        if: steps.cfg.outputs.ok == 'true'
+        shell: bash
+        run: |
+          for i in $(seq 10); do
+            code="$(curl -s -o /dev/null -w '%{http_code}' https://sellux.ch/ || true)"
+            [ "$code" = "200" ] && { echo "sellux.ch 200"; exit 0; }
+            sleep 3
+          done
+          echo "::error::https://sellux.ch answered $code"; exit 1
+
+      - name: Clean up
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
