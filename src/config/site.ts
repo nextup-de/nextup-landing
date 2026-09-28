@@ -20,14 +20,12 @@ export const LEGAL = {
   city: "12435 Berlin",
   country: "Germany",
   email: "kevin.schmid@code.berlin", // TODO Kevin: confirm - assumed from the CODE address pattern
-  // Hosting provider + location, named in the privacy policy once the site is deployed (e.g. "Vercel Inc., EU region").
+  // Hosting provider + location, named in the privacy policy once the site is deployed (company, address, server location).
   // Leave null while it only runs locally.
   hosting: {
-    provider: "Vercel Inc., USA",
-    location: "Frankfurt am Main (EU) für serverseitige Funktionen; statische Seiten werden über das weltweite Vercel-Netzwerk ausgeliefert",
-    privacyUrl: "https://vercel.com/legal/privacy-policy",
-    // Vercel is a US company, so a transfer to a third country can happen. Rendered after the provider paragraph.
-    transfer: "Vercel ist unter dem EU-US Data Privacy Framework zertifiziert (Angemessenheitsbeschluss, Art. 45 DSGVO); ergänzend gelten die EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO).",
-  } as null | { provider: string; location: string; privacyUrl: string; transfer?: string },
+    provider: "Hetzner Online GmbH, Industriestr. 25, 91710 Gunzenhausen, Deutschland",
+    location: "Nürnberg, Deutschland",
+    privacyUrl: "https://www.hetzner.com/legal/privacy-policy",
+  } as null | { provider: string; location: string; privacyUrl: string },
   updated: "2026-09-28", // last change to /privacy, ISO date
 } as const;
