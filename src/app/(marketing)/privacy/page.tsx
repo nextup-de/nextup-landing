@@ -67,11 +67,18 @@ export default function PrivacyPage() {
               <strong>Speicherdauer</strong>: Logfiles werden spätestens nach 14 Tagen gelöscht, sofern kein sicherheitsrelevanter Vorfall eine längere Aufbewahrung erfordert.
             </p>
             {h ? (
-              <p>
-                <strong>Hosting-Anbieter</strong>: {h.provider}, Serverstandort {h.location}. Der Anbieter verarbeitet die
-                Daten in unserem Auftrag auf Grundlage eines Auftragsverarbeitungsvertrags nach Art. 28 DSGVO. Dessen
-                Datenschutzhinweise: <a href={h.privacyUrl} rel="noopener noreferrer">{h.privacyUrl}</a>.
-              </p>
+              <>
+                <p>
+                  <strong>Hosting-Anbieter</strong>: {h.provider}, Serverstandort {h.location}. Der Anbieter verarbeitet die
+                  Daten in unserem Auftrag auf Grundlage eines Auftragsverarbeitungsvertrags nach Art. 28 DSGVO. Dessen
+                  Datenschutzhinweise: <a href={h.privacyUrl} rel="noopener noreferrer">{h.privacyUrl}</a>.
+                </p>
+                {h.transfer ? (
+                  <p>
+                    <strong>Übermittlung in Drittländer</strong>: {h.transfer}
+                  </p>
+                ) : null}
+              </>
             ) : (
               <p>
                 <strong>Hosting-Anbieter</strong>: Die Website befindet sich im Aufbau und wird derzeit nicht öffentlich
