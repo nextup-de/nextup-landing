@@ -1,0 +1,15 @@
+# Keep the build context small and free of anything host-specific - above all the .env files,
+# or a laptop's secrets end up in the image.
+node_modules
+.next
+.git
+.github
+.vercel
+tests
+test-results
+playwright-report
+deploy
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
