@@ -26,8 +26,9 @@ case "$action" in
     [[ "$tag" =~ ^(main|sha-[0-9a-f]{7})$ ]] || { echo "deploy: tag must be main or sha-<7 hex>" >&2; exit 2; }
     echo "$(date -u +%FT%TZ) deploy $tag by ${SSH_CONNECTION%% *}" >> "$log"
     previous="$(cat "$here/tag" 2>/dev/null || echo main)"
+    # Pull before recording the tag: a failed pull (e.g. package still private) changes nothing.
+    LANDING_TAG="$tag" docker compose -f "$here/compose.yml" pull --quiet
     echo "$tag" > "$here/tag"
-    compose pull --quiet
     compose up -d --remove-orphans
     # Up means answering: give it 30 s, otherwise go back to the previous tag.
     for _ in $(seq 30); do
