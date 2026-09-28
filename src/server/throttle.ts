@@ -1,6 +1,6 @@
 // Brakes for the two doors this site has: the /contact form and the /login company lookup.
 //
-// In-process memory in the one container - fine for a single instance. The app checks forwarded
+// In-process memory in the one container - fine for a single instance. Admin checks forwarded
 // pilot requests again on its side.
 //
 // Not a "use server" module: a helper the action calls, not an action itself.
