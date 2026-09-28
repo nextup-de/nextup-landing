@@ -1,6 +1,6 @@
 # CI for the public NextUp site. Both jobs must pass before a PR can merge.
 #   guard — no secrets / forbidden files (this repo is public)
-#   site  — npm ci, lint, typecheck, unit tests, production build
+#   site  — npm ci, npm audit (prod, high+), lint, typecheck, unit tests, production build
 #
 # Kevin owns this file.
 
@@ -57,6 +57,9 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci --no-audit --no-fund
+      # Known vulnerabilities in what ships (dependencies, not devDependencies): high+ fails.
+      - name: npm audit (production dependencies)
+        run: npm audit --omit=dev --audit-level=high
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
