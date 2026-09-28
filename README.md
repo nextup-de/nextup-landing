@@ -51,5 +51,14 @@ over too.
 
 ## Deploy
 
-Vercel project, production branch `main`, framework Next.js, root directory `/`. Test domain
-`sellux.ch` (+ `www`).
+Vercel project `nextup-landing`, production branch `main` (every merge deploys), framework
+Next.js, root directory `/`, server functions in `fra1` (Frankfurt). Test domain `sellux.ch`;
+`www.sellux.ch` redirects there (308).
+
+DNS for `sellux.ch` is at hostserv.eu. The apex `A` records and the `www` `CNAME` point to Vercel
+(values: Project → Settings → Domains). Every other `*.sellux.ch` name stays on the wildcard to
+the Hetzner box, where the company stacks run.
+
+Production env: only `NEXT_PUBLIC_APP_URL` (`https://acme.sellux.ch` while we test). The intake
+variables are unset, so the form opens a pre-filled e-mail until `admin.sellux.ch` takes pilot
+requests.
