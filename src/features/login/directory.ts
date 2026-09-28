@@ -19,3 +19,17 @@ export function readDirectory(body: unknown): ListedCompany[] {
   }
   return out.sort((a, b) => a.name.localeCompare(b.name));
 }
+
+/**
+ * The companies to suggest under the field for what has been typed so far - nothing until two
+ * characters, so the page never shows a list up front. Name or slug starting with it first, then
+ * the ones that contain it.
+ */
+export function suggest<T extends ListedCompany>(list: T[], typed: string, max = 5): T[] {
+  const q = typed.trim().toLowerCase();
+  if (q.length < 2) return [];
+  const slugQ = q.replace(/^[a-z]+:\/\//, "").split(/[./?#]/)[0];
+  const starts = (c: T) => c.name.toLowerCase().startsWith(q) || (slugQ !== "" && c.slug.startsWith(slugQ));
+  const contains = (c: T) => c.name.toLowerCase().includes(q) || (slugQ !== "" && c.slug.includes(slugQ));
+  return [...list.filter(starts), ...list.filter((c) => !starts(c) && contains(c))].slice(0, max);
+}

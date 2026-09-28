@@ -1,6 +1,6 @@
 // /login's company list from admin: only well-formed companies get through. Pure - no network.
 import { describe, expect, it } from "vitest";
-import { readDirectory } from "@/features/login/directory";
+import { readDirectory, suggest } from "@/features/login/directory";
 
 describe("readDirectory", () => {
   it("keeps valid companies, sorted by name", () => {
@@ -25,5 +25,28 @@ describe("readDirectory", () => {
     expect(readDirectory(null)).toEqual([]);
     expect(readDirectory({ companies: "acme" })).toEqual([]);
     expect(readDirectory("oops")).toEqual([]);
+  });
+});
+
+describe("suggest", () => {
+  const list = [
+    { slug: "acme", name: "Acme Maschinenbau GmbH" },
+    { slug: "globex", name: "Globex Industrie AG" },
+    { slug: "inteche", name: "Inteche Company" },
+  ];
+
+  it("shows nothing before two characters", () => {
+    expect(suggest(list, "")).toEqual([]);
+    expect(suggest(list, "a")).toEqual([]);
+  });
+
+  it("matches the start of the name or slug first, then anywhere", () => {
+    expect(suggest(list, "gl").map((c) => c.slug)).toEqual(["globex"]);
+    expect(suggest(list, "in").map((c) => c.slug)).toEqual(["inteche", "acme", "globex"]);
+    expect(suggest(list, "acme.sellux.ch").map((c) => c.slug)).toEqual(["acme"]);
+  });
+
+  it("finds nothing for an unknown name", () => {
+    expect(suggest(list, "zz")).toEqual([]);
   });
 });

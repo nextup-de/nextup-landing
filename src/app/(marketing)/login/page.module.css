@@ -17,22 +17,3 @@
   .card { padding: 22px; }
 }
 
-/* The companies admin lists: one click each. Typing the name stays below for everyone else. */
-.pick { display: grid; gap: 10px; }
-.pickLabel { font-size: 14px; font-weight: 600; color: var(--nh-ink); }
-.list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; max-height: 312px; overflow-y: auto; }
-.company {
-  display: grid; grid-template-columns: 1fr auto; grid-template-areas: "name arrow" "host arrow";
-  align-items: center; column-gap: 12px; row-gap: 2px; padding: 12px 14px;
-  border: 1px solid var(--nh-line); border-radius: var(--nh-r); background: var(--nh-card); color: var(--nh-ink);
-  text-decoration: none; transition: border-color 120ms ease, background-color 120ms ease;
-}
-.company:hover { border-color: var(--nh-brand-line); background: var(--nh-brand-tint); }
-.company:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 2px; }
-.companyName { grid-area: name; font-size: 15px; font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
-.companyHost { grid-area: host; font-family: var(--nh-mono); font-size: 12px; color: var(--nh-mute); overflow-wrap: anywhere; }
-.arrow { grid-area: arrow; color: var(--nh-mute); font-weight: 600; }
-.company:hover .arrow { color: var(--nh-brand); }
-.or { display: flex; align-items: center; gap: 12px; margin-top: 8px; font-size: 13px; color: var(--nh-mute); }
-.or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--nh-line); }
-@media (prefers-reduced-motion: reduce) { .company { transition: none; } }

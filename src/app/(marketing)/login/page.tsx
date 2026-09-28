@@ -1,6 +1,6 @@
 // LOG IN, step 1: which company? Each company has its own NextUp address; this page sends people
-// to that company's login. The companies admin lists (src/server/directory.ts) are one click away;
-// anyone else types the name (src/server/actions/login.ts). Accounts live there, not here.
+// to that company's login (src/server/actions/login.ts). While typing, matching companies admin lists
+// (src/server/directory.ts) are suggested - no list up front. Accounts live there, not here.
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FindCompanyForm } from "@/components/marketing/FindCompanyForm";
@@ -31,24 +31,7 @@ export default async function LoginPage() {
           <h1>Find your company</h1>
           <p>Every company has its own NextUp address. We take you to your company&apos;s login.</p>
         </div>
-        {companies.length > 0 && (
-          <nav aria-labelledby="pick-company" className={styles.pick}>
-            <h2 id="pick-company" className={styles.pickLabel}>Pick your company</h2>
-            <ul className={styles.list}>
-              {companies.map((c) => (
-                <li key={c.slug}>
-                  <a href={c.href} className={styles.company}>
-                    <span className={styles.companyName}>{c.name}</span>
-                    <span className={styles.companyHost}>{c.host}</span>
-                    <span className={styles.arrow} aria-hidden>→</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <p className={styles.or}><span>or type its name</span></p>
-          </nav>
-        )}
-        <FindCompanyForm focus={companies.length === 0} />
+        <FindCompanyForm companies={companies} />
         <p className={styles.foot}>
           Not using NextUp yet? <Link href="/contact">Book a pilot</Link>.
         </p>
