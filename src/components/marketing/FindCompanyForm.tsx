@@ -35,8 +35,8 @@ export function FindCompanyForm() {
 
   return (
     <form action={submit} onSubmit={onSubmit} noValidate className={styles.form}>
-      <Field id="company" label="Your company's NextUp name" hint="The first part of your NextUp address - acme in acme.sellux.ch." error={error ?? undefined}>
-        <input ref={inputRef} className="nh-input" id="company" name="company" type="text" placeholder="acme"
+      <Field id="company" label="Your company's NextUp name" hint="The first part of your NextUp address: yourcompany.sellux.ch" error={error ?? undefined}>
+        <input ref={inputRef} className="nh-input" id="company" name="company" type="text" placeholder="yourcompany"
           autoComplete="organization" autoCapitalize="none" spellCheck={false} autoFocus value={value}
           onChange={(e) => { setValue(e.target.value); if (error) setError(null); }}
           {...(error ? { "aria-invalid": true as const, "aria-describedby": "company-error" } : {})} />
