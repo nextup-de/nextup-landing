@@ -11,11 +11,7 @@ RUN npm ci --no-audit --no-fund
 FROM deps AS build
 WORKDIR /app
 COPY . .
-# NEXT_PUBLIC_* is inlined at build time, and every page is prerendered, so the "Log in" target
-# is part of the image. CI passes it from the repo variable APP_URL.
-ARG NEXT_PUBLIC_APP_URL=https://acme.sellux.ch
-ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL \
-    NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
 # ── runtime ──────────────────────────────────────────────────────────────────

@@ -10,7 +10,6 @@
 #   secret DEPLOY_KNOWN_HOSTS  the box's host key line(s)
 #   var    DEPLOY_HOST         178.104.253.90
 #   var    DEPLOY_USER         kschmid
-# Repo variable APP_URL (optional): "Log in" target baked into the image; default https://acme.sellux.ch.
 # Until DEPLOY_SSH_KEY is set the deploy job skips itself with a notice.
 #
 # Kevin owns this file.
@@ -70,7 +69,6 @@ jobs:
           context: .
           load: true
           tags: nextup-landing:scan
-          build-args: NEXT_PUBLIC_APP_URL=${{ vars.APP_URL || 'https://acme.sellux.ch' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -91,7 +89,6 @@ jobs:
         with:
           context: .
           push: true
-          build-args: NEXT_PUBLIC_APP_URL=${{ vars.APP_URL || 'https://acme.sellux.ch' }}
           tags: |
             ${{ steps.tags.outputs.image }}:main
             ${{ steps.tags.outputs.image }}:${{ steps.tags.outputs.short }}

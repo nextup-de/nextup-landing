@@ -2,7 +2,9 @@
 
 The public NextUp website: home, pricing, book a pilot, imprint, privacy. Marketing only. There
 is no database, no login and no customer data here. The product itself lives in
-[`selluxhenner/nextup`](https://github.com/selluxhenner/nextup), and "Log in" links there.
+[`selluxhenner/nextup`](https://github.com/selluxhenner/nextup): every company runs its own copy at
+`<company>.sellux.ch`. "Log in" opens `/login` here, which asks for the company and sends people to
+its own login page.
 
 This repo is **public**. Never commit secrets, `.env*` files (except `.env.example`) or anything
 from a customer.
@@ -11,7 +13,7 @@ from a customer.
 
 ```bash
 npm install
-cp .env.example .env.local   # optional; without it "Log in" points at localhost:3000
+cp .env.example .env.local   # optional; the contact form and /login work without it
 npm run dev                  # http://localhost:3000
 ```
 
@@ -28,7 +30,7 @@ saves it, and it appears in the app's `/admin` → Requests.
 
 | Env var | Where | What |
 |---|---|---|
-| `NEXT_PUBLIC_APP_URL` | build time (Docker build arg) | Base URL of the app, for "Log in" |
+| `COMPANY_URL` | server only, optional | Where `/login` sends people: `https://{slug}.sellux.ch` by default |
 | `PILOT_INTAKE_URL` | server only | The app's intake endpoint |
 | `PILOT_INTAKE_TOKEN` | server only, **secret** | Must equal `PILOT_INTAKE_TOKEN` in the app |
 
@@ -39,7 +41,7 @@ Without the two intake variables the form falls back to a pre-filled `mailto:`.
 ```
 src/app/(marketing)/   pages: home, pricing, contact, imprint, privacy
 src/components/        marketing (header, footer, contact form) + ui (Button, Field) + shell (Ground)
-src/config/site.ts     name, tagline, legal operator details, APP_URL
+src/config/site.ts     name, tagline, legal operator details, COMPANY_URL
 src/features/pilot/    pilot request validation (pure, unit-tested)
 src/server/            the form's server action + its rate limit
 src/styles/            design tokens - keep in step with the app's src/styles/tokens.css
@@ -57,5 +59,4 @@ over too.
 
 | Setting | Where | What |
 |---|---|---|
-| `APP_URL` | GitHub repo variable | "Log in" target, baked into the image (default `https://acme.sellux.ch`) |
 | `PILOT_INTAKE_URL`, `PILOT_INTAKE_TOKEN` | `~/nextup/landing/.env` on the box | The contact form forwarding. Unset for now: the form opens a pre-filled e-mail until `admin.sellux.ch` takes pilot requests |
