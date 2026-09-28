@@ -10,6 +10,8 @@ export const SITE = {
 // (src/server/actions/login.ts). COMPANY_URL is read on the server; {slug} is the company.
 export const COMPANY_URL = process.env.COMPANY_URL ?? "https://{slug}.sellux.ch";
 export const LOGIN_URL = "/login";
+// The companies /login lists to pick from (src/server/directory.ts). Empty turns the list off.
+export const COMPANY_DIRECTORY_URL = process.env.COMPANY_DIRECTORY_URL ?? "https://admin.sellux.ch/api/directory";
 
 // Who runs this site. Rendered on /imprint, /privacy, /contact and in the footer - change it here only.
 // Required by § 5 DDG (Impressum) and Art. 13 GDPR (controller). Keep it accurate before the site goes public.
