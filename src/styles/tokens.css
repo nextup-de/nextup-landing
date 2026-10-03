@@ -36,6 +36,9 @@
   --nh-idea: #6d4fc2;         /* violet: something could be */
   --nh-idea-tint: #f2eefb;
   --nh-idea-line: #cfc2f0;
+  /* The raise box's gold edge, as on the landing's hero box: strong at the sides, pale across the middle. */
+  --nh-gold: #f0c440;
+  --nh-gold-soft: #fdefc5;
 
   --nh-font: var(--font-sans, "Manrope"), system-ui, -apple-system, "Segoe UI", sans-serif;   /* --font-sans set by next/font in layout.tsx */
   --nh-mono: var(--font-mono, "IBM Plex Mono"), ui-monospace, SFMono-Regular, Menlo, monospace;
