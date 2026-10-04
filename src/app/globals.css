@@ -1,7 +1,7 @@
 /* Global styles: tokens + reset + shared primitives (nh-* classes).
    Page-specific styles live next to the page as *.module.css. */
 @import "../styles/tokens.css";
-/* Fonts: loaded via next/font in src/app/layout.tsx (self-hosted, no third-party request). */
+/* Fonts: committed in src/app/fonts, loaded via next/font/local in src/app/layout.tsx (no third-party request, not even at build time). */
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; zoom: var(--nh-zoom); } /* the page scale: see tokens.css */
