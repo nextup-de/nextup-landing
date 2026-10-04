@@ -4,9 +4,15 @@
 
 .display { font-family: var(--nh-serif); font-weight: 400; font-size: clamp(38px, 5.4vw, 76px); line-height: 0.98; letter-spacing: -0.018em; text-wrap: balance; }
 
-/* The hero: the question, one line, the box and its answer - centred, with air around them. */
-.hero { padding: clamp(56px, min(9vw, calc(var(--nh-screen-h) * 0.14)), 136px) var(--nh-page-x) 0; }
-.heroIn { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(22px, 3vw, 40px); justify-items: center; text-align: center; }
+/* The hero: the question, one line, the box and its answer - centred in the first screen. Together with the
+   sticky header it fills the viewport exactly; when the content is taller (a short phone, a landscape phone) it
+   grows instead of clipping. */
+.hero {
+  min-height: calc(var(--nh-screen-h) - var(--nh-head));
+  display: grid; align-content: center;
+  padding: clamp(32px, calc(var(--nh-screen-h) * 0.06), 72px) var(--nh-page-x);
+}
+.heroIn { width: 100%; max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(22px, 3vw, 40px); justify-items: center; text-align: center; }
 .hero h1 {
   font-family: var(--nh-serif); font-weight: 400; line-height: 0.92; letter-spacing: -0.022em; text-wrap: balance;
   font-size: clamp(54px, min(9.4vw, calc(var(--nh-screen-h) * 0.19)), 140px);
