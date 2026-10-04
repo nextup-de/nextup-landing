@@ -3,7 +3,7 @@
    Blue is the routed line and the owner, the sender is a black pill like the app's own. */
 
 .scene {
-  --head: 64px; /* the site header (SiteHeader.module.css), which stays on top of the pinned stage */
+  --head: var(--nh-head); /* the site header, which stays on top of the pinned stage */
   --stage-h: calc(var(--nh-screen-h) - var(--head));
   height: calc(var(--nh-screen-h) * 4);
   margin: clamp(72px, 9vw, 128px) 12px 0; border-radius: clamp(20px, 2.6vw, 34px);

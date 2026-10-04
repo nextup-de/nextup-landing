@@ -61,9 +61,16 @@
   --nh-zoom-h: 1;
   --nh-zoom: 1;
   /* The viewport in page pixels. Viewport units are scaled by `zoom` too, so a full-height box
-     uses these instead of 100dvh / 100vw. */
-  --nh-screen-h: calc(100dvh / var(--nh-zoom));
+     uses these instead of 100vh / 100vw. Height is the small viewport (svh): on iOS Safari and
+     Android Chrome 100vh is taller than the screen while the toolbar shows, and dvh changes as the
+     toolbar slides away, so every box sized by it jumps mid-scroll. svh fits the screen with the
+     toolbar showing and never moves. Browsers without svh (Safari < 15.4) get vh. */
+  --nh-screen-h: calc(100vh / var(--nh-zoom));
   --nh-screen-w: calc(100vw / var(--nh-zoom));
+  --nh-head: 64px; /* the sticky site header (SiteHeader.module.css) */
+}
+@supports (height: 100svh) {
+  :root { --nh-screen-h: calc(100svh / var(--nh-zoom)); }
 }
 
 @supports (zoom: 1) {
