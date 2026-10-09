@@ -2,7 +2,7 @@
 
 Latin-subset woff2 files from Google Fonts, committed so `next build` never needs the network.
 All three families are under the SIL Open Font License 1.1 (https://openfontlicense.org).
-Same files as the app (`selluxhenner/nextup`, `apps/app/src/app/fonts/`).
+Same files as the app (`nextup-de/nextup`, `apps/app/src/app/fonts/`).
 
 | File | Family | Weights |
 |---|---|---|
