@@ -1,6 +1,6 @@
 // "Log in" on the public site: which company's NextUp to send someone to. Pure - no network.
 //
-// Every company runs its own NextUp at its own address, <slug>.sellux.ch (selluxhenner/nextup,
+// Every company runs its own NextUp at its own address, <slug>.sellux.ch (nextup-de/nextup,
 // docs/PLATFORM_PLAN.md: one stack per company). This site has no accounts and no company list,
 // so /login turns what was typed into a slug here, and the server action
 // (src/server/actions/login.ts) asks that address whether a company answers there.

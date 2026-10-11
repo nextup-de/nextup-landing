@@ -1,6 +1,6 @@
 # The public site as an image: install -> build -> a runtime carrying no toolchain.
-# Same shape as the app's ops/Dockerfile (selluxhenner/nextup). Runs on the shared Hetzner box
-# behind nginx (deploy/README.md); published to ghcr.io/selluxhenner/nextup-landing.
+# Same shape as the app's ops/Dockerfile (nextup-de/nextup). Runs on the shared Hetzner box
+# behind nginx (deploy/README.md); published to ghcr.io/nextup-de/nextup-landing.
 
 FROM node:26-bookworm-slim AS deps
 WORKDIR /app

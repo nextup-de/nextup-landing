@@ -7,7 +7,7 @@ certbot own ports 80/443 there, so the container listens on loopback only:
 sellux.ch, www ──▶ nginx (TLS, www → apex) ──▶ 127.0.0.1:3151 ──▶ container `nextup-landing-web-1`
 ```
 
-Port 3151 is registered in `selluxhenner/nextup` → `stack/nginx/ports.md`. DNS needs nothing: the
+Port 3151 is registered in `nextup-de/nextup` → `stack/nginx/ports.md`. DNS needs nothing: the
 apex `A` record of `sellux.ch` already points at the box, and `www` is covered by `*.sellux.ch`.
 
 ## On the box
@@ -41,7 +41,7 @@ ssh -t hetzner 'sudo cp /tmp/nginx-sellux.ch.conf /etc/nginx/sites-available/nex
 ## Contact form → admin
 
 The `/contact` form forwards each pilot request to `https://admin.sellux.ch/api/pilot-requests`,
-where it lands on admin's `/requests` page (selluxhenner/nextup-admin). One token: in full here,
+where it lands on admin's `/requests` page (nextup-de/nextup-admin). One token: in full here,
 as a sha256 (`PILOT_INTAKE_TOKEN_SHA256`) in admin.
 
 Order: admin's pilot-requests release is deployed first; then, once, on the box:
@@ -70,7 +70,7 @@ Without the two variables here the form opens the visitor's mail program instead
 ## Deploys
 
 A merge to `main` runs `.github/workflows/deploy.yml`. It builds, scans with Trivy, pushes
-`ghcr.io/selluxhenner/nextup-landing:main` + `:sha-<short>`, then runs `ssh … deploy sha-<short>`.
+`ghcr.io/nextup-de/nextup-landing:main` + `:sha-<short>`, then runs `ssh … deploy sha-<short>`.
 The key only reaches `deploy.sh` (forced command in `~/.ssh/authorized_keys`, comment
 `nextup-landing-deploy`). If the new container doesn't answer within 30 s, `deploy.sh` goes back
 to the previous tag.

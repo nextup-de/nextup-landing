@@ -1,4 +1,4 @@
-// Copied from the app (selluxhenner/nextup, apps/app/src/features/routing) for the landing's hero box. Keep the two
+// Copied from the app (nextup-de/nextup, apps/app/src/features/routing) for the landing's hero box. Keep the two
 // in step, so the hero routes exactly as the product does.
 // Routing table matcher: free text -> the route (owner, deputy, buddy) with the most keyword hits.
 // It *proposes* the row - it never decides (§11.2). Overrides are logged against the map.

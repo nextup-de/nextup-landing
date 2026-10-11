@@ -2,7 +2,7 @@
 
 The public NextUp website: home, pricing, book a pilot, imprint, privacy. Marketing only. There
 is no database, no login and no customer data here. The product itself lives in
-[`selluxhenner/nextup`](https://github.com/selluxhenner/nextup): every company runs its own copy at
+[`nextup-de/nextup`](https://github.com/nextup-de/nextup): every company runs its own copy at
 `<company>.sellux.ch`. "Log in" opens `/login` here, which asks for the company and sends people to
 its own login page.
 
@@ -26,7 +26,7 @@ npm run dev                  # http://localhost:3000
 
 `/contact` validates in the browser and again on the server (`src/server/actions/pilot.ts`), then
 forwards the request to the dev admin's `POST /api/pilot-requests` (`admin.sellux.ch`, repo
-`selluxhenner/nextup-admin`) with a bearer token. Admin saves it, and it appears on its `/requests`
+`nextup-de/nextup-admin`) with a bearer token. Admin saves it, and it appears on its `/requests`
 page. No e-mail is sent.
 
 | Env var | Where | What |

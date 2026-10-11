@@ -1,5 +1,5 @@
 // The demo company's routing map, for the landing's hero box and its pinned scene. A copy of ROUTES in the app's demo
-// seed (selluxhenner/nextup, apps/app/src/features/demo/seed.ts) - keep the two in step. Fictional people, no customer data.
+// seed (nextup-de/nextup, apps/app/src/features/demo/seed.ts) - keep the two in step. Fictional people, no customer data.
 export type Route = { id: string; type: string; keys: string[]; owner: { name: string; role: string; dept: string }; deputy: string; buddy: string; wait: string };
 
 export const ROUTES: Route[] = [
