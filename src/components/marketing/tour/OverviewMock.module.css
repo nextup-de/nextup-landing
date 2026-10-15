@@ -1,0 +1,38 @@
+/* The manager's overview, drawn like the app's dashboard: four tiles, then where the waiting goes. */
+.mock { height: 100%; display: grid; grid-template-rows: auto auto auto minmax(0, 1fr); gap: 12px; font-family: var(--nh-heading); }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.title { font-size: var(--nh-fs-2xl); font-weight: 600; letter-spacing: -0.02em; }
+.toggle { display: inline-flex; padding: 3px; border-radius: var(--radius-sm); background: #eceef1; }
+.toggle button { height: 30px; padding: 0 12px; border: 0; border-radius: var(--radius-xs); background: transparent; font-size: var(--nh-fs-sm); font-weight: 600; color: var(--nh-ink-2); cursor: pointer; transition: background 0.2s ease, color 0.2s ease; }
+.toggle button[aria-pressed="true"] { background: var(--nh-ink); color: #fff; }
+.toggle button:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 2px; }
+
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.tile { display: grid; gap: 4px; align-content: start; padding: 14px; background: var(--nh-card); border-radius: var(--radius-md); box-shadow: 0 1px 2px rgb(0 0 0 / 0.04); }
+.label { font-size: var(--nh-fs-xs); color: var(--nh-ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.value { font-size: var(--nh-fs-3xl); font-weight: 600; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.value small { font-size: var(--nh-fs-lg); font-weight: 600; color: var(--nh-ink-2); }
+.mock[data-side="now"] .value { color: var(--nh-ink); }
+.mock[data-side="before"] .value { color: var(--nh-ink-2); }
+.note { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: var(--nh-fs-xs); color: var(--nh-mute); }
+.note i { font-style: normal; font-weight: 600; padding: 1px 6px; border-radius: var(--radius-xs); background: var(--nh-ok-tint); color: var(--nh-ok); }
+
+.waits { min-height: 0; padding: 14px 16px; background: var(--nh-card); border-radius: var(--radius-md); box-shadow: 0 1px 2px rgb(0 0 0 / 0.04); overflow: auto; }
+.waitsHead { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.waitsHead b { font-size: var(--nh-fs-md); font-weight: 600; }
+.waitsHead span { font-size: var(--nh-fs-xs); color: var(--nh-mute); }
+.waits ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.waits li { display: grid; grid-template-columns: minmax(0, 150px) minmax(0, 1fr) 40px; gap: 12px; align-items: center; font-size: var(--nh-fs-sm); }
+.track { height: 10px; border-radius: 5px; background: #eef1f4; overflow: hidden; }
+.track i { display: block; height: 100%; width: 100%; border-radius: 5px; background: var(--nh-brand); transform-origin: left; transform: scaleX(var(--w)); animation: grow 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d) both; }
+.track i[data-first] { background: var(--nh-accent); }
+@keyframes grow { from { transform: scaleX(0); } }
+.days { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.blank { padding: 8px 0 4px; font-size: var(--nh-fs-sm); line-height: 1.5; color: var(--nh-mute); }
+.small { align-self: end; font-size: var(--nh-fs-xs); color: var(--nh-mute); }
+@media (prefers-reduced-motion: reduce) { .track i { animation: none; } }
+@media (max-width: 760px) {
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .waits li { grid-template-columns: minmax(0, 1fr) 40px; }
+  .waits li .track { grid-column: 1 / -1; grid-row: 2; }
+}

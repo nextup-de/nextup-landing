@@ -192,6 +192,16 @@ export function WaitScene({ request, from, decision, promiseDays, owner, ownerRo
               </p>
             </div>
 
+            {/* One mark per day: today the 19 days, orange while it waits, ink while someone works on it; with NextUp the 5 days of the promise. */}
+            <div className={styles.rail} aria-hidden="true">
+              <span className={styles.marks}>
+                {Array.from({ length: today ? TOTAL : promiseDays }, (_, i) => (
+                  <i key={`${view.side}${i}`} data-on={i < view.day ? "true" : undefined} data-work={today && i >= TOTAL - WORK ? "true" : undefined} />
+                ))}
+              </span>
+              <span className={styles.railNote}>{today ? `day ${view.day} of ${TOTAL}` : `the promise: ${promiseDays} days`}</span>
+            </div>
+
             <div className={styles.ledgers}>
               <ol className={styles.ledger} data-show={today} aria-hidden={!today}>
                 {HOPS.map((h, i) => (

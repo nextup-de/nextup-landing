@@ -1,84 +1,120 @@
-/* Landing. Everything sits on the app's own ground in the app's own colours: ink type, white cards, Decision Blue
-   for actions, orange for time. The hero stands straight on the ground as the raise screen does; the pinned scene
-   (WaitScene) and the close are white cards; 1240px bands between them. Display type is the raise page's serif. */
+/* Landing. The app's own look: Inter headings, ink type, white cards on the dotted ground, Decision Blue for
+   actions, orange for time, square corners. Sizes are fixed per screen class (tokens.css), never scaled. */
 
-.display { font-family: var(--nh-serif); font-weight: 400; font-size: clamp(38px, 5.4vw, 76px); line-height: 0.98; letter-spacing: -0.018em; text-wrap: balance; }
-
-/* The hero: the question, one line, the box and its answer - centred in the first screen. Together with the
-   sticky header it fills the viewport exactly; when the content is taller (a short phone, a landscape phone) it
-   grows instead of clipping. */
+/* ── Hero: the badge, the question, one line, the app's raise box and its routing card, then the strip of facts. */
 .hero {
   min-height: calc(var(--nh-screen-h) - var(--nh-head));
-  display: grid; align-content: center;
-  padding: clamp(32px, calc(var(--nh-screen-h) * 0.06), 72px) var(--nh-page-x);
+  display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 40px;
+  padding: 56px var(--nh-page-x) 32px;
 }
-.heroIn { width: 100%; max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(22px, 3vw, 40px); justify-items: center; text-align: center; }
-.hero h1 {
-  font-family: var(--nh-serif); font-weight: 400; line-height: 0.92; letter-spacing: -0.022em; text-wrap: balance;
-  font-size: clamp(54px, min(9.4vw, calc(var(--nh-screen-h) * 0.19)), 140px);
+.heroIn { align-self: center; width: 100%; max-width: var(--nh-wide); margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; justify-items: center; text-align: center; }
+.pill {
+  display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px 0 4px; border-radius: var(--radius-sm);
+  background: rgb(255 255 255 / 0.8); box-shadow: 0 1px 2px rgb(0 0 0 / 0.05), inset 0 0 0 1px rgb(20 40 70 / 0.06);
+  font-size: var(--nh-fs-sm); font-weight: 600; color: var(--nh-ink-2); transition: color 0.15s ease, box-shadow 0.15s ease;
 }
-@keyframes rise { from { opacity: 0; transform: translateY(18px); } }
-.hero h1, .lead { animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-.lead { animation-delay: 0.1s; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.5; color: var(--nh-ink-2); max-width: 46ch; text-wrap: balance; }
+.pill span { height: 24px; padding: 0 8px; display: inline-grid; place-items: center; border-radius: var(--radius-xs); background: var(--nh-brand-tint); color: var(--nh-brand); font-size: var(--nh-fs-xs); }
+.pill:hover { color: var(--nh-ink); box-shadow: 0 1px 2px rgb(0 0 0 / 0.05), inset 0 0 0 1px var(--nh-brand-line); }
+.pill:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 3px; }
+.hero h1 { font-size: var(--nh-fs-hero); font-weight: 600; line-height: 1.02; letter-spacing: -0.045em; text-wrap: balance; }
+.lead { font-size: var(--nh-fs-xl); line-height: 1.5; color: var(--nh-ink-2); max-width: 44ch; text-wrap: balance; margin-bottom: 16px; }
+@keyframes rise { from { opacity: 0; transform: translateY(16px); } }
+.pill, .hero h1, .lead { animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.hero h1 { animation-delay: 0.06s; }
+.lead { animation-delay: 0.14s; }
 
-/* A band: one section on the light ground. */
-.band { max-width: 1240px; margin: 0 auto; padding: clamp(88px, 11vw, 168px) var(--nh-page-x) 0; display: grid; gap: clamp(32px, 4.4vw, 60px); }
-.bandHead { display: grid; gap: 16px; align-content: start; }
-.aside { font-size: 16.5px; line-height: 1.55; color: var(--nh-ink-2); max-width: 46ch; }
-.split { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 24px clamp(32px, 6vw, 96px); align-items: end; }
+.facts {
+  list-style: none; margin: 0 auto; padding: 0; width: 100%; max-width: var(--nh-wide);
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 10px 28px;
+  font-size: var(--nh-fs-sm); font-weight: 500; color: var(--nh-ink-2);
+  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.5s both;
+}
+.facts li { display: inline-flex; align-items: center; gap: 8px; }
+.facts svg { color: var(--nh-brand); }
 
-/* What it never does: the claim on the left, the three rules as a ruled list on the right. */
-.never { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 32px clamp(32px, 6vw, 96px); align-items: start; }
-.never .aside { margin-top: 8px; }
-.neverList { list-style: none; margin: 0; padding: 0; display: grid; }
-.neverList li { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 8px 24px; padding: 24px 0; border-top: 1px solid var(--nh-line); }
-.neverList li:last-child { border-bottom: 1px solid var(--nh-line); }
-.neverList h3 { font-size: 18px; letter-spacing: -0.01em; line-height: 1.3; }
-.neverList p { font-size: 15.5px; line-height: 1.55; color: var(--nh-ink-2); }
+/* ── A band: one section on the ground, with its heading. */
+.band { max-width: calc(var(--nh-wide) + 2 * var(--nh-page-x)); margin: 0 auto; padding: 144px var(--nh-page-x) 0; display: grid; gap: 48px; }
+.head { display: grid; gap: 14px; justify-items: start; max-width: 760px; }
+.head h2, .close h2 { font-size: var(--nh-fs-h2); font-weight: 600; line-height: 1.06; letter-spacing: -0.035em; text-wrap: balance; }
+.sub { font-size: var(--nh-fs-lg); line-height: 1.55; color: var(--nh-ink-2); max-width: 58ch; }
+.inline { color: var(--nh-ink); text-decoration: underline; text-decoration-color: var(--nh-line); text-underline-offset: 3px; }
+.inline:hover { color: var(--nh-ink); text-decoration-color: var(--nh-ink); }
 
-/* The pilot week: the five days carry the blue rule, what comes after does not. */
-.week { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px clamp(16px, 2.4vw, 32px); }
-.week li { display: grid; gap: 12px; align-content: start; padding-top: 16px; border-top: 2px solid var(--nh-brand); }
-.week li:last-child { border-top-color: var(--nh-line); }
-.week span { font-family: var(--nh-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--nh-brand); }
-.week li:last-child span { color: var(--nh-mute); }
-.week p { font-size: 15.5px; line-height: 1.55; color: var(--nh-ink-2); }
+/* ── Security and the works council: six cards, three by two. */
+.trust { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.trust li {
+  display: grid; gap: 10px; align-content: start; padding: 24px; background: var(--nh-card); border-radius: var(--radius-md);
+  box-shadow: var(--nh-card-shadow); transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.trust li:hover { transform: translateY(-2px); box-shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 22px 40px -24px rgb(20 50 100 / 0.35); }
+.trustIcon { width: 40px; height: 40px; display: grid; place-items: center; margin-bottom: 6px; border-radius: var(--radius-sm); background: var(--nh-brand-tint); color: var(--nh-brand); }
+.trust h3 { font-size: var(--nh-fs-lg); letter-spacing: -0.015em; }
+.trust p { font-size: var(--nh-fs-md); line-height: 1.55; color: var(--nh-ink-2); }
 
-/* Close: the question back, one button - a white card, like the panels in the app. */
+/* ── The pilot: heading and the ask side by side, then the week as a track of four steps. */
+.split { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 24px 64px; align-items: end; }
+.splitSide { display: grid; gap: 20px; justify-items: start; }
+.splitSide p { font-size: var(--nh-fs-lg); line-height: 1.55; color: var(--nh-ink-2); }
+.week { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; counter-reset: step; }
+.week li { position: relative; display: grid; gap: 8px; align-content: start; padding: 28px 22px 24px; background: var(--nh-card); border-radius: var(--radius-md); box-shadow: var(--nh-card-shadow); }
+/* The track along the top: blue for the five days, grey for what comes after. */
+.week li::before { content: ""; position: absolute; left: 22px; right: 22px; top: 0; height: 3px; border-radius: 0 0 2px 2px; background: var(--nh-brand); }
+.week li:last-child::before { background: var(--nh-line); }
+.when { font-family: var(--nh-mono); font-size: var(--nh-fs-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--nh-brand); }
+.week li:last-child .when { color: var(--nh-mute); }
+.week h3 { font-size: var(--nh-fs-xl); letter-spacing: -0.02em; }
+.week p { font-size: var(--nh-fs-md); line-height: 1.55; color: var(--nh-ink-2); }
+
+/* ── Questions: the heading on the left, the answers on the right; one open at a time. */
+.faq { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: start; gap: 48px 64px; }
+.faqList { display: grid; border-top: 1px solid var(--nh-line); }
+.faqList details { border-bottom: 1px solid var(--nh-line); }
+.faqList summary {
+  list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 0; cursor: pointer;
+  font-family: var(--nh-heading); font-size: var(--nh-fs-lg); font-weight: 600; letter-spacing: -0.01em;
+}
+.faqList summary::-webkit-details-marker { display: none; }
+.faqList summary:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 4px; border-radius: var(--radius-xs); }
+.plus { position: relative; flex: none; width: 28px; height: 28px; border-radius: var(--radius-sm); background: var(--nh-card); box-shadow: inset 0 0 0 1px var(--nh-line); }
+.plus::before, .plus::after { content: ""; position: absolute; left: 50%; top: 50%; width: 12px; height: 1.6px; margin: -0.8px 0 0 -6px; background: var(--nh-ink); border-radius: 1px; transition: transform 0.25s ease; }
+.plus::after { transform: rotate(90deg); }
+.faqList details[open] .plus::after { transform: rotate(0deg); }
+.faqList details p { padding: 0 44px 22px 0; font-size: var(--nh-fs-md); line-height: 1.6; color: var(--nh-ink-2); }
+
+/* ── Close: the question back, one button - a white card with the ground's dots and a soft blue light. */
 .close {
-  margin: clamp(88px, 11vw, 168px) 12px 0; padding: clamp(48px, 7vw, 104px) clamp(18px, 4.4vw, 64px);
-  border-radius: clamp(20px, 2.6vw, 34px); background: var(--nh-card); box-shadow: var(--nh-card-shadow);
+  max-width: var(--nh-wide); margin: 144px auto 0; padding: 88px 32px;
+  display: grid; justify-items: center; gap: 18px; text-align: center; position: relative; overflow: hidden; isolation: isolate;
+  background: var(--nh-card); border-radius: var(--radius-md); box-shadow: var(--nh-card-shadow);
 }
-.closeIn { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 28px clamp(32px, 6vw, 96px); align-items: end; }
-.closeAsk { display: grid; gap: 22px; }
-.closeAsk p { font-size: 17px; line-height: 1.5; color: var(--nh-ink-2); max-width: 44ch; }
-.cta { display: flex; align-items: center; gap: 12px 22px; flex-wrap: wrap; }
-.close .book { height: 50px; padding: 0 26px; font-size: 15px; }
-.down { font-size: 15px; font-weight: 600; text-decoration: underline; text-decoration-color: var(--nh-line); text-underline-offset: 5px; }
-.down:hover { color: var(--nh-ink); text-decoration-color: var(--nh-ink); }
-.down:focus-visible, .close .book:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 3px; }
+.close::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: radial-gradient(60% 80% at 50% 0%, rgb(11 112 209 / 0.08), transparent 70%), radial-gradient(circle, rgb(60 100 170 / 0.16) 0.9px, transparent 1.5px) 0 0 / 28px 28px;
+  -webkit-mask-image: linear-gradient(#000, transparent 85%); mask-image: linear-gradient(#000, transparent 85%);
+}
+.close > p:not(:global(.nh-eyebrow)) { font-size: var(--nh-fs-lg); line-height: 1.55; color: var(--nh-ink-2); max-width: 50ch; }
+.cta { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
 
-/* Headings come up as they scroll in - only where the browser can tie an animation to the scroll position. */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .band .display, .close .display { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 70%; }
-  }
-}
 @media (prefers-reduced-motion: reduce) {
-  .hero h1, .lead { animation: none; }
+  .pill, .hero h1, .lead, .facts { animation: none; }
+  .trust li { transition: none; }
 }
 
-@media (max-width: 900px) {
-  .split, .never, .closeIn { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 1023px) {
+  .band { padding-top: 112px; gap: 40px; }
+  .trust { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .split, .faq { grid-template-columns: minmax(0, 1fr); }
   .week { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .close { margin: 112px var(--nh-page-x) 0; }
 }
 @media (max-width: 760px) {
-  .close { margin-left: 8px; margin-right: 8px; }
-}
-@media (max-width: 640px) {
-  .hero h1 { font-size: clamp(40px, 15vw, 64px); } /* two lines on a phone: sized to the width, not the one-line rule above */
-  .neverList li { grid-template-columns: minmax(0, 1fr); }
-}
-@media (max-width: 480px) {
-  .week { grid-template-columns: minmax(0, 1fr); }
+  .hero { padding-top: 40px; gap: 32px; }
+  .lead { font-size: var(--nh-fs-lg); }
+  .facts { justify-content: flex-start; gap: 10px 18px; }
+  .band { padding-top: 88px; gap: 32px; }
+  .sub { font-size: var(--nh-fs-md); }
+  .trust, .week { grid-template-columns: minmax(0, 1fr); }
+  .trust li { padding: 20px; }
+  .close { margin: 88px 8px 0; padding: 56px 20px; }
+  .faqList details p { padding-right: 0; }
 }

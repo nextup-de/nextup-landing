@@ -1,0 +1,13 @@
+.avatar {
+  flex: none; display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: var(--radius-full);
+  background: var(--nh-avatar); color: var(--nh-avatar-ink);
+  font-family: var(--nh-heading); font-size: var(--nh-fs-xs); font-weight: 600; letter-spacing: 0.01em;
+}
+.avatar[data-size="24"] { width: 24px; height: 24px; }
+.avatar[data-size="28"] { width: 28px; height: 28px; }
+.avatar[data-size="36"] { width: 36px; height: 36px; font-size: var(--nh-fs-sm); }
+
+.person { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.who { display: grid; min-width: 0; text-align: left; }
+.who strong { font-family: var(--nh-heading); font-size: var(--nh-fs-md); font-weight: 600; color: var(--nh-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.who small { font-size: var(--nh-fs-sm); color: var(--nh-mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

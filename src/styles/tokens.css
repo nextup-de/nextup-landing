@@ -36,57 +36,52 @@
   --nh-idea: #6d4fc2;         /* violet: something could be */
   --nh-idea-tint: #f2eefb;
   --nh-idea-line: #cfc2f0;
-  /* The raise box's gold edge, as on the landing's hero box: strong at the sides, pale across the middle. */
+  /* The raise box's gold edge (the app's composer): strong at the sides, pale across the middle. */
   --nh-gold: #f0c440;
   --nh-gold-soft: #fdefc5;
 
   --nh-font: var(--font-sans, "Manrope"), system-ui, -apple-system, "Segoe UI", sans-serif;   /* --font-sans set by next/font in layout.tsx */
   --nh-mono: var(--font-mono, "IBM Plex Mono"), ui-monospace, SFMono-Regular, Menlo, monospace;
-  --nh-serif: var(--font-serif, "Instrument Serif"), Georgia, "Times New Roman", serif;   /* section headings on the raise page */
+  --nh-heading: var(--font-inter, "Inter"), var(--nh-font);   /* headings and the product's screens: the app's heading face */
 
-  --nh-r-sm: 8px;
-  --nh-r: 11px;
-  --nh-r-lg: 18px;
-  --nh-r-xl: 22px;
+  /* Corners, as in the app (Square Corners): controls 8px (6px when tiny), containers 12px; avatars and dots 50%. */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-full: 9999px;
+  --nh-r-sm: var(--radius-xs);
+  --nh-r: var(--radius-xs);
+  --nh-r-lg: var(--radius-md);
+  --nh-r-xl: var(--radius-md);
+
+  /* Type: the app's fixed scale (its docs/RESPONSIVE.md "Sizes") - real sizes, nothing grows with the window. */
+  --nh-fs-xs: 12px;
+  --nh-fs-sm: 13px;
+  --nh-fs-md: 15px;
+  --nh-fs-lg: 17px;
+  --nh-fs-xl: 20px;
+  --nh-fs-2xl: 24px;
+  --nh-fs-3xl: 28px;
+  --nh-fs-4xl: 34px;
+  --nh-fs-input: 16px;
+  /* The landing's only sizes above the app's scale: the hero line and section headings. Fixed, one step per screen class. */
+  --nh-fs-hero: 84px;
+  --nh-fs-h2: 48px;
 
   --nh-space: 8px;
-  --nh-page-x: clamp(16px, 5vw, 56px);
+  --nh-page-x: 56px;   /* the side gutter: 32px on tablets, 16px on phones (below) */
   --nh-max: 1120px;
+  --nh-wide: 1200px;   /* the landing's sections */
 
-  /* Page scale, applied as `zoom` on <html> in globals.css. The design is drawn for a ~1920x950
-     canvas; a laptop at 100% shows it ~25% too large, so mouse-driven screens scale down to 0.9
-     at most (0.8 made text too small), big monitors scale up a little. Phones and tablets stay at 1:
-     their sizes are tuned per breakpoint. The smaller of the width and height factor wins. */
-  --nh-zoom-w: 1;
-  --nh-zoom-h: 1;
-  --nh-zoom: 1;
-  /* The viewport in page pixels. Viewport units are scaled by `zoom` too, so a full-height box
-     uses these instead of 100vh / 100vw. Height is the small viewport (svh): on iOS Safari and
-     Android Chrome 100vh is taller than the screen while the toolbar shows, and dvh changes as the
-     toolbar slides away, so every box sized by it jumps mid-scroll. svh fits the screen with the
-     toolbar showing and never moves. Browsers without svh (Safari < 15.4) get vh. */
-  --nh-screen-h: calc(100vh / var(--nh-zoom));
-  --nh-screen-w: calc(100vw / var(--nh-zoom));
+  /* The viewport. No page scale (the app dropped `zoom`: Safari lays zoomed lengths out differently).
+     Height is the small viewport (svh): on iOS Safari and Android Chrome 100vh is taller than the screen
+     while the toolbar shows, and dvh changes as it slides away. Browsers without svh get vh. */
+  --nh-screen-h: 100vh;
+  --nh-screen-w: 100vw;
   --nh-head: 64px; /* the sticky site header (SiteHeader.module.css) */
 }
 @supports (height: 100svh) {
-  :root { --nh-screen-h: calc(100svh / var(--nh-zoom)); }
+  :root { --nh-screen-h: 100svh; }
 }
-
-@supports (zoom: 1) {
-  @media (hover: hover) and (pointer: fine) {
-    :root { --nh-zoom: min(var(--nh-zoom-w), var(--nh-zoom-h)); }
-    @media (min-width: 900px) { :root { --nh-zoom-w: 0.96; } }
-    @media (min-width: 1000px) { :root { --nh-zoom-w: 0.93; } }
-    @media (min-width: 1100px) { :root { --nh-zoom-w: 0.9; } }
-    @media (min-width: 1700px) { :root { --nh-zoom-w: 0.94; } }
-    @media (min-width: 1800px) { :root { --nh-zoom-w: 0.97; } }
-    @media (min-width: 1900px) { :root { --nh-zoom-w: 1; } }
-    @media (min-width: 2300px) and (min-height: 1150px) { :root { --nh-zoom-w: 1.08; } }
-    @media (min-width: 2800px) and (min-height: 1400px) { :root { --nh-zoom-w: 1.16; } }
-    /* Laptops are short: below ~900px of height the page shrinks with it, never below 0.9 -
-       under that, body text drops toward 12px and reads too small on a laptop. */
-    @media (min-width: 1100px) and (max-height: 899px) { :root { --nh-zoom-h: 0.95; } }
-    @media (min-width: 1100px) and (max-height: 819px) { :root { --nh-zoom-h: 0.9; } }
-  }
-}
+@media (max-width: 1023px) { :root { --nh-page-x: 32px; --nh-fs-hero: 64px; --nh-fs-h2: 40px; } }
+@media (max-width: 760px) { :root { --nh-page-x: 16px; --nh-fs-hero: 42px; --nh-fs-h2: 32px; } }

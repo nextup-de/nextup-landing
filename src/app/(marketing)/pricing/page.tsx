@@ -1,7 +1,7 @@
 // PRICING. Free pilot, one flat company plan, and "talk to us" for groups. Per company, not per seat.
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/Button";
-import { PRINCIPLES, SITE } from "@/config/site";
+import { FAQ, PRINCIPLES, SITE } from "@/config/site";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -67,14 +67,6 @@ const TIERS = [
     cta: { label: "Contact us", href: "/contact", variant: "ghost" as const },
     featured: false,
   },
-];
-
-const FAQ = [
-  ["Why per company and not per seat?", "A tool for raising things fails the moment you count who is allowed to raise them. Everyone raises; the price does not change when you add people."],
-  ["What exactly is a pilot?", "Five working days in one department, timing one recurring decision type - approve a tool, sign off a clause, answer a data request. Real requests, real owners. At the end you see the median time to first answer and where the waiting went. It is free; we ask for thirty minutes of feedback."],
-  ["Do you need access to our systems?", "No. Cases are raised in one field on the site. Optionally, an employee forwards a single e-mail thread to one address - consent is the act of forwarding. There is no mailbox connection and no monitoring."],
-  ["We have a works council. Is this a problem?", `Usually not, and we would rather have the conversation early. ${SITE.name} leads with problems and blockers, not an ideas scheme, and it records no per-person metrics. We can provide a written description of what is measured for the works council before the pilot starts.`],
-  ["Where is our data stored?", "On servers in the EU. The privacy policy names the hosting provider. Your data is keyed to your company and never visible to another tenant."],
 ];
 
 export default function PricingPage() {

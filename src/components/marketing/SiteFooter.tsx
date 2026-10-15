@@ -9,14 +9,22 @@ export function SiteFooter() {
       <div className={styles.top}>
         <div className={styles.brand}>
           <Image src="/brand/nextup-logo-blue.png" alt={SITE.name} width={506} height={224} />
+          <p>{SITE.description}</p>
         </div>
-        <nav className={styles.links} aria-label="Footer">
-          <Link href="/#how">How it works</Link>
+        <nav className={styles.col} aria-label="Product">
+          <p className={styles.colHead}>Product</p>
+          <Link href="/#product">How it works</Link>
+          <Link href="/#trust">Security</Link>
+          <Link href="/#pilot">The pilot</Link>
           <Link href="/pricing">Pricing</Link>
+        </nav>
+        <nav className={styles.col} aria-label="Get started">
+          <p className={styles.colHead}>Get started</p>
           <Link href="/contact">Book a pilot</Link>
           <a href={LOGIN_URL}>Log in</a>
         </nav>
-        <nav className={`${styles.links} ${styles.legal}`} aria-label="Legal">
+        <nav className={styles.col} aria-label="Legal">
+          <p className={styles.colHead}>Legal</p>
           <Link href="/imprint">Imprint</Link>
           <Link href="/privacy">Privacy</Link>
         </nav>

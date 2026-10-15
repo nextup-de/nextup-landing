@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
 
-type Variant = "primary" | "ghost" | "accent";
-type Common = { variant?: Variant; size?: "sm" | "md"; block?: boolean; className?: string; children: React.ReactNode };
+type Variant = "primary" | "ghost" | "accent" | "dark";
+type Common = { variant?: Variant; size?: "sm" | "md" | "lg"; block?: boolean; className?: string; children: React.ReactNode };
 type AsLink = Common & { href: string };
 type AsButton = Common & { href?: undefined; type?: "button" | "submit"; onClick?: () => void; disabled?: boolean };
 
 function classes({ variant = "primary", size = "md", block, className }: Common) {
-  return cn("nh-btn", `nh-btn-${variant}`, size === "sm" && "nh-btn-sm", block && "nh-btn-block", className);
+  return cn("nh-btn", `nh-btn-${variant}`, size !== "md" && `nh-btn-${size}`, block && "nh-btn-block", className);
 }
 
 export function Button(props: AsLink | AsButton) {

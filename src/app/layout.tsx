@@ -15,16 +15,19 @@ const mono = localFont({
   ],
   variable: "--font-mono", display: "swap",
 });
-const serif = localFont({ src: "./fonts/instrument-serif-400.woff2", weight: "400", variable: "--font-serif", display: "swap" }); // headings on the raise page
+const inter = localFont({ src: "./fonts/inter-var.woff2", weight: "400 700", variable: "--font-inter", display: "swap" }); // headings and the product's own screens, as in the app
 
 export const metadata: Metadata = {
   title: { default: `${SITE.name} - ${SITE.tagline}`, template: `%s · ${SITE.name}` },
   description: SITE.description,
+  // What a shared link shows in Slack, Teams, LinkedIn or a mail client. Text only: no image to keep in step.
+  openGraph: { type: "website", siteName: SITE.name, title: `${SITE.name} - ${SITE.tagline}`, description: SITE.description },
+  twitter: { card: "summary", title: `${SITE.name} - ${SITE.tagline}`, description: SITE.description },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable} ${serif.variable}`}>
+    <html lang="en" className={`${sans.variable} ${mono.variable} ${inter.variable}`}>
       <body>{children}</body>
     </html>
   );

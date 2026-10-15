@@ -41,16 +41,17 @@ Without the two intake variables the form falls back to a pre-filled `mailto:`.
 
 ```
 src/app/(marketing)/   pages: home, pricing, contact, imprint, privacy
-src/components/        marketing (header, footer, contact form) + ui (Button, Field) + shell (Ground)
-src/config/site.ts     name, tagline, legal operator details, COMPANY_URL
+src/components/        marketing (header, footer, contact form, the home page's live demos and tour/) + ui (Button, Field, Icon) + shell (Ground)
+src/config/site.ts     name, tagline, legal operator details, COMPANY_URL, the pilot week, principles and FAQ
+src/features/demo/     the demo company's routing map and the product tour's data - copies of the app's demo seed
 src/features/pilot/    pilot request validation (pure, unit-tested)
 src/server/            the form's server action + its rate limit
 src/styles/            design tokens - keep in step with the app's src/styles/tokens.css
 ```
 
 These files were split out of the app on 27 Sep 2026 (docs/PLATFORM_PLAN.md in the app repo).
-The design tokens and `ui/` components are copies. If the app's look changes, copy the change
-over too.
+The design tokens, `ui/` components and `lib/avatar.ts` are copies. If the app's look changes, copy the change
+over too. The covers in `public/feed/` are four of the app's Feed covers (`public/feed/library/`).
 
 ## Deploy
 

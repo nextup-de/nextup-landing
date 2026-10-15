@@ -8,7 +8,7 @@ Same files as the app (`nextup-de/nextup`, `apps/app/src/app/fonts/`).
 |---|---|---|
 | manrope-var.woff2 | Manrope (variable) | 400-800 |
 | plex-mono-400/500/600.woff2 | IBM Plex Mono | 400, 500, 600 |
-| instrument-serif-400.woff2 | Instrument Serif | 400 |
+| inter-var.woff2 | Inter (variable) | 400-700 |
 
 To refresh one: request `https://fonts.googleapis.com/css2?family=<Family>:wght@<range>` with a current
 browser user agent and download the url under the `/* latin */` block.

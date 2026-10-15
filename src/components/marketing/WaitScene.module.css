@@ -6,7 +6,7 @@
   --head: var(--nh-head); /* the site header, which stays on top of the pinned stage */
   --stage-h: calc(var(--nh-screen-h) - var(--head));
   height: calc(var(--nh-screen-h) * 4);
-  margin: clamp(72px, 9vw, 128px) 12px 0; border-radius: clamp(20px, 2.6vw, 34px);
+  margin: 128px 12px 0; border-radius: var(--radius-md);
   background: var(--nh-card); box-shadow: var(--nh-card-shadow);
 }
 .stage {
@@ -17,9 +17,9 @@
 
 .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .eyebrow { font-family: var(--nh-mono); font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--nh-mute); }
-.toggle { display: inline-flex; padding: 4px; border-radius: 999px; background: var(--nh-app-ground); border: 1px solid var(--nh-line-soft); }
+.toggle { display: inline-flex; padding: 3px; border-radius: var(--radius-sm); background: #eceef1; }
 .toggle button {
-  height: 34px; padding: 0 15px; border: 0; border-radius: 999px; background: transparent; cursor: pointer;
+  height: 32px; padding: 0 14px; border: 0; border-radius: var(--radius-xs); background: transparent; cursor: pointer; font-family: var(--nh-heading);
   font-size: 13px; font-weight: 700; color: var(--nh-ink-2); transition: background 0.25s ease, color 0.25s ease;
 }
 .toggle button:hover { color: var(--nh-ink); }
@@ -28,19 +28,29 @@
 
 .cols { min-height: 0; display: grid; grid-template-columns: minmax(0, 9fr) minmax(0, 14fr); gap: clamp(24px, 4vw, 64px); align-items: center; }
 .story { min-width: 0; display: grid; gap: clamp(14px, calc(var(--nh-screen-h) * 0.03), 30px); }
-.ask { font-family: var(--nh-serif); font-size: clamp(23px, 2.5vw, 36px); line-height: 1.1; letter-spacing: -0.01em; max-width: 19ch; text-wrap: balance; }
+.ask { font-family: var(--nh-heading); font-size: var(--nh-fs-2xl); font-weight: 600; line-height: 1.25; letter-spacing: -0.02em; max-width: 22ch; text-wrap: balance; }
 
 /* The count: the one big number on the page. It is the day the request is on. */
 .count { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: end; gap: 18px; }
 .num {
-  font-family: var(--nh-serif); font-size: clamp(88px, calc(var(--nh-screen-h) * 0.2), 184px); line-height: 0.78;
-  min-width: 0.86em; color: var(--nh-accent); transition: color 0.4s ease;
+  font-family: var(--nh-heading); font-weight: 600; font-size: clamp(72px, calc(var(--nh-screen-h) * 0.16), 150px); line-height: 0.82;
+  letter-spacing: -0.05em; font-variant-numeric: tabular-nums; min-width: 1.15em; color: var(--nh-accent); transition: color 0.4s ease;
 }
 .scene[data-side="next"] .num { color: var(--nh-brand); }
 .unit { display: grid; gap: 4px; font-size: 14px; line-height: 1.45; color: var(--nh-ink-2); max-width: 34ch; padding-bottom: 4px; }
 .unit strong { font-size: 16px; font-weight: 700; color: var(--nh-ink); }
 .unit span { opacity: 0; transform: translateY(4px); transition: opacity 0.4s ease, transform 0.4s ease; }
 .unit span[data-on="true"] { opacity: 1; transform: none; }
+
+/* The day rail under the count. */
+.rail { display: flex; align-items: center; gap: 12px; }
+.marks { flex: 1; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 3px; }
+.marks i { height: 8px; border-radius: 2px; background: #eceef1; transition: background 0.25s ease; }
+.marks i[data-on] { background: var(--nh-accent); }
+.marks i[data-on][data-work] { background: var(--nh-ink); }
+.scene[data-side="next"] .marks i { height: 8px; }
+.scene[data-side="next"] .marks i[data-on] { background: var(--nh-brand); }
+.railNote { flex: none; font-family: var(--nh-mono); font-size: var(--nh-fs-xs); color: var(--nh-mute); }
 
 /* The ledger: one line per desk, appended as it happens. The bar under a line fills while the request lies there. */
 .ledgers { display: grid; }
@@ -88,7 +98,7 @@
 
 .desk { position: absolute; left: calc(var(--x) * 100%); top: calc(var(--y) * 100%); transform: translate(-50%, -50%); z-index: 1; }
 .plate {
-  display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px 6px 10px; border-radius: 999px; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px 6px 10px; border-radius: var(--radius-sm); white-space: nowrap; font-family: var(--nh-heading);
   background: var(--nh-card); border: 1px solid var(--nh-line); box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
   font-size: 13px; font-weight: 600; color: var(--nh-ink-2);
   transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
@@ -96,7 +106,7 @@
 .plate i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: 0.7; }
 .tag {
   position: absolute; left: 50%; top: calc(100% + 5px); transform: translateX(-50%); white-space: nowrap;
-  padding: 1px 7px; border-radius: 6px; background: var(--nh-card); /* lines pass behind the words, not through them */
+  padding: 1px 7px; border-radius: var(--radius-xs); background: var(--nh-card); /* lines pass behind the words, not through them */
   font-family: var(--nh-mono); font-size: 12px; color: var(--nh-problem); opacity: 0; transition: opacity 0.3s ease;
 }
 .desk[data-low="true"] .tag { top: auto; bottom: calc(100% + 5px); }
@@ -124,17 +134,19 @@
 @media (max-width: 900px) {
   .cols { display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: clamp(10px, calc(var(--nh-screen-h) * 0.02), 20px); }
   .story { display: contents; }
-  .ask { order: 1; max-width: none; font-size: clamp(21px, 5.4vw, 30px); }
+  .ask { order: 1; max-width: none; font-size: var(--nh-fs-xl); }
   .floors { order: 2; }
   .count { order: 3; }
-  .ledgers { order: 4; }
+  .rail { order: 4; }
+  .ledgers { order: 5; }
   .floor { width: min(100%, 560px, calc((var(--stage-h) - 360px) * 1000 / 620)); }
-  .num { font-size: clamp(64px, calc(var(--nh-screen-h) * 0.11), 110px); }
+  .num { font-size: clamp(56px, calc(var(--nh-screen-h) * 0.1), 96px); }
   .ledger li { display: none; }
   .ledger li[data-now="true"], .ledger li[data-on="true"]:not(:has(~ li[data-on="true"])) { display: grid; }
 }
+@media (max-width: 1023px) { .scene { margin-top: 96px; } }
 @media (max-width: 760px) {
-  .scene { margin-left: 8px; margin-right: 8px; }
+  .scene { margin: 72px 8px 0; }
   .floor[data-floor="wide"] { display: none; }
   .floor[data-floor="tall"] { display: block; width: min(100%, 400px, calc((var(--stage-h) - 372px) * 600 / 640)); }
   .plate { font-size: 12px; padding: 5px 9px 5px 8px; gap: 5px; }
