@@ -62,7 +62,7 @@ export default function PricingPage() {
             </div>
             <div className={styles.seats}>
               <span className={styles.faces} aria-hidden="true">
-                {SEATS.map(([name, tone]) => <Avatar key={name} name={name} tone={tone} size={48} />)}
+                {SEATS.map(([name, tone]) => <Avatar key={name} name={name} tone={tone} size={38} />)}
               </span>
               <p>One seat for each person who uses NextUp. Add and remove seats as teams change.</p>
             </div>
