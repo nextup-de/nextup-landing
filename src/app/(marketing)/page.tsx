@@ -120,7 +120,7 @@ export default function LandingPage() {
           <article className={styles.tile} data-tone="amber">
             <div className={styles.role} aria-hidden="true">
               <span className={styles.roleChip}>Head of Inbound Logistics</span>
-              <span className={styles.pair}><Avatar name="N. Demir" tone="blue" size={44} /><Avatar name="T. Vogel" tone="green" size={44} /><small>owner · deputy</small></span>
+              <span className={styles.pair}><Avatar name="N. Demir" tone="blue" size={35} /><Avatar name="T. Vogel" tone="green" size={35} /><small>owner · deputy</small></span>
             </div>
             <div><h3>Roles, not names</h3><p>Routing follows the role, through holidays and job changes.</p></div>
           </article>
@@ -129,7 +129,7 @@ export default function LandingPage() {
             <div><h3>Hosted in the EU</h3><p>One stack per company. No cookies and no tracking on this site.</p></div>
           </article>
           <article className={styles.tile} data-tone="grey">
-            <p className={styles.mini} aria-hidden="true"><span>Raise it in one line</span><i><ArrowUp size={14} /></i></p>
+            <p className={styles.mini} aria-hidden="true"><span>Raise it in one line</span><i><ArrowUp size={11} /></i></p>
             <div><h3>One field to start</h3><p>A pilot needs one field and one routing table.</p></div>
           </article>
         </div>

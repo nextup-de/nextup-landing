@@ -6,39 +6,39 @@
   --head: var(--nh-head); /* the site header, which stays on top of the pinned stage */
   --stage-h: calc(var(--nh-screen-h) - var(--head));
   height: calc(var(--nh-screen-h) * 4);
-  margin: 40px 40px 0; border-radius: var(--nh-r-xl);
+  margin: 32px 32px 0; border-radius: var(--nh-r-xl);
   background: var(--nh-card); box-shadow: var(--nh-card-shadow);
 }
 .stage {
   position: sticky; top: var(--head); height: var(--stage-h);
-  padding: clamp(20px, calc(var(--nh-screen-h) * 0.055), 48px) max(20px, calc((100% - var(--nh-max)) / 2)) clamp(16px, calc(var(--nh-screen-h) * 0.045), 40px);
-  display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: clamp(12px, calc(var(--nh-screen-h) * 0.03), 40px);
+  padding: clamp(16px, calc(var(--nh-screen-h) * 0.044), 38px) max(16px, calc((100% - var(--nh-max)) / 2)) clamp(13px, calc(var(--nh-screen-h) * 0.036), 32px);
+  display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: clamp(10px, calc(var(--nh-screen-h) * 0.024), 32px);
 }
 
-.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-.eyebrow { font-family: var(--nh-mono); font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--nh-mute); }
-.toggle { display: inline-flex; gap: 2px; padding: 4px; border-radius: 999px; background: var(--nh-surface); }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 13px; flex-wrap: wrap; }
+.eyebrow { font-family: var(--nh-mono); font-size: 10px; line-height: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--nh-mute); }
+.toggle { display: inline-flex; gap: 2px; padding: 3px; border-radius: 999px; background: var(--nh-surface); }
 .toggle button {
-  padding: 8px 18px; border: 0; border-radius: 999px; background: transparent; cursor: pointer;
-  font-size: 14px; line-height: 18px; font-weight: 600; color: var(--nh-ink-2); transition: background 320ms var(--nh-ease), color 320ms var(--nh-ease);
+  padding: 6px 14px; border: 0; border-radius: 999px; background: transparent; cursor: pointer;
+  font-size: 11px; line-height: 14px; font-weight: 600; color: var(--nh-ink-2); transition: background 320ms var(--nh-ease), color 320ms var(--nh-ease);
 }
 .toggle button:hover { color: var(--nh-brand); }
 .toggle button[aria-pressed="true"] { background: var(--nh-brand); color: #fff; }
 .toggle button:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 2px; }
 
-.cols { min-height: 0; display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 64px; align-items: center; }
-.story { min-width: 0; display: grid; gap: clamp(14px, calc(var(--nh-screen-h) * 0.03), 28px); }
-.ask { font-size: clamp(24px, 2.4vw, 34px); line-height: 1.18; font-weight: 600; letter-spacing: -0.02em; text-wrap: balance; }
+.cols { min-height: 0; display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 51px; align-items: center; }
+.story { min-width: 0; display: grid; gap: clamp(11px, calc(var(--nh-screen-h) * 0.024), 22px); }
+.ask { font-size: clamp(19px, 1.92vw, 27px); line-height: 1.18; font-weight: 600; letter-spacing: -0.02em; text-wrap: balance; }
 
 /* The count: the one big number on the page. It is the day the request is on. */
-.count { display: flex; align-items: flex-end; gap: 20px; }
+.count { display: flex; align-items: flex-end; gap: 16px; }
 .num {
-  font-size: clamp(88px, calc(var(--nh-screen-h) * 0.19), 168px); line-height: 0.84; font-weight: 700; letter-spacing: -0.05em;
+  font-size: clamp(70px, calc(var(--nh-screen-h) * 0.152), 134px); line-height: 0.84; font-weight: 700; letter-spacing: -0.05em;
   min-width: 1.1em; color: var(--nh-danger); font-variant-numeric: tabular-nums; transition: color 420ms var(--nh-ease);
 }
 .scene[data-side="next"] .num { color: var(--nh-brand); }
-.unit { display: grid; gap: 4px; font-size: 15px; line-height: 22px; color: var(--nh-mute); max-width: 210px; padding-bottom: 10px; }
-.unit strong { font-size: 17px; line-height: 22px; font-weight: 600; color: var(--nh-ink); }
+.unit { display: grid; gap: 3px; font-size: 12px; line-height: 18px; color: var(--nh-mute); max-width: 180px; padding-bottom: 8px; }
+.unit strong { font-size: 14px; line-height: 18px; font-weight: 600; color: var(--nh-ink); }
 .unit span { opacity: 0; transition: opacity 420ms var(--nh-ease); }
 .unit span[data-on="true"] { opacity: 1; }
 
@@ -47,27 +47,27 @@
 .ledger { grid-area: 1 / 1; list-style: none; margin: 0; padding: 0; display: grid; align-content: start; border-bottom: 1px solid var(--nh-line); opacity: 0; visibility: hidden; transition: opacity 320ms var(--nh-ease), visibility 0s 320ms; }
 .ledger[data-show="true"] { opacity: 1; visibility: visible; transition-delay: 0s; }
 .ledger li {
-  display: grid; grid-template-columns: 150px minmax(0, 1fr) 60px 30px; gap: 12px; align-items: center;
-  min-height: 40px; border-top: 1px solid var(--nh-line); font-size: 15px; line-height: 20px; font-weight: 600; color: var(--nh-ink);
+  display: grid; grid-template-columns: 120px minmax(0, 1fr) 48px 24px; gap: 10px; align-items: center;
+  min-height: 32px; border-top: 1px solid var(--nh-line); font-size: 12px; line-height: 16px; font-weight: 600; color: var(--nh-ink);
   opacity: 0.3; transition: opacity 320ms var(--nh-ease);
 }
 .ledger li[data-on="true"] { opacity: 1; }
-.reason { font-size: 14px; font-weight: 400; color: var(--nh-mute); }
+.reason { font-size: 11px; font-weight: 400; color: var(--nh-mute); }
 .ledger li[data-on="true"] .reason { color: var(--nh-warn); }
 .ledger li[data-work="true"][data-on="true"] .reason { color: var(--nh-ok); }
-.days { font-family: var(--nh-mono); font-size: 13px; font-weight: 400; color: var(--nh-ink-2); text-align: right; white-space: nowrap; }
-.track { height: 6px; border-radius: 3px; background: var(--nh-surface); overflow: hidden; }
-.bar { display: block; height: 100%; border-radius: 3px; background: var(--nh-danger); transform: scaleX(var(--w, 0)); transform-origin: left; }
+.days { font-family: var(--nh-mono); font-size: 10.5px; font-weight: 400; color: var(--nh-ink-2); text-align: right; white-space: nowrap; }
+.track { height: 5px; border-radius: 2px; background: var(--nh-surface); overflow: hidden; }
+.bar { display: block; height: 100%; border-radius: 2px; background: var(--nh-danger); transform: scaleX(var(--w, 0)); transform-origin: left; }
 .ledger li[data-work="true"] .bar { background: var(--nh-brand); }
-.ledger[data-kind="next"] li { grid-template-columns: 52px minmax(0, 1fr); align-items: baseline; font-weight: 400; line-height: 22px; padding: 9px 0; color: var(--nh-ink-2); }
+.ledger[data-kind="next"] li { grid-template-columns: 42px minmax(0, 1fr); align-items: baseline; font-weight: 400; line-height: 18px; padding: 7px 0; color: var(--nh-ink-2); }
 .ledger[data-kind="next"] .days { text-align: left; color: var(--nh-brand); font-weight: 500; }
 .ledger em { font-style: normal; font-weight: 600; color: var(--nh-ink); }
 
 /* The floor: desks as pills, the request's way as lines. Sized so it always fits the pinned stage. */
 .floors { min-width: 0; display: grid; place-items: center; }
 .floor {
-  position: relative; aspect-ratio: 1000 / 620; width: min(100%, calc((var(--stage-h) - 190px) * 1000 / 620));
-  border-radius: var(--nh-r-lg); background: #f7fafd radial-gradient(circle, rgb(60 100 170 / 0.32) 1px, rgb(60 100 170 / 0) 1.6px) 0 0 / 42px 42px;
+  position: relative; aspect-ratio: 1000 / 620; width: min(100%, calc((var(--stage-h) - 152px) * 1000 / 620));
+  border-radius: var(--nh-r-lg); background: #f7fafd radial-gradient(circle, rgb(60 100 170 / 0.32) 1px, rgb(60 100 170 / 0) 1.6px) 0 0 / 34px 34px;
 }
 .floor[data-floor="tall"] { display: none; aspect-ratio: 600 / 640; }
 .wires { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
@@ -87,58 +87,58 @@
 
 .desk { position: absolute; left: calc(var(--x) * 100%); top: calc(var(--y) * 100%); transform: translate(-50%, -50%); z-index: 1; }
 .plate {
-  display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 6px; border-radius: 999px; white-space: nowrap;
-  background: rgb(255 255 255 / 0.7); font-size: 14px; line-height: 18px; font-weight: 500; color: var(--nh-mute);
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px 5px 5px; border-radius: 999px; white-space: nowrap;
+  background: rgb(255 255 255 / 0.7); font-size: 11px; line-height: 14px; font-weight: 500; color: var(--nh-mute);
   transition: background 320ms var(--nh-ease), color 320ms var(--nh-ease), box-shadow 320ms var(--nh-ease);
 }
 .tag {
-  position: absolute; left: 50%; top: calc(100% + 6px); transform: translateX(-50%); white-space: nowrap;
-  padding: 4px 10px; border-radius: var(--nh-r); background: var(--nh-danger-tint);
-  font-size: 13px; line-height: 16px; font-weight: 600; color: var(--nh-danger); opacity: 0; transition: opacity 320ms var(--nh-ease);
+  position: absolute; left: 50%; top: calc(100% + 5px); transform: translateX(-50%); white-space: nowrap;
+  padding: 3px 8px; border-radius: var(--nh-r); background: var(--nh-danger-tint);
+  font-size: 10.5px; line-height: 13px; font-weight: 600; color: var(--nh-danger); opacity: 0; transition: opacity 320ms var(--nh-ease);
 }
-.desk[data-low="true"] .tag { top: auto; bottom: calc(100% + 6px); }
+.desk[data-low="true"] .tag { top: auto; bottom: calc(100% + 5px); }
 .tag[data-work="true"] { background: var(--nh-ok-tint); color: var(--nh-ok); } /* the desk that answered */
 /* A desk the request has reached: a full white pill. */
 .desk[data-seen="true"] .plate { background: var(--nh-card); color: var(--nh-ink); font-weight: 600; box-shadow: var(--nh-float-shadow); }
-.desk[data-role="sender"] .plate, .desk[data-role="sender"][data-seen="true"] .plate { background: var(--nh-brand); color: #fff; font-weight: 600; box-shadow: 0 6px 20px rgb(0 98 110 / 0.25); }
+.desk[data-role="sender"] .plate, .desk[data-role="sender"][data-seen="true"] .plate { background: var(--nh-brand); color: #fff; font-weight: 600; box-shadow: 0 5px 16px rgb(0 98 110 / 0.25); }
 .desk[data-role="sender"] .plate > span { background: #fff; color: var(--nh-brand); }
 .desk[data-seen="true"] .tag { opacity: 1; }
-.desk[data-here="true"]:not([data-role="sender"]) .plate { box-shadow: 0 0 0 5px rgb(215 0 21 / 0.12), var(--nh-float-shadow); }
+.desk[data-here="true"]:not([data-role="sender"]) .plate { box-shadow: 0 0 0 4px rgb(215 0 21 / 0.12), var(--nh-float-shadow); }
 /* With NextUp: the old stops fall back, the owner and the deputy on the map step forward. */
 .scene[data-side="next"] .desk[data-seen="true"]:not([data-role="sender"]) .plate { background: rgb(255 255 255 / 0.7); color: var(--nh-mute); font-weight: 500; box-shadow: none; }
 .scene[data-side="next"] .desk[data-seen="true"] .tag { opacity: 0; }
 .desk[data-role="owner"] .tag, .desk[data-role="deputy"] .tag { background: var(--nh-brand-tint); color: var(--nh-brand); }
 .scene[data-beat="2"] .desk[data-role="owner"] .plate, .scene[data-beat="3"] .desk[data-role="owner"] .plate {
-  background: var(--nh-brand); color: #fff; font-weight: 600; box-shadow: 0 0 0 5px var(--nh-brand-focus), 0 6px 20px rgb(0 98 110 / 0.25);
+  background: var(--nh-brand); color: #fff; font-weight: 600; box-shadow: 0 0 0 4px var(--nh-brand-focus), 0 5px 16px rgb(0 98 110 / 0.25);
 }
 .scene[data-beat="2"] .desk[data-role="owner"] .plate > span, .scene[data-beat="3"] .desk[data-role="owner"] .plate > span { background: #fff; color: var(--nh-brand); }
 .scene[data-beat="2"] .desk[data-role="deputy"] .plate, .scene[data-beat="3"] .desk[data-role="deputy"] .plate { background: var(--nh-card); color: var(--nh-ink); font-weight: 600; box-shadow: var(--nh-float-shadow); }
 .scene[data-beat="2"] .desk[data-role] .tag, .scene[data-beat="3"] .desk[data-role] .tag { opacity: 1; }
 .scene[data-beat="2"] .desk[data-role="sender"] .tag, .scene[data-beat="3"] .desk[data-role="sender"] .tag { opacity: 0; }
 
-.note { font-size: 13px; line-height: 18px; color: var(--nh-mute); }
+.note { font-size: 10.5px; line-height: 14px; color: var(--nh-mute); }
 
 /* Narrow: one column - the request, the floor, the count, then only the ledger line that is happening now. */
 @media (max-width: 1000px) {
-  .cols { display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: clamp(10px, calc(var(--nh-screen-h) * 0.02), 20px); }
+  .cols { display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: clamp(8px, calc(var(--nh-screen-h) * 0.016), 16px); }
   .story { display: contents; }
-  .ask { order: 1; font-size: clamp(22px, 5.4vw, 30px); }
+  .ask { order: 1; font-size: clamp(18px, 4.32vw, 24px); }
   .floors { order: 2; }
   .count { order: 3; }
   .ledgers { order: 4; }
-  .floor { width: min(100%, 560px, calc((var(--stage-h) - 380px) * 1000 / 620)); }
-  .num { font-size: clamp(64px, calc(var(--nh-screen-h) * 0.12), 120px); }
+  .floor { width: min(100%, 448px, calc((var(--stage-h) - 304px) * 1000 / 620)); }
+  .num { font-size: clamp(51px, calc(var(--nh-screen-h) * 0.096), 96px); }
   .ledger li { display: none; }
   .ledger li[data-now="true"], .ledger li[data-on="true"]:not(:has(~ li[data-on="true"])) { display: grid; }
-  .ledger li { grid-template-columns: minmax(0, 1fr) auto 30px; }
+  .ledger li { grid-template-columns: minmax(0, 1fr) auto 24px; }
   .track { display: none; }
 }
 @media (max-width: 760px) {
   .scene { margin: 0; border-radius: 0; box-shadow: none; }
   .floor[data-floor="wide"] { display: none; }
-  .floor[data-floor="tall"] { display: block; width: min(100%, 400px, calc((var(--stage-h) - 392px) * 600 / 640)); }
-  .plate { font-size: 12px; padding: 4px 10px 4px 4px; gap: 6px; }
-  .plate > span { --s: 24px !important; }
+  .floor[data-floor="tall"] { display: block; width: min(100%, 320px, calc((var(--stage-h) - 314px) * 600 / 640)); }
+  .plate { font-size: 10px; padding: 3px 8px 3px 3px; gap: 5px; }
+  .plate > span { --s: 19px !important; }
   .unit span { display: none; }
   .unit span[data-on="true"] { display: block; }
   .note { display: none; }
@@ -148,5 +148,5 @@
 @media (prefers-reduced-motion: reduce), (max-height: 560px) {
   .scene { height: auto; }
   .stage { position: static; height: auto; }
-  .floor, .floor[data-floor="tall"] { width: min(100%, 720px); }
+  .floor, .floor[data-floor="tall"] { width: min(100%, 576px); }
 }

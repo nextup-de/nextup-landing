@@ -251,7 +251,7 @@ export function WaitScene({ request, from, decision, promiseDays, owner, ownerRo
                       // The same numbers that draw the lines place the desk: a position, not a style.
                       <span key={id} className={styles.desk} data-role={role} data-seen={seen} data-here={here === id} data-low={pos[1] > box.h * 0.7}
                         style={{ "--x": pos[0] / box.w, "--y": pos[1] / box.h } as React.CSSProperties}>
-                        <span className={styles.plate}><Avatar name={names[id][1]} tone={FACE[id]} size={28} />{names[id][kind === "wide" ? 0 : 1]}</span>
+                        <span className={styles.plate}><Avatar name={names[id][1]} tone={FACE[id]} size={22} />{names[id][kind === "wide" ? 0 : 1]}</span>
                         {tag && <span className={styles.tag} data-work={hop >= 0 && HOPS[hop].work ? "true" : undefined}>{tag}</span>}
                       </span>
                     );
