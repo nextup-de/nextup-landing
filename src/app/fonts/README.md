@@ -1,11 +1,13 @@
 # Fonts
 
 Latin-subset woff2 files from Google Fonts, committed so `next build` never needs the network.
-Both families are under the SIL Open Font License 1.1 (https://openfontlicense.org).
-Same files as the app (`nextup-de/nextup`, `apps/app/src/app/fonts/`).
+All three families are under the SIL Open Font License 1.1 (https://openfontlicense.org).
+Onest is the site's own face; Inter and Plex Mono are the same files as the app (`nextup-de/nextup`,
+`apps/app/src/app/fonts/`) and draw the product's screens.
 
 | File | Family | Weights |
 |---|---|---|
+| onest-var.woff2 | Onest (variable) | 400-700 |
 | inter-var.woff2 | Inter (variable) | 400-700 |
 | plex-mono-400/500/600.woff2 | IBM Plex Mono | 400, 500, 600 |
 

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Button } from "@/components/ui/Button";
 import { SeatQuote } from "@/components/marketing/SeatQuote";
 import { Avatar, Pill, type Tone } from "@/components/product/elements";
+import { FAQ } from "@/config/site";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -12,14 +13,6 @@ export const metadata: Metadata = {
 };
 
 const SEATS: Array<[string, Tone]> = [["N. Demir", "blue"], ["T. Vogel", "green"], ["A. Schulz", "amber"], ["M. Hoffmann", "violet"], ["K. Yilmaz", "teal"], ["J. Schmidt", "pink"]];
-
-const FAQ = [
-  ["What counts as a seat?", "One seat is one person who uses NextUp. Who needs a seat in your company is agreed in the pilot scope."],
-  ["What exactly is a pilot?", "A paid build project in three phases. We agree the scope and the price, build NextUp with your people on your org chart and routing, and run it in your plant with real ideas. How long it takes depends on the scope."],
-  ["Do you need access to our systems?", "Not to start. Ideas are raised in one field. What gets connected later, such as single sign-on, is part of the pilot scope."],
-  ["We have a works council. Is this a problem?", "Talk to us early. The works council should be part of the pilot scope from the first conversation."],
-  ["Where is our data stored?", "On servers in the EU. The privacy policy names the hosting provider. Your data is keyed to your company and never visible to another company."],
-];
 
 export default function PricingPage() {
   return (

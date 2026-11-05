@@ -1,0 +1,51 @@
+/* The pilot's diagram on the lit frame: a 700 x 460 box, centred, its labels placed in percent of it by the same
+   numbers that draw the lines, and sized in container units so the whole picture scales as one. The inputs are
+   white chips, the hub the brand colour, the owners white cards. A phone stacks them: inputs, hub, owners. */
+.frame { height: 100%; min-height: 380px; display: grid; place-items: center; padding: var(--s-6); }
+.box { position: relative; width: min(100%, 700px); aspect-ratio: 700 / 460; container-type: inline-size; }
+
+.lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.lines path { fill: none; stroke: var(--nh-brand-line); stroke-width: 1.5; stroke-dasharray: 3 5; }
+.pulseIn { fill: var(--nh-blue-bright); }
+.pulseOut { fill: var(--nh-brand); }
+
+.input, .hub, .owner { position: absolute; left: var(--x); top: var(--y); white-space: nowrap; }
+.input {
+  transform: translate(-100%, -50%); display: inline-flex; align-items: center; gap: 1.2cqw; padding: 0.9cqw 1.8cqw 0.9cqw 0.9cqw;
+  border-radius: 999px; background: var(--nh-card); box-shadow: 0 0 0 1px rgb(20 50 90 / 0.06), 0 6px 16px rgb(20 50 90 / 0.08);
+  font-size: max(10px, 2cqw); line-height: 1.3; font-weight: 500; color: var(--ink);
+}
+.input i { width: 3.8cqw; height: 3.8cqw; min-width: 18px; min-height: 18px; border-radius: 999px; display: grid; place-items: center; background: var(--nh-blue-tint); color: var(--nh-blue); }
+.input i svg { width: 60%; height: 60%; }
+.hub {
+  transform: translate(-50%, -50%); width: 15.4cqw; height: 15.4cqw; border-radius: 4cqw; display: grid; place-content: center; gap: 0.3cqw; text-align: center;
+  background: var(--nh-brand); color: #fff; box-shadow: 0 0 0 1.2cqw rgb(0 98 110 / 0.1), 0 20px 40px -16px rgb(0 63 71 / 0.6);
+}
+.hub b { font-size: max(11px, 2.85cqw); line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
+.hub small { font-size: max(9px, 1.6cqw); line-height: 1.3; color: rgb(255 255 255 / 0.8); }
+.owner {
+  transform: translate(0, -50%); display: inline-flex; align-items: center; gap: 1.4cqw; padding: 1.1cqw 2cqw 1.1cqw 1.1cqw;
+  border-radius: 1.8cqw; background: var(--nh-card); box-shadow: 0 0 0 1px rgb(20 50 90 / 0.06), 0 6px 16px rgb(20 50 90 / 0.08);
+}
+.owner > :first-child { --s: max(20px, 3.8cqw) !important; }
+.owner > span:last-child { display: grid; }
+.owner strong { font-size: max(10px, 2cqw); line-height: 1.3; font-weight: 500; color: var(--ink); }
+.owner small { font-size: max(9px, 1.7cqw); line-height: 1.3; color: var(--muted); }
+
+.pause { right: 16px; bottom: 16px; }
+
+@media (max-width: 639px) {
+  .frame { min-height: 0; padding: var(--s-5) var(--s-4); }
+  .box { aspect-ratio: auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .lines, .pause { display: none; }
+  .input, .hub, .owner { position: static; transform: none; }
+  .input { font-size: 12px; gap: 6px; padding: 4px 10px 4px 4px; }
+  .input i { width: 22px; height: 22px; }
+  .hub { width: 100%; height: auto; margin: 8px 0; padding: 12px; border-radius: var(--r-md); box-shadow: none; }
+  .hub b { font-size: 16px; }
+  .hub small { font-size: 12px; }
+  .owner { flex: 1 1 calc(50% - 4px); gap: 8px; padding: 6px 10px 6px 6px; border-radius: var(--r-sm); }
+  .owner > :first-child { --s: 24px !important; }
+  .owner strong { font-size: 13px; }
+  .owner small { font-size: 11px; }
+}

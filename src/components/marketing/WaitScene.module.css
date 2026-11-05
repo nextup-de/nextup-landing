@@ -2,38 +2,31 @@
    site header while the page scrolls through it. Red is waiting, teal is the sender, the routed line and the
    owner. Desks are white pills with a tinted face, as people are in the app. */
 
-.scene {
-  --head: var(--nh-head); /* the site header, which stays on top of the pinned stage */
-  --stage-h: calc(var(--nh-screen-h) - var(--head));
-  height: calc(var(--nh-screen-h) * 4);
-  margin: 32px 32px 0; border-radius: var(--nh-r-xl);
-  background: var(--nh-card); box-shadow: var(--nh-card-shadow);
-}
+.scene { --stage-h: var(--nh-screen-h); }
 .stage {
-  position: sticky; top: var(--head); height: var(--stage-h);
-  padding: clamp(16px, calc(var(--nh-screen-h) * 0.044), 38px) max(16px, calc((100% - var(--nh-max)) / 2)) clamp(13px, calc(var(--nh-screen-h) * 0.036), 32px);
-  display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: clamp(10px, calc(var(--nh-screen-h) * 0.024), 32px);
+  position: sticky; top: 0; height: var(--stage-h); padding: var(--padt) 0 var(--padb);
+  display: grid; grid-template-rows: auto minmax(0, 1fr); gap: var(--s-6);
 }
 
-.top { display: flex; align-items: center; justify-content: space-between; gap: 13px; flex-wrap: wrap; }
-.eyebrow { font-family: var(--nh-mono); font-size: 10px; line-height: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--nh-mute); }
-.toggle { display: inline-flex; gap: 2px; padding: 3px; border-radius: 999px; background: var(--nh-surface); }
+.top { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s-5); flex-wrap: wrap; }
+.top :global(.section-head) { margin-bottom: 0; }
+.toggle { flex: none; display: inline-flex; gap: 2px; padding: 4px; border-radius: 999px; background: var(--g-alt); box-shadow: inset 0 0 0 1px var(--hair); }
 .toggle button {
-  padding: 6px 14px; border: 0; border-radius: 999px; background: transparent; cursor: pointer;
-  font-size: 11px; line-height: 14px; font-weight: 600; color: var(--nh-ink-2); transition: background 320ms var(--nh-ease), color 320ms var(--nh-ease);
+  padding: 8px 18px; border: 0; border-radius: 999px; background: transparent; cursor: pointer;
+  font-size: 14px; line-height: 18px; font-weight: 500; color: var(--muted); transition: background 320ms var(--nh-ease), color 320ms var(--nh-ease);
 }
 .toggle button:hover { color: var(--nh-brand); }
 .toggle button[aria-pressed="true"] { background: var(--nh-brand); color: #fff; }
 .toggle button:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 2px; }
 
-.cols { min-height: 0; display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 51px; align-items: center; }
+.cols { min-height: 0; display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--s-5); align-items: center; }
 .story { min-width: 0; display: grid; gap: clamp(11px, calc(var(--nh-screen-h) * 0.024), 22px); }
-.ask { font-size: clamp(19px, 1.92vw, 27px); line-height: 1.18; font-weight: 600; letter-spacing: -0.02em; text-wrap: balance; }
+.ask { font-size: clamp(19px, 1.6vw, 24px); line-height: 1.25; font-weight: 500; letter-spacing: -0.02em; text-wrap: balance; }
 
 /* The count: the one big number on the page. It is the day the request is on. */
 .count { display: flex; align-items: flex-end; gap: 16px; }
 .num {
-  font-size: clamp(70px, calc(var(--nh-screen-h) * 0.152), 134px); line-height: 0.84; font-weight: 700; letter-spacing: -0.05em;
+  font-size: clamp(70px, calc(var(--nh-screen-h) * 0.13), 120px); line-height: 0.84; font-weight: 500; letter-spacing: -0.05em;
   min-width: 1.1em; color: var(--nh-danger); font-variant-numeric: tabular-nums; transition: color 420ms var(--nh-ease);
 }
 .scene[data-side="next"] .num { color: var(--nh-brand); }
@@ -66,8 +59,9 @@
 /* The floor: desks as pills, the request's way as lines. Sized so it always fits the pinned stage. */
 .floors { min-width: 0; display: grid; place-items: center; }
 .floor {
-  position: relative; aspect-ratio: 1000 / 620; width: min(100%, calc((var(--stage-h) - 152px) * 1000 / 620));
-  border-radius: var(--nh-r-lg); background: #f7fafd radial-gradient(circle, rgb(60 100 170 / 0.32) 1px, rgb(60 100 170 / 0) 1.6px) 0 0 / 34px 34px;
+  position: relative; aspect-ratio: 1000 / 620; width: min(100%, calc((var(--stage-h) - var(--padt) - var(--padb) - 150px) * 1000 / 620));
+  border-radius: var(--r-lg);
+  background: radial-gradient(circle, var(--ground-dots) 1px, transparent 1.6px) 0 0 / 34px 34px, radial-gradient(60% 55% at 12% 8%, var(--ground-light), transparent 70%), var(--ground-bg);
 }
 .floor[data-floor="tall"] { display: none; aspect-ratio: 600 / 640; }
 .wires { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
@@ -116,7 +110,6 @@
 .scene[data-beat="2"] .desk[data-role] .tag, .scene[data-beat="3"] .desk[data-role] .tag { opacity: 1; }
 .scene[data-beat="2"] .desk[data-role="sender"] .tag, .scene[data-beat="3"] .desk[data-role="sender"] .tag { opacity: 0; }
 
-.note { font-size: 10.5px; line-height: 14px; color: var(--nh-mute); }
 
 /* Narrow: one column - the request, the floor, the count, then only the ledger line that is happening now. */
 @media (max-width: 1000px) {
@@ -126,7 +119,7 @@
   .floors { order: 2; }
   .count { order: 3; }
   .ledgers { order: 4; }
-  .floor { width: min(100%, 448px, calc((var(--stage-h) - 304px) * 1000 / 620)); }
+  .floor { width: min(100%, 520px, calc((var(--stage-h) - var(--padt) - var(--padb) - 380px) * 1000 / 620)); }
   .num { font-size: clamp(51px, calc(var(--nh-screen-h) * 0.096), 96px); }
   .ledger li { display: none; }
   .ledger li[data-now="true"], .ledger li[data-on="true"]:not(:has(~ li[data-on="true"])) { display: grid; }
@@ -134,19 +127,17 @@
   .track { display: none; }
 }
 @media (max-width: 760px) {
-  .scene { margin: 0; border-radius: 0; box-shadow: none; }
+  .top :global(.section-head) > p { display: none; }
   .floor[data-floor="wide"] { display: none; }
-  .floor[data-floor="tall"] { display: block; width: min(100%, 320px, calc((var(--stage-h) - 314px) * 600 / 640)); }
+  .floor[data-floor="tall"] { display: block; width: min(100%, 320px, calc((var(--stage-h) - var(--padt) - var(--padb) - 300px) * 600 / 640)); }
   .plate { font-size: 10px; padding: 3px 8px 3px 3px; gap: 5px; }
   .plate > span { --s: 19px !important; }
   .unit span { display: none; }
   .unit span[data-on="true"] { display: block; }
-  .note { display: none; }
 }
 
 /* No pinning when motion is unwanted or the screen is too short to hold the stage: the buttons switch sides. */
 @media (prefers-reduced-motion: reduce), (max-height: 560px) {
-  .scene { height: auto; }
   .stage { position: static; height: auto; }
   .floor, .floor[data-floor="tall"] { width: min(100%, 576px); }
 }

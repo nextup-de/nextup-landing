@@ -1,45 +1,103 @@
-/* The top bar in the brand colour (Paper: Home · Header). 51px, logo left, pill nav centred, two buttons right. */
-.bar {
-  position: sticky; top: 0; z-index: 10;
-  /* Three columns: the pill sits in the exact middle of the bar, whatever the widths left and right of it. */
-  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 13px;
-  height: var(--nh-head); padding: 0 32px; background: var(--nh-brand);
-}
-.logo { display: block; justify-self: start; line-height: 0; border-radius: 3px; }
-.logo img { display: block; height: 27px; width: 63px; }
-.logo:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+/* The top bar in the brand colour, on the page's wrap: the words left, the logo in the exact middle, the actions
+   right. 72px, 56px on a phone. The Button on it is the white one, the one filled action of the bar. It is fixed
+   over the top of the page (the marketing layout pads <main> by its height; the home page's hero lies under it). */
+.bar { position: fixed; top: 0; left: 0; right: 0; z-index: 20; height: var(--nh-head); background: var(--nh-brand); color: #fff; }
+.in { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: var(--s-5); }
 
-.pill { display: flex; gap: 2px; padding: 3px; border-radius: 999px; background: rgb(255 255 255 / 0.14); }
-.pill a {
-  padding: 6px 14px; border-radius: 999px; font-size: 12px; line-height: 16px; font-weight: 600; color: #fff;
-  transition: background 160ms var(--nh-ease), color 160ms var(--nh-ease);
+.links { display: flex; align-items: center; gap: var(--s-6); }
+.link {
+  font-size: 15px; line-height: 20px; font-weight: 500; color: rgb(255 255 255 / 0.86); white-space: nowrap;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: color var(--m-out) var(--m-ease), background-size var(--m-out) var(--m-ease);
 }
-.pill a:hover { background: rgb(255 255 255 / 0.14); color: #fff; }
-.pill a[aria-current="page"] { background: #fff; color: var(--nh-brand); }
-.pill a:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
+.link:hover, .link[aria-current="page"] { color: #fff; background-size: 100% 1px; transition-duration: var(--m-in); }
+.link:focus-visible { outline: 2px solid #fff; outline-offset: 4px; border-radius: 2px; }
 
-.actions { grid-column: 3; justify-self: end; display: flex; align-items: center; gap: 8px; }
+.logo { display: block; line-height: 0; border-radius: 3px; }
+.logo img { display: block; height: 30px; width: auto; }
+.logo:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
 
-/* Phone: the pill and Log in fold into a menu. */
-.menu { display: none; position: relative; }
-.menu summary {
-  list-style: none; width: 29px; height: 29px; border-radius: var(--nh-r); display: grid; place-items: center;
-  background: rgb(255 255 255 / 0.14); color: #fff; cursor: pointer;
+.actions { justify-self: end; display: flex; align-items: center; gap: var(--s-5); }
+
+/* The menu button: two lines that turn into a cross. */
+.toggle {
+  display: none; position: relative; width: 40px; height: 40px; border-radius: var(--r-sm); border: 1px solid rgb(255 255 255 / 0.32);
+  background: transparent; color: #fff; cursor: pointer; transition: background var(--m-out) var(--m-ease);
 }
-.menu summary::-webkit-details-marker { display: none; }
-.menu summary:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.toggle:hover { background: rgb(255 255 255 / 0.12); }
+.toggle:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.toggle span {
+  position: absolute; left: 11px; right: 11px; height: 1.6px; border-radius: 1px; background: currentColor;
+  transition: transform var(--m-out) var(--m-ease);
+}
+.toggle span:first-child { top: 15px; }
+.toggle span:last-child { top: 22px; }
+.bar[data-open="true"] .toggle span:first-child { transform: translateY(3.5px) rotate(45deg); }
+.bar[data-open="true"] .toggle span:last-child { transform: translateY(-3.5px) rotate(-45deg); }
+
+/* The menu: the whole screen under the bar. It slides down a little and fades in; its parts follow one after
+   another (--i), 40ms apart. Closed, it is invisible and takes no focus (inert). */
 .sheet {
-  position: absolute; right: 0; top: calc(100% + 8px); min-width: 160px; padding: 6px; border-radius: var(--nh-r-lg);
-  display: grid; background: var(--nh-card); box-shadow: 0 10px 26px rgb(20 30 60 / 0.16), 0 1px 2px rgb(20 30 60 / 0.06);
+  position: fixed; inset: var(--nh-head) 0 0; z-index: 19; overflow-y: auto; overscroll-behavior: contain;
+  background: var(--g-main); color: var(--ink);
+  opacity: 0; visibility: hidden; transform: translateY(-8px);
+  transition: opacity var(--m-out) var(--m-ease), transform var(--m-out) var(--m-ease), visibility 0s var(--m-out);
 }
-.sheet a { padding: 10px 11px; border-radius: var(--nh-r); font-size: 13px; line-height: 16px; font-weight: 600; color: var(--nh-ink); }
-.sheet a:hover { background: var(--nh-brand-tint); color: var(--nh-brand); }
+.sheet[data-open="true"] { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+.sheetIn { min-height: 100%; display: flex; flex-direction: column; gap: var(--s-6); padding-block: var(--s-4) var(--s-6); }
+.sheetIn > *, .rows > li { opacity: 0; transform: translateY(10px); transition: opacity 260ms var(--m-ease), transform 260ms var(--m-ease); }
+.sheet[data-open="true"] .rows > li, .sheet[data-open="true"] .sheetIn > :not(nav) {
+  opacity: 1; transform: none; transition-delay: calc(60ms + var(--i, 0) * 40ms);
+}
+.sheetIn > nav { opacity: 1; transform: none; }
 
-@media (max-width: 760px) {
-  .bar { padding: 0 13px; }
-  .logo img { height: 22px; width: 52px; }
-  .pill, .login { display: none; }
-  .actions { gap: 6px; }
-  .actions :global(.nh-btn-sm) { height: 29px; padding: 0 11px; font-size: 11px; }
-  .menu { display: block; }
+.rows { list-style: none; margin: 0; padding: 0; display: grid; }
+.rows a {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); padding: var(--s-5) 0;
+  border-bottom: 1px solid var(--hair); color: var(--ink);
+}
+.rows a > span { display: grid; gap: 4px; }
+.rows strong { font-size: 30px; line-height: 34px; font-weight: 500; letter-spacing: -0.03em; }
+.rows small { font-size: 15px; line-height: 21px; color: var(--muted); }
+.rows a[aria-current="page"] strong { color: var(--nh-brand); }
+.rows svg {
+  flex: none; width: 16px; height: 16px; fill: none; stroke: var(--nh-brand); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform var(--m-out) var(--m-ease);
+}
+.rows a:hover svg, .rows a:focus-visible svg { transform: translateX(4px); }
+.rows a:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 2px; border-radius: 4px; }
+
+/* A glimpse of the product: the ideas list, three faces deep. */
+.glimpse {
+  display: flex; align-items: center; gap: var(--s-4); padding: var(--s-4); border-radius: var(--r-md);
+  background: var(--g-alt); box-shadow: inset 0 0 0 1px var(--hair); color: var(--ink);
+  transition: transform var(--m-out) var(--m-ease), box-shadow var(--m-out) var(--m-ease);
+}
+.glimpse:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px var(--nh-brand-line), 0 10px 24px -14px rgb(20 50 90 / 0.4); }
+.glimpse:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 2px; }
+.glimpse > span:last-child { display: grid; gap: 2px; }
+.glimpse strong { font-size: 16px; line-height: 22px; font-weight: 500; }
+.glimpse small { font-size: 13px; line-height: 18px; color: var(--muted); }
+.faces { flex: none; display: flex; gap: 4px; }
+
+.foot { margin-top: auto; display: grid; gap: var(--s-4); }
+.foot p { font-size: 13px; line-height: 18px; color: var(--muted); text-align: center; }
+
+@media (max-width: 1023px) {
+  .links { gap: var(--s-5); }
+  .actions { gap: var(--s-4); }
+}
+/* Below 860: the logo left; Book a pilot and the menu button right. */
+@media (max-width: 859px) {
+  .in { grid-template-columns: auto minmax(0, 1fr); }
+  .links, .login { display: none; }
+  .logo { grid-column: 1; grid-row: 1; }
+  .logo img { height: 26px; }
+  .actions { grid-column: 2; grid-row: 1; gap: var(--s-3); }
+  .actions :global(.nh-btn) { height: 40px; padding: 0 14px; font-size: 14px; }
+  .toggle { display: block; }
+}
+@media (min-width: 860px) { .sheet { display: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .sheet, .sheetIn > *, .rows > li, .toggle span { transition: none; transform: none; }
 }

@@ -1,1 +1,2 @@
 .site { min-height: var(--nh-screen-h); } /* the blue Ground paints the surface */
+.site > main { padding-top: var(--nh-head); } /* the fixed header's room; the home page's hero takes it back */

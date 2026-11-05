@@ -1,179 +1,103 @@
-/* Landing (Paper: "Landing · redesign", 01 · Home · desktop 1440 and 03 · Home · phone 390).
-   One 1120 container (--nh-page-x), Inter everywhere, one idea per screen. Sections on the light ground let
-   the shell's Ground show through; the product story and the principles stand on white. */
+/* The home page's own layouts. The page system (section heights, the wrap, the heading scale, the lit frame)
+   is in globals.css; the product windows style themselves. */
 
-.title { font-size: 45px; line-height: 48px; font-weight: 700; letter-spacing: -0.035em; color: var(--nh-ink); margin-top: 16px; }
-.head { display: flex; justify-content: space-between; align-items: flex-end; gap: 51px; }
-.aside { flex: none; width: 288px; padding-bottom: 5px; font-size: 14px; line-height: 21px; color: var(--nh-ink-2); }
-
-/* 02 Hero: the question, one line, the box and its answer - centred in the first screen. */
-.hero {
-  min-height: calc(var(--nh-screen-h) - var(--nh-head));
-  display: grid; align-content: center; padding: 38px var(--nh-page-x);
+/* Hero (collage): the words on 5 columns, the lit frame on 6 from column 7, as tall as the hero's content box.
+   The hero is exactly the first screen and lies under the sticky header. */
+:global(main) > .hero {
+  margin-top: calc(-1 * var(--nh-head)); height: var(--nh-screen-h); min-height: 600px;
+  padding: calc(var(--nh-head) + 48px) 0 64px;
 }
-.heroIn { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; justify-items: center; text-align: center; }
-.heroText { display: grid; gap: 19px; justify-items: center; }
-.hero h1 { font-size: clamp(51px, 6.22vw, 90px); line-height: 0.964; font-weight: 700; letter-spacing: -0.04em; color: var(--nh-ink); max-width: 608px; }
-.lead { font-size: 17px; line-height: 24px; color: var(--nh-ink-2); max-width: 416px; }
-@keyframes rise { from { opacity: 0; transform: translateY(10px); } }
-.hero h1, .lead { animation: rise 420ms var(--nh-ease) both; }
-.lead { animation-delay: 60ms; }
+.heroGrid { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: minmax(0, 1fr); column-gap: var(--s-5); }
+.heroText { grid-column: 1 / span 5; align-self: start; display: grid; gap: var(--s-5); }
+.heroText h1 { text-box: trim-start cap alphabetic; }
+.lead { font-size: 20px; line-height: 30px; color: var(--muted); max-width: 34ch; }
+.actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-3); }
+.heroGrid > :last-child { grid-column: 7 / span 6; }
 
-/* 04 Statement: one sentence. The second half is the part the page has not reached yet. */
-.statement { min-height: 608px; display: flex; flex-direction: column; justify-content: center; gap: 45px; padding: 77px var(--nh-page-x); }
-.statement h2 { font-size: clamp(45px, 5.34vw, 77px); line-height: 1.042; font-weight: 700; letter-spacing: -0.04em; color: var(--nh-ink); }
-.statement h2 span { color: var(--nh-pale); }
-.rail { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 11px; }
-.rail li { display: flex; align-items: center; gap: 6px; font-size: 14px; line-height: 18px; font-weight: 600; color: var(--nh-ink); }
-.rail li::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--nh-brand); }
-.rail li:not(:last-child)::after { content: ""; width: 38px; height: 2px; margin-left: 5px; background: var(--nh-brand); }
-.rail li[data-state="doing"] { color: var(--nh-blue); }
-.rail li[data-state="doing"]::before { background: var(--nh-blue-bright); }
-.rail li[data-state="doing"]::after, .rail li[data-state="open"]::after { background: var(--nh-open); }
-.rail li[data-state="open"] { font-weight: 500; color: var(--nh-mute); }
-.rail li[data-state="open"]::before { background: var(--nh-open); }
+@media (max-width: 1279px) { .heroText { grid-column: 1 / span 6; } }
+@media (max-width: 1023px) {
+  .heroGrid { display: flex; flex-direction: column; gap: var(--s-6); }
+  .heroGrid > :last-child { flex: 1 1 0; }
+  .heroText { max-width: 640px; }
+}
+@media (max-width: 639px) {
+  :global(main) > .hero { padding: calc(var(--nh-head) + 28px) 0 24px; min-height: 640px; }
+  .heroGrid { gap: var(--s-5); }
+  .heroText { gap: var(--s-4); }
+  .lead { font-size: 17px; line-height: 26px; }
+  .actions :global(.nh-btn) { width: 100%; }
+}
 
-/* 06 On whose desk: the ideas list in one white card. This is where the page gets its colour. */
-.desk { min-height: 768px; display: flex; flex-direction: column; justify-content: center; gap: 38px; padding: 77px var(--nh-page-x); }
-.desk .title { max-width: 512px; }
-.table { padding: 6px 26px 10px; border-radius: var(--nh-r-xl); background: var(--nh-card); box-shadow: 0 24px 64px rgb(20 50 90 / 0.14), 0 2px 5px rgb(20 50 90 / 0.06); }
-.thead, .row { display: grid; grid-template-columns: 304px 88px 96px 200px minmax(0, 1fr); column-gap: 16px; align-items: center; }
-.thead { height: 42px; font-size: 11px; line-height: 14px; font-weight: 600; color: var(--nh-mute); }
-.row { min-height: 70px; border-top: 1px solid var(--nh-line); font-size: 13px; line-height: 18px; color: var(--nh-ink-2); }
-.what { display: grid; gap: 6px; justify-items: start; padding: 6px 0; }
-.what strong, .who strong { font-weight: 600; color: var(--nh-ink); }
-.since[data-late="true"] { font-weight: 600; color: var(--nh-danger); }
-.who { display: flex; align-items: center; gap: 10px; }
-.who > span:last-child { display: grid; gap: 2px; min-width: 0; }
-.who small { font-size: 10.5px; line-height: 13px; color: var(--nh-mute); }
+/* A section head with the h2 left and its line on the right, both on the grid. */
+.headSplit { max-width: none; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--s-5); align-items: end; }
+.headSplit > h2 { grid-column: 1 / span 7; }
+.headSplit > p { grid-column: 9 / span 4; }
+@media (max-width: 1023px) { .headSplit > h2, .headSplit > p { grid-column: 1 / -1; } }
 
-/* 07 Principles: one large tile, four small ones. Each carries a small piece of product UI. */
-.principles { min-height: 720px; display: flex; flex-direction: column; justify-content: center; gap: 38px; padding: 77px var(--nh-page-x); background: var(--nh-card); }
-.bento { display: grid; grid-template-columns: 416px minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: 202px 202px; gap: 13px; }
-.tileAi { grid-row: 1 / span 2; display: flex; flex-direction: column; justify-content: space-between; gap: 19px; padding: 29px; border-radius: var(--nh-r-xl); background: var(--nh-brand-tint); }
-.tileAi > div:first-child { display: grid; gap: 10px; }
-.tileAi h3 { font-size: 32px; line-height: 35px; font-weight: 700; letter-spacing: -0.03em; color: var(--nh-brand-deep); }
-.tileAi p { max-width: 304px; font-size: 14px; line-height: 21px; color: var(--nh-ink-2); }
-.talk { display: grid; gap: 8px; }
-.asks { justify-self: start; display: flex; align-items: center; gap: 8px; padding: 10px 13px; border-radius: var(--nh-r-lg); background: var(--nh-card); font-size: 12px; line-height: 16px; color: var(--nh-ink-2); }
-.asks svg { flex: none; color: var(--nh-blue-bright); }
-.says { justify-self: end; display: flex; align-items: center; gap: 8px; padding: 8px 13px 8px 8px; border-radius: var(--nh-r-lg); background: var(--nh-brand); font-size: 12px; line-height: 16px; font-weight: 600; color: #fff; }
-.says i { flex: none; width: 24px; height: 24px; border-radius: 999px; display: grid; place-items: center; background: #fff; font-size: 10px; font-style: normal; font-weight: 700; color: var(--nh-brand); }
+/* Rules: a bento on the grid - one wide tile and one narrow, then three. Two boxes deep: the tile, its picture. */
+.bento { flex: 1 1 auto; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: minmax(0, 1fr); gap: var(--s-5); }
+.tile {
+  grid-column: span 4; min-height: 240px; display: flex; flex-direction: column; justify-content: space-between; gap: var(--s-5);
+  padding: var(--s-6); border-radius: var(--r-lg); background: var(--g-alt); box-shadow: inset 0 0 0 1px var(--hair);
+}
+.wide { grid-column: span 8; }
+.tile h3 { font-size: 22px; line-height: 28px; font-weight: 500; letter-spacing: -0.02em; color: var(--ink); }
+.tile p { margin-top: var(--s-2); font-size: 16px; line-height: 24px; color: var(--muted); max-width: 46ch; }
+.tile > div:last-child > p { margin-top: var(--s-2); }
 
-.tile { display: flex; flex-direction: column; justify-content: space-between; gap: 13px; padding: 19px; border-radius: var(--nh-r-xl); min-width: 0; }
-.tile[data-tone="blue"] { background: var(--nh-blue-tint); }
-.tile[data-tone="amber"] { background: #fff6df; }
-.tile[data-tone="green"] { background: #eaf8ee; }
-.tile[data-tone="grey"] { background: var(--nh-surface); }
-.tile > div:last-child { display: grid; gap: 5px; }
-.tile h3 { font-size: 16px; line-height: 21px; font-weight: 600; letter-spacing: -0.01em; color: var(--nh-ink); }
-.tile > div:last-child p { font-size: 12px; line-height: 18px; color: var(--nh-ink-2); }
-.five { display: flex; align-items: flex-end; gap: 8px; color: var(--nh-blue); }
-.five b { font-size: 70px; line-height: 61px; font-weight: 700; letter-spacing: -0.05em; }
-.five span { padding-bottom: 5px; font-size: 12px; line-height: 16px; font-weight: 600; }
-.role { display: grid; gap: 14px; justify-items: start; }
-.roleChip { padding: 4px 8px; border-radius: var(--nh-r-sm); background: rgb(253 224 138 / 0.7); font-size: 10.5px; line-height: 13px; font-weight: 600; color: #7a5200; }
-.pair { display: flex; align-items: center; }
-.pair > span { box-shadow: 0 0 0 2px #fff6df; }
-.pair small { padding-left: 8px; font-size: 10.5px; line-height: 13px; color: var(--nh-ink-2); }
-.place { display: flex; align-items: center; gap: 6px; font-family: var(--nh-mono); font-size: 10.5px; line-height: 13px; font-weight: 500; color: var(--nh-ok); }
-.place i { width: 8px; height: 8px; border-radius: 999px; background: var(--nh-ok); }
+.talk { display: grid; gap: var(--s-3); justify-items: start; font-family: var(--nh-ui); }
+.asks, .says { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px 10px 12px; border-radius: 14px; font-size: 14px; line-height: 20px; font-weight: 500; }
+.asks { background: var(--nh-card); color: var(--nh-ink); box-shadow: 0 6px 16px rgb(20 50 90 / 0.08); }
+.asks svg { color: var(--nh-blue-bright); }
+.says { margin-left: var(--s-8); background: var(--nh-brand); color: #fff; }
+.five { display: flex; align-items: flex-end; gap: var(--s-3); }
+.five b { font-size: 96px; line-height: 0.8; font-weight: 500; letter-spacing: -0.06em; color: var(--nh-brand); }
+.five span { font-size: 15px; line-height: 19px; color: var(--muted); }
+.role { display: grid; gap: var(--s-3); justify-items: start; font-family: var(--nh-ui); }
+.roleChip { padding: 6px 12px; border-radius: 999px; background: var(--nh-card); font-size: 13px; font-weight: 600; color: var(--nh-ink); box-shadow: 0 6px 16px rgb(20 50 90 / 0.08); }
+.pair { display: inline-flex; align-items: center; gap: 6px; }
+.pair small { margin-left: 6px; font-size: 12px; color: var(--muted); }
+.place { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 500; color: var(--ink); }
+.place i { width: 10px; height: 10px; border-radius: 999px; background: var(--nh-ok); box-shadow: 0 0 0 5px rgb(31 122 58 / 0.15); }
 .mini {
-  display: flex; align-items: center; justify-content: space-between; height: 35px; padding: 0 4px 0 11px; border: 2px solid transparent; border-radius: 999px;
-  background: linear-gradient(var(--nh-card), var(--nh-card)) padding-box, var(--nh-gold-ring) border-box; font-size: 10.5px; line-height: 13px; color: var(--nh-mute);
+  align-self: stretch; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 8px 8px 16px;
+  border: 2px solid transparent; border-radius: 999px; font-family: var(--nh-ui); font-size: 14px; color: var(--nh-mute);
+  background: linear-gradient(var(--nh-card), var(--nh-card)) padding-box, var(--nh-gold-ring) border-box;
 }
-.mini i { width: 24px; height: 24px; border-radius: 999px; display: grid; place-items: center; background: var(--nh-brand); color: #fff; }
+.mini i { width: 30px; height: 30px; border-radius: 999px; display: grid; place-items: center; background: var(--nh-brand); color: #fff; }
 
-/* 08 Pilot: three phases as one track, in the app's progress colours. No durations. */
-.pilot { min-height: 640px; display: flex; flex-direction: column; justify-content: center; gap: 51px; padding: 77px var(--nh-page-x); }
-.track { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr); gap: 5px; }
-.track li { display: grid; align-content: start; padding-right: 19px; }
-.track li i { display: block; height: 10px; margin: 0 -19px 16px 0; background: var(--nh-brand); }
-.track li:first-child i { border-radius: 5px 0 0 5px; }
-.track li:last-child i { border-radius: 0 5px 5px 0; }
-.track li[data-phase="1"] i { background: var(--nh-blue-bright); }
-.track li[data-phase="2"] i { background: var(--nh-open); }
-.track span { font-family: var(--nh-mono); font-size: 10.5px; line-height: 13px; font-weight: 500; text-transform: uppercase; color: var(--nh-brand); }
-.track li[data-phase="1"] span { color: var(--nh-blue); }
-.track li[data-phase="2"] span { color: var(--nh-mute); }
-.track h3 { margin-top: 6px; font-size: 18px; line-height: 22px; font-weight: 600; letter-spacing: -0.015em; color: var(--nh-ink); }
-.track p { margin-top: 6px; max-width: 336px; font-size: 12px; line-height: 18px; color: var(--nh-ink-2); }
-
-/* 09 Close: the question back on a full teal band, with the raise box as the ask. */
-.close { padding: 0 32px 32px; }
-.band {
-  min-height: 544px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 35px; padding: 51px 19px;
-  border-radius: var(--nh-r-xl); text-align: center;
-  background: var(--nh-brand) radial-gradient(ellipse 60% 80% at 50% 120%, #0b8794 0%, rgb(11 135 148 / 0) 70%);
+@media (max-width: 1023px) {
+  .tile, .wide { grid-column: span 6; }
+  .wide { grid-column: 1 / -1; }
 }
-.band h2 { max-width: 784px; font-size: clamp(45px, 5.34vw, 77px); line-height: 1.02; font-weight: 700; letter-spacing: -0.04em; color: #fff; }
-.band p { font-size: 14px; line-height: 21px; color: rgb(255 255 255 / 0.86); }
-
-@media (prefers-reduced-motion: reduce) {
-  .hero h1, .lead { animation: none; }
+@media (max-width: 639px) {
+  .bento { gap: var(--s-3); grid-auto-rows: auto; }
+  .tile, .wide { grid-column: 1 / -1; min-height: 0; padding: var(--s-5); }
+  .says { margin-left: var(--s-5); }
+  .five b { font-size: 72px; }
 }
 
-/* Between desktop and phone: the fixed columns give way. */
-@media (max-width: 1160px) {
-  .thead, .row { grid-template-columns: minmax(0, 1.5fr) 77px 83px minmax(0, 1fr) auto; }
-  .bento { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr); }
-}
-@media (max-width: 1000px) {
-  .head { flex-direction: column; align-items: flex-start; gap: 16px; }
-  .aside { width: auto; max-width: 416px; padding-bottom: 0; }
-  .bento { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: none; }
-  .tileAi { grid-row: auto; grid-column: 1 / -1; min-height: 288px; }
-  .tile { min-height: 176px; }
-  /* The list becomes one card per idea. */
-  .table { padding: 0; background: none; box-shadow: none; display: grid; gap: 10px; }
-  .thead { display: none; }
-  .row { grid-template-columns: minmax(0, 1fr) auto; row-gap: 10px; min-height: 0; padding: 13px; border-top: 0; border-radius: var(--nh-r-lg); background: var(--nh-card); box-shadow: var(--nh-card-shadow); }
-  .what { grid-column: 1 / -1; grid-row: 2; padding: 0; }
-  .what strong { font-size: 14px; line-height: 18px; }
-  .status { grid-column: 2; grid-row: 1; }
-  .stage { grid-column: 1; grid-row: 1; font-size: 11px; color: var(--nh-mute); }
-  .who { grid-column: 1; grid-row: 3; }
-  .who > span:first-child { --s: 29px !important; }
-  .who strong { font-size: 11px; font-weight: 400; color: var(--nh-ink-2); }
-  .who small { display: none; }
-  .since { grid-column: 2; grid-row: 3; justify-self: end; font-size: 11px; }
+/* Pilot: the phases on 5 columns, the diagram on 7. */
+.pilot { flex: 1 1 auto; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--s-5); }
+.pilotText { grid-column: 1 / span 5; display: flex; flex-direction: column; }
+.pilot > :last-child { grid-column: 7 / span 6; }
+.phases { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--hair); }
+.phases li { display: grid; gap: var(--s-2); padding: var(--s-5) 0; border-bottom: 1px solid var(--hair); }
+.phase { font-size: 13px; line-height: 18px; font-weight: 500; color: var(--nh-brand); }
+.phases h3 { font-size: 22px; line-height: 28px; font-weight: 500; letter-spacing: -0.02em; color: var(--ink); }
+.phases p { color: var(--muted); max-width: 44ch; }
+@media (max-width: 1023px) {
+  .pilot { display: flex; flex-direction: column; gap: var(--s-6); }
+  .pilot > :last-child { flex: 1 1 auto; }
 }
 
-/* Phone (Paper: 03 · Home · phone 390). */
-@media (max-width: 760px) {
-  .title { font-size: 26px; line-height: 29px; letter-spacing: -0.03em; margin-top: 10px; }
-  .hero { padding: 32px 16px; }
-  .heroIn { gap: 19px; justify-items: stretch; text-align: left; }
-  .heroText { justify-items: start; }
-  .hero h1 { font-size: 45px; line-height: 45px; }
-  .lead { font-size: 14px; line-height: 22px; }
-  .statement { min-height: 0; gap: 26px; padding: 58px 16px; }
-  .statement h2 { font-size: 32px; line-height: 35px; letter-spacing: -0.035em; }
-  .rail { gap: 8px; }
-  .rail li { font-size: 12px; }
-  .rail li:not(:last-child)::after { width: 13px; margin-left: 2px; }
-  .desk, .principles, .pilot { min-height: 0; gap: 19px; padding: 45px 16px; }
-  .row:nth-child(n + 5) { display: none; } /* three ideas are enough on a phone */
-  .bento { grid-template-columns: minmax(0, 1fr); gap: 10px; }
-  .tileAi { min-height: 0; padding: 19px; gap: 16px; }
-  .tileAi h3 { font-size: 22px; line-height: 26px; letter-spacing: -0.025em; }
-  .tileAi h3 br { display: none; }
-  .tileAi p { font-size: 13px; line-height: 19px; }
-  .asks, .says { font-size: 11px; }
-  .tile { min-height: 0; padding: 16px 19px; }
-  .tile h3 { font-size: 14px; line-height: 19px; }
-  .five b { font-size: 51px; line-height: 48px; }
-  /* The track turns upright: a bar on the left, the phases beside it. */
-  .track { grid-template-columns: minmax(0, 1fr); gap: 3px; }
-  .track li { grid-template-columns: 6px minmax(0, 1fr); column-gap: 13px; padding: 0 0 13px; }
-  .track li i { grid-row: 1 / span 3; width: 6px; height: auto; margin: 0 0 -13px; border-radius: 0; }
-  .track li:first-child i { border-radius: 3px 3px 0 0; }
-  .track li:last-child i { border-radius: 0 0 3px 3px; margin-bottom: 0; }
-  .track li:last-child { padding-bottom: 0; }
-  .track h3 { margin-top: 3px; font-size: 14px; line-height: 18px; letter-spacing: 0; }
-  .track p { margin-top: 2px; }
-  .close { padding: 0 10px 10px; }
-  .band { min-height: 0; align-items: stretch; gap: 19px; padding: 45px 16px; text-align: left; }
-  .band h2 { font-size: 35px; line-height: 37px; }
-  .band p { font-size: 12px; line-height: 18px; }
+/* Questions: the head on 4 columns, the answers on 8, every answer open. */
+.faq { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--s-5); align-content: start; }
+.faq > :first-child { grid-column: 1 / span 4; align-self: start; }
+.answers { grid-column: 6 / span 7; margin: 0; display: grid; border-top: 1px solid var(--hair); }
+.answers > div { display: grid; gap: var(--s-2); padding: var(--s-5) 0; border-bottom: 1px solid var(--hair); }
+.answers dt { font-size: 19px; line-height: 26px; font-weight: 500; letter-spacing: -0.015em; color: var(--ink); }
+.answers dd { margin: 0; color: var(--muted); max-width: 62ch; }
+@media (max-width: 1023px) {
+  .faq > :first-child, .answers { grid-column: 1 / -1; }
 }

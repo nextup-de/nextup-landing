@@ -1,29 +1,21 @@
-/* The raise box on the teal close band (Paper: Home · 09 Close). */
+/* The closing ask (the home page's last screen): the raise box across the wrap, with the gold ring the app gives
+   it, and the main action inside it. */
 .box {
-  width: min(100%, 544px); display: flex; align-items: center; gap: 10px; min-height: 58px; padding: 6px 6px 6px 22px;
-  border: 2px solid transparent; border-radius: 999px;
+  width: 100%; display: flex; align-items: center; gap: var(--s-4); min-height: 84px; padding: 16px 16px 16px 32px;
+  border: 2px solid transparent; border-radius: var(--r-lg);
   background: linear-gradient(var(--nh-card), var(--nh-card)) padding-box, var(--nh-gold-ring) border-box;
-  box-shadow: 0 16px 48px rgb(0 40 46 / 0.35); transition: box-shadow 160ms var(--nh-ease);
+  box-shadow: 0 24px 56px -28px rgb(140 100 10 / 0.45), 0 2px 6px rgb(20 33 36 / 0.06);
+  transition: box-shadow var(--m-out) var(--m-ease);
 }
-.box:focus-within { box-shadow: 0 0 0 4px rgb(240 194 58 / 0.3), 0 16px 48px rgb(0 40 46 / 0.35); }
-.input { flex: 1; min-width: 0; height: 22px; padding: 0; border: 0; outline: 0; background: transparent; font-size: 15px; line-height: 22px; color: var(--nh-ink); }
-.input::placeholder { color: var(--nh-mute); }
-.go {
-  flex: none; height: 42px; padding: 0 18px; border: 0; border-radius: 999px; background: var(--nh-brand); color: #fff; cursor: pointer;
-  font-size: 13px; line-height: 16px; font-weight: 600; white-space: nowrap; transition: background 160ms var(--nh-ease), transform 150ms var(--nh-ease);
+.box:focus-within { box-shadow: 0 0 0 5px rgb(240 194 58 / 0.25), 0 24px 56px -28px rgb(140 100 10 / 0.45); }
+.input {
+  flex: 1; min-width: 0; height: 32px; padding: 0; border: 0; outline: 0; background: transparent;
+  font-size: 22px; line-height: 32px; letter-spacing: -0.01em; color: var(--ink);
 }
-.go:hover { background: var(--nh-brand-hover); }
-.go:active { transform: scale(0.97); }
-.go:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 2px; }
+.input::placeholder { color: var(--nh-mute-2); }
 
-@media (max-width: 760px) {
-  /* Phone: the field and the button stack; the button is the white block of the band. */
-  .box { flex-direction: column; align-items: stretch; gap: 10px; min-height: 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
-  .box:focus-within { box-shadow: none; }
-  .input { flex: none; height: 42px; padding: 0 13px; border-radius: var(--nh-r); background: var(--nh-card); font-size: 13px; } /* flex: none - in a column the base flex: 1 would collapse the height */
-  .input:focus { box-shadow: 0 0 0 2px rgb(255 255 255 / 0.45); }
-  .go { border-radius: var(--nh-r); background: #fff; color: var(--nh-brand); }
-  .go:hover { background: var(--nh-brand-tint); }
-  .go:focus-visible { outline-color: #fff; }
+@media (max-width: 639px) {
+  /* Phone: the field and the button stack inside the ring; the button runs full width. */
+  .box { flex-direction: column; align-items: stretch; gap: var(--s-4); padding: 20px 16px 16px; }
+  .input { flex: none; font-size: 18px; }
 }
-@media (prefers-reduced-motion: reduce) { .go:active { transform: none; } }
