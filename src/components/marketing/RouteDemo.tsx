@@ -4,6 +4,7 @@
 // stand the owner, the day the answer is owed and the deputy. Until the visitor touches the box it types the
 // examples by itself, one after another. Nothing leaves the browser.
 import { useEffect, useId, useState, useSyncExternalStore } from "react";
+import { ArrowUp, Avatar, Clock } from "@/components/product/elements";
 import { propose } from "@/features/routing";
 import styles from "./RouteDemo.module.css";
 
@@ -61,11 +62,7 @@ export function RouteDemo({ routes, promiseDays, examples }: Props) {
 
   const note = raised && route
     ? `Raised. On ${route.owner}'s desk, and the clock is running.`
-    : route
-      ? `Demo routing map: ${route.type}`
-      : miss
-        ? "No row on this map matches yet. A person triages it, and the map gets a new row."
-        : "The demo company's routing map answers as you type.";
+      : "No row on this map matches yet. A person triages it, and the map gets a new row.";
 
   return (
     <div className={styles.demo}>
@@ -78,18 +75,25 @@ export function RouteDemo({ routes, promiseDays, examples }: Props) {
           onFocus={() => { if (!touched) setTyped(text); }}
           onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); e.currentTarget.form?.requestSubmit(); } }}
         />
-        <button type="submit" className={styles.send} disabled={!route} aria-label="Raise it">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 15V3M4 8l5-5 5 5" /></svg>
-        </button>
+        <button type="submit" className={styles.send} disabled={!route} aria-label="Raise it"><ArrowUp /></button>
       </form>
 
       <div className={styles.answer} data-on={route ? "true" : "false"}>
         <dl className={styles.facts}>
-          <div><dt>Owner{route ? ` · ${route.role}` : ""}</dt><dd>{route?.owner ?? "—"}</dd></div>
-          <div><dt>Answer owed by</dt><dd>{route ? due ?? `Day ${promiseDays}` : "—"}</dd></div>
-          <div><dt>Deputy</dt><dd>{route?.deputy ?? "—"}</dd></div>
+          <div>
+            {route ? <Avatar name={route.owner} size={44} /> : <span className={styles.blank} />}
+            <span><dt>Owner{route ? ` · ${route.role}` : ""}</dt><dd>{route?.owner ?? "—"}</dd></span>
+          </div>
+          <div>
+            <span className={styles.clock}><Clock size={20} /></span>
+            <span><dt>Answer owed by</dt><dd>{route ? due ?? `Day ${promiseDays}` : "—"}</dd></span>
+          </div>
+          <div>
+            {route ? <Avatar name={route.deputy} size={44} /> : <span className={styles.blank} />}
+            <span><dt>Deputy</dt><dd>{route?.deputy ?? "—"}</dd></span>
+          </div>
         </dl>
-        <p className={styles.note} data-raised={raised && route ? "true" : undefined}>{note}</p>
+        {(raised && route) || miss ? <p className={styles.note} data-raised={raised && route ? "true" : undefined}>{note}</p> : null}
       </div>
       <p className="nh-sr" role="status">
         {touched && route ? `Proposed owner: ${route.owner}, ${route.role}. Answer owed by ${due ?? `day ${promiseDays}`}. Deputy: ${route.deputy}.${raised ? " Raised." : ""}` : miss ? note : ""}

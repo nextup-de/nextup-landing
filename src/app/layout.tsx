@@ -6,7 +6,7 @@ import "./globals.css";
 // Fonts are committed in ./fonts (latin subset, SIL Open Font License) and served from this origin.
 // No request ever goes to Google - not from a visitor's browser (GDPR, LG München I, 3 O 17493/20) and not from
 // the build either: next/font/google downloads at build time, and a failed download breaks the image build.
-const sans = localFont({ src: "./fonts/manrope-var.woff2", weight: "400 800", variable: "--font-sans", display: "swap" });
+const inter = localFont({ src: "./fonts/inter-var.woff2", weight: "400 700", variable: "--font-inter", display: "swap" });
 const mono = localFont({
   src: [
     { path: "./fonts/plex-mono-400.woff2", weight: "400" },
@@ -15,7 +15,6 @@ const mono = localFont({
   ],
   variable: "--font-mono", display: "swap",
 });
-const serif = localFont({ src: "./fonts/instrument-serif-400.woff2", weight: "400", variable: "--font-serif", display: "swap" }); // headings on the raise page
 
 export const metadata: Metadata = {
   title: { default: `${SITE.name} - ${SITE.tagline}`, template: `%s · ${SITE.name}` },
@@ -24,7 +23,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable} ${serif.variable}`}>
+    <html lang="en" className={`${inter.variable} ${mono.variable}`}>
       <body>{children}</body>
     </html>
   );

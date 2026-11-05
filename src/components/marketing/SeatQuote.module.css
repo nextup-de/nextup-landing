@@ -1,0 +1,21 @@
+/* The seat count and "Get a quote" (Paper: 04 · Pricing, Quote row). */
+.quote { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.quote p { flex: 1; min-width: 180px; font-size: 14px; line-height: 20px; color: var(--nh-mute); }
+.count {
+  display: flex; align-items: center; gap: 4px; width: 220px; height: 48px; padding: 0 6px 0 16px;
+  border: 1px solid var(--nh-line-2); border-radius: var(--nh-r); background: var(--nh-card);
+  transition: border-color 160ms var(--nh-ease), box-shadow 160ms var(--nh-ease);
+}
+.count:focus-within { border-color: var(--nh-brand); box-shadow: 0 0 0 1px var(--nh-brand), 0 0 0 5px var(--nh-brand-focus); }
+.count input { width: 58px; min-width: 0; padding: 0; border: 0; outline: 0; background: transparent; font-size: 16px; line-height: 24px; color: var(--nh-ink); font-variant-numeric: tabular-nums; appearance: textfield; -moz-appearance: textfield; }
+.count input::-webkit-outer-spin-button, .count input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.count span { flex: 1; font-size: 16px; line-height: 24px; color: var(--nh-ink); }
+.count button {
+  flex: none; width: 36px; height: 36px; border: 0; border-radius: var(--nh-r-sm); background: var(--nh-brand-tint); color: var(--nh-brand); cursor: pointer;
+  font-size: 20px; line-height: 1; font-weight: 600; transition: background 160ms var(--nh-ease), transform 150ms var(--nh-ease);
+}
+.count button:hover { background: var(--nh-brand-line); }
+.count button:active { transform: scale(0.97); }
+.count button:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 2px; }
+@media (max-width: 760px) { .count { width: 100%; } .quote :global(.nh-btn) { width: 100%; } }
+@media (prefers-reduced-motion: reduce) { .count button:active { transform: none; } }

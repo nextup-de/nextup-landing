@@ -1,10 +1,10 @@
 /* Shared by /imprint and /privacy: a narrow prose column with a sticky summary card. */
 .wrap {
-  max-width: var(--nh-max); margin: 0 auto; padding: clamp(48px, 7vw, 88px) var(--nh-page-x) 48px;
+  padding: clamp(48px, 7vw, 88px) var(--nh-page-x) 48px;
   display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 48px; align-items: start;
 }
 .head { display: grid; gap: 12px; margin-bottom: 8px; }
-.head h1 { font-size: clamp(30px, 4.2vw, 48px); font-weight: 800; }
+.head h1 { font-size: clamp(30px, 4.2vw, 48px); font-weight: 700; }
 .head p { color: var(--nh-ink-2); max-width: 56ch; }
 .stamp { font-size: 11px; color: var(--nh-mute); }
 
@@ -15,7 +15,7 @@
 .prose p, .prose li { font-size: 14.5px; color: var(--nh-ink-2); line-height: 1.6; }
 .prose ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
 .prose a { color: var(--nh-ink); font-weight: 600; text-decoration: underline; text-decoration-color: var(--nh-line); text-underline-offset: 3px; }
-.prose a:hover { text-decoration-color: var(--nh-accent); }
+.prose a:hover { text-decoration-color: var(--nh-brand); }
 .prose strong { color: var(--nh-ink); }
 .address { font-style: normal; font-size: 14.5px; line-height: 1.6; color: var(--nh-ink); }
 
@@ -25,7 +25,7 @@
 .card ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
 .card li { font-size: 13px; color: var(--nh-ink-2); padding-left: 16px; position: relative; line-height: 1.45; }
 .card li::before { content: ""; position: absolute; left: 0; top: 7px; width: 7px; height: 7px; border-radius: 999px; background: var(--nh-ok); }
-.card li.no::before { background: var(--nh-accent); }
+.card li.no::before { background: var(--nh-brand); }
 .card p { font-size: 12px; color: var(--nh-mute); }
 .card a { color: var(--nh-ink); font-weight: 600; }
 

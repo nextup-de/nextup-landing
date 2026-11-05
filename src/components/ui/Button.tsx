@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
 
-type Variant = "primary" | "ghost" | "accent";
+type Variant = "primary" | "tint" | "ghost" | "white" | "onbrand" | "accent";
 type Common = { variant?: Variant; size?: "sm" | "md"; block?: boolean; className?: string; children: React.ReactNode };
 type AsLink = Common & { href: string };
 type AsButton = Common & { href?: undefined; type?: "button" | "submit"; onClick?: () => void; disabled?: boolean };

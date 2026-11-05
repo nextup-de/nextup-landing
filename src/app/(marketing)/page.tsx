@@ -1,12 +1,13 @@
-// LANDING. The question, answered live: the hero is one box that routes whatever a visitor types on the demo company's map.
-// Then one request both ways (the pinned scene), the screens by role, what is never measured, the pilot, one ask.
-// Screenshots are the real app at 1440px @2x (public/screenshots/*.png). When you retake one, bump the -N suffix so no cache serves the old picture.
-import Link from "next/link";
-import { Button } from "@/components/ui/Button";
-import { RoleScreens, type RoleScreen } from "@/components/marketing/RoleScreens";
+// LANDING (Paper: "Landing · redesign", artboard 01 · Home). The question, answered live: the hero is one box that
+// routes whatever a visitor types on the demo company's map. Then one request both ways (the pinned scene), one
+// sentence, the product in five chapters (the pinned window), the ideas list, five principles, the pilot, one ask.
+// Every picture is product UI built from the app's own elements - no screenshots to retake.
+import { CloseAsk } from "@/components/marketing/CloseAsk";
+import { ProductStory } from "@/components/marketing/ProductStory";
 import { RouteDemo } from "@/components/marketing/RouteDemo";
 import { WaitScene } from "@/components/marketing/WaitScene";
-import { PILOT_WEEK, PRINCIPLES, SITE } from "@/config/site";
+import { ArrowUp, Avatar, Dept, Pill, Spark, type Status, type Tone } from "@/components/product/elements";
+import { PILOT_PHASES, SITE } from "@/config/site";
 import { ROUTES } from "@/features/demo/routes";
 import styles from "./page.module.css";
 
@@ -25,29 +26,18 @@ const EXAMPLES = [
   "Tolerance drift on station 7 - who owns the gauge calibration?",
 ];
 
-// One screen per role. Keep every body to two sentences.
-// `why` is the one design reason we give a customer in the room - why the screen is this small.
-const SCREENS: RoleScreen[] = [
-  { who: "Team member", title: "Raise it in one box.", path: "/acme/raise",
-    body: "Problem or idea, one line, a screenshot if it helps. NextUp reads it against the company's own org chart and routing map, names the owner and the day an answer is due.",
-    why: "If raising a problem takes longer than complaining about it, it stays in the corridor. So: no form, no category tree, no ticket - the routing is done for you.",
-    shot: "/screenshots/raise-box-3.png", w: 2360, h: 1032, tight: true,
-    alt: "The raise box: idea or problem toggle, one text field, Attach and Affected, and the send arrow" },
-  { who: "Team leader", title: "Answer in one click.", path: "/acme/leader",
-    body: `Open items, oldest first, each with the days left on its clock. Yes, no and why, pass it on, or ask a question. Miss the ${P}-day promise and it moves to the deputy by itself.`,
-    why: "A leader's job here is to answer, not to manage a tool. Four buttons and no free-text status: an answer takes seconds, and every answer is a fact the ledger can count.",
-    shot: "/screenshots/inbox-3.png", w: 2880, h: 1400,
-    alt: "The inbox: cases sorted by age with days left, the selected case, and four buttons" },
-  { who: "Everyone", title: "See what is waiting on whom.", path: "/acme/dashboard",
-    body: "One list for the whole company: how long each case has been open, every desk it has been on, what stage it reached, and a score built from the case, never the person.",
-    why: "Waiting only shrinks when the people waiting can see it - and a score on the case, not the person, keeps it safe to raise things anonymously.",
-    shot: "/screenshots/dashboard-3.png", w: 2880, h: 1400,
-    alt: "The dashboard: every problem and idea with open since, stage, on whose desk and score" },
-  { who: "Manager", title: "Report two numbers.", path: "/acme/manager",
-    body: `What is waiting on you, the four numbers that moved, where the waiting goes. Two of them get reported upward: median time to the first answer, and the share answered within the ${P}-day promise.`,
-    why: "Waiting that nobody counts cannot be shortened. The ledger files every waiting day under one of four reasons, so the fix is usually a row in the map, not another meeting.",
-    shot: "/screenshots/overview-3.png", w: 2880, h: 1800,
-    alt: "The manager overview: what is waiting on you, four numbers, where the waiting goes, the wait ledger" },
+// The five stages under the statement: two done, one in progress, two open.
+const STAGES: Array<[string, "done" | "doing" | "open"]> = [["Raise", "done"], ["AI check", "done"], ["Decide", "doing"], ["Build", "open"], ["Measure", "open"]];
+
+// The ideas list, as the app shows it: what, since when, which stage, on whose desk, status.
+type Idea = { what: string; dept: string; deptTone: Tone; since: string; late?: boolean; stage: string; who: string; role: string; tone: Tone; status: Status; label: string };
+const IDEAS: Idea[] = [
+  { what: "Seam-sealing robot drips after every nozzle change", dept: "Body & Assembly", deptTone: "amber", since: "6 d", late: true, stage: "Team lead", who: "M. Hoffmann", role: "Team lead, final assembly", tone: "violet", status: "move", label: "Your move" },
+  { what: "Reusable crates for door modules", dept: "Logistics", deptTone: "blue", since: "3 d", stage: "Decision", who: "N. Demir", role: "Head of Inbound Logistics", tone: "blue", status: "clock", label: "3 d left" },
+  { what: "Torque records on the line tablet", dept: "Quality", deptTone: "pink", since: "1 d", stage: "AI check", who: "K. Yilmaz", role: "Head of Plant Quality", tone: "teal", status: "info", label: "Needs info" },
+  { what: "Standby for welding robots during breaks", dept: "Maintenance", deptTone: "teal", since: "9 d", stage: "Project", who: "A. Schulz", role: "Lead, body shop maintenance", tone: "amber", status: "ok", label: "Running" },
+  { what: "Paint booth filter change by sensor", dept: "Paint shop", deptTone: "green", since: "2 d", stage: "Team lead", who: "T. Vogel", role: "Team lead, paint shop", tone: "green", status: "clock", label: "4 d left" },
+  { what: "Shift handover checklist on one page", dept: "Engineering", deptTone: "violet", since: "Today", stage: "AI check", who: "J. Schmidt", role: "Process engineer", tone: "pink", status: "new", label: "New" },
 ];
 
 export default function LandingPage() {
@@ -55,10 +45,12 @@ export default function LandingPage() {
     <>
       <section className={styles.hero}>
         <div className={styles.heroIn}>
-          <h1>{SITE.tagline}</h1>
-          <p className={styles.lead}>
-            Raise a problem or an idea in one box. NextUp names who owns it and when they owe an answer.
-          </p>
+          <div className={styles.heroText}>
+            <h1>{SITE.tagline}</h1>
+            <p className={styles.lead}>
+              Raise a problem or an idea in one box. NextUp names who owns it and when they owe an answer.
+            </p>
+          </div>
           <RouteDemo routes={MAP} promiseDays={P} examples={EXAMPLES} />
         </div>
       </section>
@@ -68,63 +60,109 @@ export default function LandingPage() {
         owner={SPEND.owner.name} ownerRole={SPEND.owner.role} deputy={SPEND.deputy} deputyRole={roleOf(SPEND.deputy)}
       />
 
-      <section className={styles.band} id="how">
-        <div className={styles.bandHead}>
-          <p className="nh-eyebrow">How it works</p>
-          <h2 className={styles.display}>One box. One inbox. One list. One ledger.</h2>
-        </div>
-        <RoleScreens screens={SCREENS} />
+      <section className={styles.statement}>
+        <h2>Every idea, from the first word <span>to the measured result.</span></h2>
+        <ol className={styles.rail}>
+          {STAGES.map(([name, state]) => <li key={name} data-state={state}>{name}</li>)}
+        </ol>
       </section>
 
-      <section className={`${styles.band} ${styles.never}`}>
-        <div className={styles.bandHead}>
-          <p className="nh-eyebrow">What it never does</p>
-          <h2 className={styles.display}>It measures cases. Never people.</h2>
-          <p className={styles.aside}>
-            A works council gets a written description of what is and is not measured before the pilot starts.
-          </p>
+      <ProductStory />
+
+      <section className={styles.desk} id="ideas">
+        <div className={styles.head}>
+          <div>
+            <p className="nh-eyebrow">Ideas</p>
+            <h2 className={styles.title}>Everyone sees what is waiting on whom.</h2>
+          </div>
+          <p className={styles.aside}>One list for the whole plant. Every idea shows its department, its stage and the desk it is on.</p>
         </div>
-        <ul className={styles.neverList}>
-          {PRINCIPLES.map(([h, b]) => (
-            <li key={h}>
-              <h3>{h}</h3>
-              <p>{b}</p>
-            </li>
+        <div className={styles.table} role="table" aria-label="Open ideas in the demo company">
+          <div className={styles.thead} role="row">
+            <span role="columnheader">What</span><span role="columnheader">Open since</span><span role="columnheader">Stage</span>
+            <span role="columnheader">On whose desk</span><span role="columnheader">Status</span>
+          </div>
+          {IDEAS.map((i) => (
+            <div key={i.what} className={styles.row} role="row">
+              <span role="cell" className={styles.what}><strong>{i.what}</strong><Dept tone={i.deptTone}>{i.dept}</Dept></span>
+              <span role="cell" className={styles.since} data-late={i.late}>{i.since}</span>
+              <span role="cell" className={styles.stage}>{i.stage}</span>
+              <span role="cell" className={styles.who}>
+                <Avatar name={i.who} tone={i.tone} />
+                <span><strong>{i.who}</strong><small>{i.role}</small></span>
+              </span>
+              <span role="cell" className={styles.status}><Pill status={i.status}>{i.label}</Pill></span>
+            </div>
           ))}
-        </ul>
+        </div>
       </section>
 
-      <section className={styles.band} id="pilot">
-        <div className={`${styles.bandHead} ${styles.split}`}>
-          <div className={styles.bandHead}>
+      <section className={styles.principles}>
+        <div>
+          <p className="nh-eyebrow">Principles</p>
+          <h2 className={styles.title}>Five rules the product keeps.</h2>
+        </div>
+        <div className={styles.bento}>
+          <article className={styles.tileAi}>
+            <div>
+              <h3>AI suggests.<br />People decide.</h3>
+              <p>The coach asks what is missing and reads the idea. The answer always comes from the person who owns it.</p>
+            </div>
+            <div className={styles.talk} aria-hidden="true">
+              <span className={styles.asks}><Spark />What does one crate cost, and who returns them?</span>
+              <span className={styles.says}><i>ND</i>Yes, start it · decided by N. Demir</span>
+            </div>
+          </article>
+          <article className={styles.tile} data-tone="blue">
+            <p className={styles.five} aria-hidden="true"><b>{P}</b><span>working<br />days</span></p>
+            <div><h3>A clock on every decision</h3><p>Every idea shows the day its answer is due.</p></div>
+          </article>
+          <article className={styles.tile} data-tone="amber">
+            <div className={styles.role} aria-hidden="true">
+              <span className={styles.roleChip}>Head of Inbound Logistics</span>
+              <span className={styles.pair}><Avatar name="N. Demir" tone="blue" size={44} /><Avatar name="T. Vogel" tone="green" size={44} /><small>owner · deputy</small></span>
+            </div>
+            <div><h3>Roles, not names</h3><p>Routing follows the role, through holidays and job changes.</p></div>
+          </article>
+          <article className={styles.tile} data-tone="green">
+            <p className={styles.place} aria-hidden="true"><i />Nuremberg · Germany</p>
+            <div><h3>Hosted in the EU</h3><p>One stack per company. No cookies and no tracking on this site.</p></div>
+          </article>
+          <article className={styles.tile} data-tone="grey">
+            <p className={styles.mini} aria-hidden="true"><span>Raise it in one line</span><i><ArrowUp size={14} /></i></p>
+            <div><h3>One field to start</h3><p>A pilot needs one field and one routing table.</p></div>
+          </article>
+        </div>
+      </section>
+
+      <section className={styles.pilot} id="pilot">
+        <div className={styles.head}>
+          <div>
             <p className="nh-eyebrow">The pilot</p>
-            <h2 className={styles.display}>Five working days. One department. One decision type.</h2>
+            <h2 className={styles.title}>A pilot we build<br />with you.</h2>
           </div>
           <p className={styles.aside}>
-            Set up in an afternoon. The only thing to fill in is a map of decision types: fifteen rows, each with
-            one owner and one deputy. A department head does it in twenty minutes.
+            Your company invests in the pilot. We build NextUp into a solution that is ready for your plant. Scope and
+            price are agreed before it starts.
           </p>
         </div>
-        <ol className={styles.week}>
-          {PILOT_WEEK.map(([d, t]) => (
-            <li key={d}>
-              <span>{d}</span>
-              <p>{t}</p>
+        <ol className={styles.track}>
+          {PILOT_PHASES.map(([phase, title, body], i) => (
+            <li key={phase} data-phase={i}>
+              <i aria-hidden="true" />
+              <span>Phase {i + 1} · {phase}</span>
+              <h3>{title}</h3>
+              <p>{body}</p>
             </li>
           ))}
         </ol>
       </section>
 
       <section className={styles.close}>
-        <div className={styles.closeIn}>
-          <h2 className={styles.display}>Which decision keeps waiting?</h2>
-          <div className={styles.closeAsk}>
-            <p>Tell us the one that always takes weeks. We time it with you for five working days. It is free; we ask for thirty minutes of feedback.</p>
-            <div className={styles.cta}>
-              <Button href="/contact" className={styles.book}>Book a pilot</Button>
-              <Link href="/pricing" className={styles.down}>See what comes after</Link>
-            </div>
-          </div>
+        <div className={styles.band}>
+          <h2>Which decision keeps waiting?</h2>
+          <CloseAsk />
+          <p>Tell us. We scope a pilot around it.</p>
         </div>
       </section>
     </>

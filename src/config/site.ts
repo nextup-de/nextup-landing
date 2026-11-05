@@ -1,23 +1,16 @@
 export const SITE = {
   name: "NextUp",
   tagline: "Who owns this decision?",
-  description: "Who owns what, and what is waiting on whom. One field to raise it, one inbox with a clock, one wait ledger.",
+  description: "Every idea, from the first word to the measured result. One box to raise it, an owner and a date, a project, a measured result.",
   promiseDays: 5, // the "answer within 5 days" promise used by the wait ledger (same as the demo seed)
 } as const;
 
-// The pilot week, shown on / and /contact: [when, what happens].
-export const PILOT_WEEK = [
-  ["Day 1", "We fill in the routing table for your decision type with the department head. Twenty minutes."],
-  ["Days 2-4", "Real requests go through one field. Owners answer from an inbox with a clock."],
-  ["Day 5", "You get the wait ledger: median hours to first answer, share within the promise, where the waiting went."],
-  ["After", "Thirty minutes of feedback from you. A one-page report you can forward from us."],
-] as const;
-
-// What holds in every plan, shown on / and /pricing: [claim, what it means].
-export const PRINCIPLES = [
-  ["Nothing to integrate", "No SSO, no mailbox access, no read access to your systems. A pilot needs one field and one routing table."],
-  ["Cases, not people", "There is no per-person metric in the data model. The ledger measures how long cases wait, never how individuals perform."],
-  ["Your data, in the EU", "Export every case, event and number at any time. Deletion on request. No cookies, no tracking, no third-party fonts on this site."],
+// The pilot, shown on /, /pricing and /contact: [phase, title, what happens]. A paid build project in three
+// phases. No durations here until they are agreed with the first pilot partners.
+export const PILOT_PHASES = [
+  ["Scope", "Agree the scope", "Which decisions wait today, where we start, and the price. Agreed before any work begins."],
+  ["Build", "Built with your people", "We build NextUp on your org chart, your routing and your rules, with your departments in the loop."],
+  ["Run", "Live in your plant", "Real ideas, real owners, real clocks. The result is measured."],
 ] as const;
 
 // The product lives elsewhere: each company runs its own NextUp at its own address. "Log in"

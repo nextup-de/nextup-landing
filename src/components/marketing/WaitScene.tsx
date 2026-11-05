@@ -1,12 +1,13 @@
 "use client";
 // One request, both ways. A pinned stage scrubbed by the scroll position: first the request wanders from
-// desk to desk (orange is waiting) until an answer comes on day 19; then the same request is matched on the
+// desk to desk (red is waiting) until an answer comes on day 19; then the same request is matched on the
 // routing map and goes straight to its owner. Scroll drives it; the two buttons jump to either end.
 //
 // Positions are data: the same numbers place the desks and draw the lines, once for wide screens and once
 // for phones. Per-frame values (how far a line is drawn, where the request is) go straight to the DOM as CSS
 // variables; React state only holds what changes a few times (the day, the desk, the side).
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { Avatar, type Tone } from "@/components/product/elements";
 import styles from "./WaitScene.module.css";
 
 type Pt = readonly [number, number];
@@ -27,6 +28,8 @@ const AT: Record<DeskId, { wide: Pt; tall: Pt | null }> = {
   qual: { wide: [905, 330], tall: null },
 };
 const DESKS = Object.keys(AT) as DeskId[];
+// Every desk keeps its face colour, as people do in the app.
+const FACE: Record<DeskId, Tone> = { sender: "teal", shift: "amber", purch: "blue", fin: "violet", head: "green", lead: "green", eng: "teal", qual: "pink" };
 
 // Today: where the request goes and how many days it lies there. `reason` is one of the ledger's four
 // stall reasons; the last hop is the one where somebody works on it. `bend` shapes the detour.
@@ -186,7 +189,7 @@ export function WaitScene({ request, from, decision, promiseDays, owner, ownerRo
                 <strong>{view.day === 1 ? "day" : "days"} {today ? "without an answer" : "to the answer"}</strong>
                 <span data-on={today ? view.day >= TOTAL : view.beat === 3}>
                   {today
-                    ? `${WORK} of them were work. The rest was waiting for someone to say yes, no, or “not me”.`
+                    ? `${WORK} of them were work. The rest was waiting.`
                     : `Same request, same company. The owner was one desk away.`}
                 </span>
               </p>
@@ -198,8 +201,8 @@ export function WaitScene({ request, from, decision, promiseDays, owner, ownerRo
                   <li key={h.where} data-on={i < view.started} data-now={today && i === view.started - 1 && view.day < TOTAL} data-work={h.work}>
                     <span>{h.where}</span>
                     <span className={styles.reason}>{h.reason}</span>
+                    <span className={styles.track}><i className={styles.bar} data-bar="" /></span>
                     <span className={styles.days}>{h.days} d</span>
-                    <i className={styles.bar} data-bar="" />
                   </li>
                 ))}
               </ol>
@@ -210,7 +213,7 @@ export function WaitScene({ request, from, decision, promiseDays, owner, ownerRo
                 </li>
                 <li data-on={view.beat >= 2}>
                   <span className={styles.days}>Day 0</span>
-                  <span>On {owner}&rsquo;s desk. Answer owed by day {promiseDays}; after that it moves to {deputy} by itself.</span>
+                  <span>On {owner}&rsquo;s desk. Answer owed by day {promiseDays}. {deputy} is the deputy.</span>
                 </li>
                 <li data-on={view.beat >= 3}>
                   <span className={styles.days}>Day {ANSWERED}</span>
@@ -248,8 +251,8 @@ export function WaitScene({ request, from, decision, promiseDays, owner, ownerRo
                       // The same numbers that draw the lines place the desk: a position, not a style.
                       <span key={id} className={styles.desk} data-role={role} data-seen={seen} data-here={here === id} data-low={pos[1] > box.h * 0.7}
                         style={{ "--x": pos[0] / box.w, "--y": pos[1] / box.h } as React.CSSProperties}>
-                        <span className={styles.plate}><i />{names[id][kind === "wide" ? 0 : 1]}</span>
-                        {tag && <span className={styles.tag}>{tag}</span>}
+                        <span className={styles.plate}><Avatar name={names[id][1]} tone={FACE[id]} size={28} />{names[id][kind === "wide" ? 0 : 1]}</span>
+                        {tag && <span className={styles.tag} data-work={hop >= 0 && HOPS[hop].work ? "true" : undefined}>{tag}</span>}
                       </span>
                     );
                   })}

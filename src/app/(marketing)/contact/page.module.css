@@ -1,32 +1,32 @@
-/* Contact / book a pilot. */
+/* Contact / book a pilot (Paper: 05 · Contact · desktop 1440). */
 .wrap {
-  max-width: var(--nh-max); margin: 0 auto; padding: clamp(48px, 7vw, 88px) var(--nh-page-x) 40px;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start;
+  min-height: calc(var(--nh-screen-h) - var(--nh-head) - 104px);
+  display: grid; grid-template-columns: minmax(0, 1fr) 480px; gap: 56px; align-items: center; /* 56, not the draft's 96: the headline needs 584px to stand on two lines */
+  padding: 72px var(--nh-page-x);
 }
-.intro { display: grid; gap: 18px; }
-.intro h1 { font-size: clamp(32px, 4.6vw, 54px); font-weight: 800; max-width: 14ch; }
-.lead { font-size: clamp(15px, 1.4vw, 17px); color: var(--nh-ink-2); max-width: 50ch; line-height: 1.55; }
+.intro { display: grid; gap: 20px; align-content: start; }
+.intro h1 { font-size: clamp(44px, 4.44vw, 64px); line-height: 1.03; font-weight: 700; letter-spacing: -0.04em; color: var(--nh-ink); }
+.lead { max-width: 440px; font-size: 17px; line-height: 26px; color: var(--nh-ink-2); }
 
-.week { list-style: none; margin: 10px 0 0; padding: 0; display: grid; }
-.week li { display: grid; grid-template-columns: 76px 1fr; gap: 14px; padding: 12px 0; border-top: 1px solid var(--nh-line); align-items: baseline; }
-.week li:last-child { border-bottom: 1px solid var(--nh-line); }
-.week span { font-size: 12px; font-weight: 600; color: var(--nh-accent); }
-.week p { font-size: 14px; color: var(--nh-ink-2); }
+/* The pilot's three phases, small: the same track as on the home page. */
+.track { list-style: none; margin: 12px 0 0; padding: 0; max-width: 440px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr); gap: 4px; }
+.track li { display: grid; gap: 12px; font-size: 14px; line-height: 18px; font-weight: 600; color: var(--nh-brand); }
+.track li i { display: block; height: 8px; background: var(--nh-brand); }
+.track li:first-child i { border-radius: 4px 0 0 4px; }
+.track li:last-child i { border-radius: 0 4px 4px 0; }
+.track li[data-phase="1"] { color: var(--nh-blue); }
+.track li[data-phase="1"] i { background: var(--nh-blue-bright); }
+.track li[data-phase="2"] { color: var(--nh-mute); }
+.track li[data-phase="2"] i { background: var(--nh-open); }
 
-.direct { display: grid; gap: 6px; margin-top: 10px; }
-.mail { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; color: var(--nh-ink); text-decoration: underline; text-decoration-color: var(--nh-line); text-underline-offset: 4px; }
-.mail:hover { text-decoration-color: var(--nh-accent); }
-.directNote { font-size: 13px; color: var(--nh-mute); max-width: 48ch; }
-.directNote a { color: var(--nh-ink); font-weight: 600; }
+.card { padding: 36px; border-radius: var(--nh-r-xl); background: var(--nh-card); box-shadow: 0 30px 80px rgb(20 50 90 / 0.14), 0 2px 6px rgb(20 50 90 / 0.06); }
 
-.card {
-  display: grid; gap: 18px; padding: 28px;
-  background: var(--nh-card); border: 1px solid var(--nh-line); border-radius: var(--nh-r-xl);
-  position: sticky; top: 84px;
+@media (max-width: 1000px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 40px; align-items: start; }
+  .card { max-width: 560px; }
 }
-.card h2 { font-size: 22px; }
-
-@media (max-width: 900px) {
-  .wrap { grid-template-columns: 1fr; gap: 32px; }
-  .card { position: static; padding: 22px; }
+@media (max-width: 760px) {
+  .wrap { min-height: 0; padding: 48px 20px 56px; gap: 32px; }
+  .intro h1 { font-size: 40px; line-height: 44px; letter-spacing: -0.035em; }
+  .card { padding: 24px 20px; }
 }
