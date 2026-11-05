@@ -1,84 +1,179 @@
-/* Landing. Everything sits on the app's own ground in the app's own colours: ink type, white cards, Decision Blue
-   for actions, orange for time. The hero stands straight on the ground as the raise screen does; the pinned scene
-   (WaitScene) and the close are white cards; 1240px bands between them. Display type is the raise page's serif. */
+/* Landing (Paper: "Landing · redesign", 01 · Home · desktop 1440 and 03 · Home · phone 390).
+   One 1120 container (--nh-page-x), Inter everywhere, one idea per screen. Sections on the light ground let
+   the shell's Ground show through; the product story and the principles stand on white. */
 
-.display { font-family: var(--nh-serif); font-weight: 400; font-size: clamp(38px, 5.4vw, 76px); line-height: 0.98; letter-spacing: -0.018em; text-wrap: balance; }
+.title { font-size: 56px; line-height: 60px; font-weight: 700; letter-spacing: -0.035em; color: var(--nh-ink); margin-top: 20px; }
+.head { display: flex; justify-content: space-between; align-items: flex-end; gap: 64px; }
+.aside { flex: none; width: 360px; padding-bottom: 6px; font-size: 17px; line-height: 26px; color: var(--nh-ink-2); }
 
-/* The hero: the question, one line, the box and its answer - centred in the first screen. Together with the
-   sticky header it fills the viewport exactly; when the content is taller (a short phone, a landscape phone) it
-   grows instead of clipping. */
+/* 02 Hero: the question, one line, the box and its answer - centred in the first screen. */
 .hero {
   min-height: calc(var(--nh-screen-h) - var(--nh-head));
-  display: grid; align-content: center;
-  padding: clamp(32px, calc(var(--nh-screen-h) * 0.06), 72px) var(--nh-page-x);
+  display: grid; align-content: center; padding: 48px var(--nh-page-x);
 }
-.heroIn { width: 100%; max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(22px, 3vw, 40px); justify-items: center; text-align: center; }
-.hero h1 {
-  font-family: var(--nh-serif); font-weight: 400; line-height: 0.92; letter-spacing: -0.022em; text-wrap: balance;
-  font-size: clamp(54px, min(9.4vw, calc(var(--nh-screen-h) * 0.19)), 140px);
+.heroIn { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; justify-items: center; text-align: center; }
+.heroText { display: grid; gap: 24px; justify-items: center; }
+.hero h1 { font-size: clamp(64px, 7.78vw, 112px); line-height: 0.964; font-weight: 700; letter-spacing: -0.04em; color: var(--nh-ink); max-width: 760px; }
+.lead { font-size: 21px; line-height: 30px; color: var(--nh-ink-2); max-width: 520px; }
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } }
+.hero h1, .lead { animation: rise 420ms var(--nh-ease) both; }
+.lead { animation-delay: 60ms; }
+
+/* 04 Statement: one sentence. The second half is the part the page has not reached yet. */
+.statement { min-height: 760px; display: flex; flex-direction: column; justify-content: center; gap: 56px; padding: 96px var(--nh-page-x); }
+.statement h2 { font-size: clamp(56px, 6.67vw, 96px); line-height: 1.042; font-weight: 700; letter-spacing: -0.04em; color: var(--nh-ink); }
+.statement h2 span { color: var(--nh-pale); }
+.rail { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 14px; }
+.rail li { display: flex; align-items: center; gap: 8px; font-size: 17px; line-height: 22px; font-weight: 600; color: var(--nh-ink); }
+.rail li::before { content: ""; width: 10px; height: 10px; border-radius: 999px; background: var(--nh-brand); }
+.rail li:not(:last-child)::after { content: ""; width: 48px; height: 2px; margin-left: 6px; background: var(--nh-brand); }
+.rail li[data-state="doing"] { color: var(--nh-blue); }
+.rail li[data-state="doing"]::before { background: var(--nh-blue-bright); }
+.rail li[data-state="doing"]::after, .rail li[data-state="open"]::after { background: var(--nh-open); }
+.rail li[data-state="open"] { font-weight: 500; color: var(--nh-mute); }
+.rail li[data-state="open"]::before { background: var(--nh-open); }
+
+/* 06 On whose desk: the ideas list in one white card. This is where the page gets its colour. */
+.desk { min-height: 960px; display: flex; flex-direction: column; justify-content: center; gap: 48px; padding: 96px var(--nh-page-x); }
+.desk .title { max-width: 640px; }
+.table { padding: 8px 32px 12px; border-radius: var(--nh-r-xl); background: var(--nh-card); box-shadow: 0 30px 80px rgb(20 50 90 / 0.14), 0 2px 6px rgb(20 50 90 / 0.06); }
+.thead, .row { display: grid; grid-template-columns: 380px 110px 120px 250px minmax(0, 1fr); column-gap: 20px; align-items: center; }
+.thead { height: 52px; font-size: 14px; line-height: 18px; font-weight: 600; color: var(--nh-mute); }
+.row { min-height: 88px; border-top: 1px solid var(--nh-line); font-size: 16px; line-height: 22px; color: var(--nh-ink-2); }
+.what { display: grid; gap: 8px; justify-items: start; padding: 8px 0; }
+.what strong, .who strong { font-weight: 600; color: var(--nh-ink); }
+.since[data-late="true"] { font-weight: 600; color: var(--nh-danger); }
+.who { display: flex; align-items: center; gap: 12px; }
+.who > span:last-child { display: grid; gap: 2px; min-width: 0; }
+.who small { font-size: 13px; line-height: 16px; color: var(--nh-mute); }
+
+/* 07 Principles: one large tile, four small ones. Each carries a small piece of product UI. */
+.principles { min-height: 900px; display: flex; flex-direction: column; justify-content: center; gap: 48px; padding: 96px var(--nh-page-x); background: var(--nh-card); }
+.bento { display: grid; grid-template-columns: 520px minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: 252px 252px; gap: 16px; }
+.tileAi { grid-row: 1 / span 2; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; padding: 36px; border-radius: var(--nh-r-xl); background: var(--nh-brand-tint); }
+.tileAi > div:first-child { display: grid; gap: 12px; }
+.tileAi h3 { font-size: 40px; line-height: 44px; font-weight: 700; letter-spacing: -0.03em; color: var(--nh-brand-deep); }
+.tileAi p { max-width: 380px; font-size: 17px; line-height: 26px; color: var(--nh-ink-2); }
+.talk { display: grid; gap: 10px; }
+.asks { justify-self: start; display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: var(--nh-r-lg); background: var(--nh-card); font-size: 15px; line-height: 20px; color: var(--nh-ink-2); }
+.asks svg { flex: none; color: var(--nh-blue-bright); }
+.says { justify-self: end; display: flex; align-items: center; gap: 10px; padding: 10px 16px 10px 10px; border-radius: var(--nh-r-lg); background: var(--nh-brand); font-size: 15px; line-height: 20px; font-weight: 600; color: #fff; }
+.says i { flex: none; width: 30px; height: 30px; border-radius: 999px; display: grid; place-items: center; background: #fff; font-size: 12px; font-style: normal; font-weight: 700; color: var(--nh-brand); }
+
+.tile { display: flex; flex-direction: column; justify-content: space-between; gap: 16px; padding: 24px; border-radius: var(--nh-r-xl); min-width: 0; }
+.tile[data-tone="blue"] { background: var(--nh-blue-tint); }
+.tile[data-tone="amber"] { background: #fff6df; }
+.tile[data-tone="green"] { background: #eaf8ee; }
+.tile[data-tone="grey"] { background: var(--nh-surface); }
+.tile > div:last-child { display: grid; gap: 6px; }
+.tile h3 { font-size: 20px; line-height: 26px; font-weight: 600; letter-spacing: -0.01em; color: var(--nh-ink); }
+.tile > div:last-child p { font-size: 15px; line-height: 22px; color: var(--nh-ink-2); }
+.five { display: flex; align-items: flex-end; gap: 10px; color: var(--nh-blue); }
+.five b { font-size: 88px; line-height: 76px; font-weight: 700; letter-spacing: -0.05em; }
+.five span { padding-bottom: 6px; font-size: 15px; line-height: 20px; font-weight: 600; }
+.role { display: grid; gap: 18px; justify-items: start; }
+.roleChip { padding: 5px 10px; border-radius: var(--nh-r-sm); background: rgb(253 224 138 / 0.7); font-size: 13px; line-height: 16px; font-weight: 600; color: #7a5200; }
+.pair { display: flex; align-items: center; }
+.pair > span { box-shadow: 0 0 0 2px #fff6df; }
+.pair small { padding-left: 10px; font-size: 13px; line-height: 16px; color: var(--nh-ink-2); }
+.place { display: flex; align-items: center; gap: 8px; font-family: var(--nh-mono); font-size: 13px; line-height: 16px; font-weight: 500; color: var(--nh-ok); }
+.place i { width: 10px; height: 10px; border-radius: 999px; background: var(--nh-ok); }
+.mini {
+  display: flex; align-items: center; justify-content: space-between; height: 44px; padding: 0 5px 0 14px; border: 2px solid transparent; border-radius: 999px;
+  background: linear-gradient(var(--nh-card), var(--nh-card)) padding-box, var(--nh-gold-ring) border-box; font-size: 13px; line-height: 16px; color: var(--nh-mute);
 }
-@keyframes rise { from { opacity: 0; transform: translateY(18px); } }
-.hero h1, .lead { animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-.lead { animation-delay: 0.1s; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.5; color: var(--nh-ink-2); max-width: 46ch; text-wrap: balance; }
+.mini i { width: 30px; height: 30px; border-radius: 999px; display: grid; place-items: center; background: var(--nh-brand); color: #fff; }
 
-/* A band: one section on the light ground. */
-.band { max-width: 1240px; margin: 0 auto; padding: clamp(88px, 11vw, 168px) var(--nh-page-x) 0; display: grid; gap: clamp(32px, 4.4vw, 60px); }
-.bandHead { display: grid; gap: 16px; align-content: start; }
-.aside { font-size: 16.5px; line-height: 1.55; color: var(--nh-ink-2); max-width: 46ch; }
-.split { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 24px clamp(32px, 6vw, 96px); align-items: end; }
+/* 08 Pilot: three phases as one track, in the app's progress colours. No durations. */
+.pilot { min-height: 800px; display: flex; flex-direction: column; justify-content: center; gap: 64px; padding: 96px var(--nh-page-x); }
+.track { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr); gap: 6px; }
+.track li { display: grid; align-content: start; padding-right: 24px; }
+.track li i { display: block; height: 12px; margin: 0 -24px 20px 0; background: var(--nh-brand); }
+.track li:first-child i { border-radius: 6px 0 0 6px; }
+.track li:last-child i { border-radius: 0 6px 6px 0; }
+.track li[data-phase="1"] i { background: var(--nh-blue-bright); }
+.track li[data-phase="2"] i { background: var(--nh-open); }
+.track span { font-family: var(--nh-mono); font-size: 13px; line-height: 16px; font-weight: 500; text-transform: uppercase; color: var(--nh-brand); }
+.track li[data-phase="1"] span { color: var(--nh-blue); }
+.track li[data-phase="2"] span { color: var(--nh-mute); }
+.track h3 { margin-top: 8px; font-size: 22px; line-height: 28px; font-weight: 600; letter-spacing: -0.015em; color: var(--nh-ink); }
+.track p { margin-top: 8px; max-width: 420px; font-size: 15px; line-height: 22px; color: var(--nh-ink-2); }
 
-/* What it never does: the claim on the left, the three rules as a ruled list on the right. */
-.never { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 32px clamp(32px, 6vw, 96px); align-items: start; }
-.never .aside { margin-top: 8px; }
-.neverList { list-style: none; margin: 0; padding: 0; display: grid; }
-.neverList li { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 8px 24px; padding: 24px 0; border-top: 1px solid var(--nh-line); }
-.neverList li:last-child { border-bottom: 1px solid var(--nh-line); }
-.neverList h3 { font-size: 18px; letter-spacing: -0.01em; line-height: 1.3; }
-.neverList p { font-size: 15.5px; line-height: 1.55; color: var(--nh-ink-2); }
-
-/* The pilot week: the five days carry the blue rule, what comes after does not. */
-.week { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px clamp(16px, 2.4vw, 32px); }
-.week li { display: grid; gap: 12px; align-content: start; padding-top: 16px; border-top: 2px solid var(--nh-brand); }
-.week li:last-child { border-top-color: var(--nh-line); }
-.week span { font-family: var(--nh-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--nh-brand); }
-.week li:last-child span { color: var(--nh-mute); }
-.week p { font-size: 15.5px; line-height: 1.55; color: var(--nh-ink-2); }
-
-/* Close: the question back, one button - a white card, like the panels in the app. */
-.close {
-  margin: clamp(88px, 11vw, 168px) 12px 0; padding: clamp(48px, 7vw, 104px) clamp(18px, 4.4vw, 64px);
-  border-radius: clamp(20px, 2.6vw, 34px); background: var(--nh-card); box-shadow: var(--nh-card-shadow);
+/* 09 Close: the question back on a full teal band, with the raise box as the ask. */
+.close { padding: 0 40px 40px; }
+.band {
+  min-height: 680px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 44px; padding: 64px 24px;
+  border-radius: var(--nh-r-xl); text-align: center;
+  background: var(--nh-brand) radial-gradient(ellipse 60% 80% at 50% 120%, #0b8794 0%, rgb(11 135 148 / 0) 70%);
 }
-.closeIn { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 28px clamp(32px, 6vw, 96px); align-items: end; }
-.closeAsk { display: grid; gap: 22px; }
-.closeAsk p { font-size: 17px; line-height: 1.5; color: var(--nh-ink-2); max-width: 44ch; }
-.cta { display: flex; align-items: center; gap: 12px 22px; flex-wrap: wrap; }
-.close .book { height: 50px; padding: 0 26px; font-size: 15px; }
-.down { font-size: 15px; font-weight: 600; text-decoration: underline; text-decoration-color: var(--nh-line); text-underline-offset: 5px; }
-.down:hover { color: var(--nh-ink); text-decoration-color: var(--nh-ink); }
-.down:focus-visible, .close .book:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 3px; }
+.band h2 { max-width: 980px; font-size: clamp(56px, 6.67vw, 96px); line-height: 1.02; font-weight: 700; letter-spacing: -0.04em; color: #fff; }
+.band p { font-size: 17px; line-height: 26px; color: rgb(255 255 255 / 0.86); }
 
-/* Headings come up as they scroll in - only where the browser can tie an animation to the scroll position. */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .band .display, .close .display { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 70%; }
-  }
-}
 @media (prefers-reduced-motion: reduce) {
   .hero h1, .lead { animation: none; }
 }
 
-@media (max-width: 900px) {
-  .split, .never, .closeIn { grid-template-columns: minmax(0, 1fr); }
-  .week { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* Between desktop and phone: the fixed columns give way. */
+@media (max-width: 1160px) {
+  .thead, .row { grid-template-columns: minmax(0, 1.5fr) 96px 104px minmax(0, 1fr) auto; }
+  .bento { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr); }
 }
+@media (max-width: 1000px) {
+  .head { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .aside { width: auto; max-width: 520px; padding-bottom: 0; }
+  .bento { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: none; }
+  .tileAi { grid-row: auto; grid-column: 1 / -1; min-height: 360px; }
+  .tile { min-height: 220px; }
+  /* The list becomes one card per idea. */
+  .table { padding: 0; background: none; box-shadow: none; display: grid; gap: 12px; }
+  .thead { display: none; }
+  .row { grid-template-columns: minmax(0, 1fr) auto; row-gap: 12px; min-height: 0; padding: 16px; border-top: 0; border-radius: var(--nh-r-lg); background: var(--nh-card); box-shadow: var(--nh-card-shadow); }
+  .what { grid-column: 1 / -1; grid-row: 2; padding: 0; }
+  .what strong { font-size: 17px; line-height: 23px; }
+  .status { grid-column: 2; grid-row: 1; }
+  .stage { grid-column: 1; grid-row: 1; font-size: 14px; color: var(--nh-mute); }
+  .who { grid-column: 1; grid-row: 3; }
+  .who > span:first-child { --s: 36px !important; }
+  .who strong { font-size: 14px; font-weight: 400; color: var(--nh-ink-2); }
+  .who small { display: none; }
+  .since { grid-column: 2; grid-row: 3; justify-self: end; font-size: 14px; }
+}
+
+/* Phone (Paper: 03 · Home · phone 390). */
 @media (max-width: 760px) {
-  .close { margin-left: 8px; margin-right: 8px; }
-}
-@media (max-width: 640px) {
-  .hero h1 { font-size: clamp(40px, 15vw, 64px); } /* two lines on a phone: sized to the width, not the one-line rule above */
-  .neverList li { grid-template-columns: minmax(0, 1fr); }
-}
-@media (max-width: 480px) {
-  .week { grid-template-columns: minmax(0, 1fr); }
+  .title { font-size: 32px; line-height: 36px; letter-spacing: -0.03em; margin-top: 12px; }
+  .hero { padding: 40px 20px; }
+  .heroIn { gap: 24px; justify-items: stretch; text-align: left; }
+  .heroText { justify-items: start; }
+  .hero h1 { font-size: 56px; line-height: 56px; }
+  .lead { font-size: 18px; line-height: 27px; }
+  .statement { min-height: 0; gap: 32px; padding: 72px 20px; }
+  .statement h2 { font-size: 40px; line-height: 44px; letter-spacing: -0.035em; }
+  .rail { gap: 10px; }
+  .rail li { font-size: 15px; }
+  .rail li:not(:last-child)::after { width: 16px; margin-left: 2px; }
+  .desk, .principles, .pilot { min-height: 0; gap: 24px; padding: 56px 20px; }
+  .row:nth-child(n + 5) { display: none; } /* three ideas are enough on a phone */
+  .bento { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .tileAi { min-height: 0; padding: 24px; gap: 20px; }
+  .tileAi h3 { font-size: 28px; line-height: 32px; letter-spacing: -0.025em; }
+  .tileAi h3 br { display: none; }
+  .tileAi p { font-size: 16px; line-height: 24px; }
+  .asks, .says { font-size: 14px; }
+  .tile { min-height: 0; padding: 20px 24px; }
+  .tile h3 { font-size: 18px; line-height: 24px; }
+  .five b { font-size: 64px; line-height: 60px; }
+  /* The track turns upright: a bar on the left, the phases beside it. */
+  .track { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .track li { grid-template-columns: 8px minmax(0, 1fr); column-gap: 16px; padding: 0 0 16px; }
+  .track li i { grid-row: 1 / span 3; width: 8px; height: auto; margin: 0 0 -16px; border-radius: 0; }
+  .track li:first-child i { border-radius: 4px 4px 0 0; }
+  .track li:last-child i { border-radius: 0 0 4px 4px; margin-bottom: 0; }
+  .track li:last-child { padding-bottom: 0; }
+  .track h3 { margin-top: 4px; font-size: 17px; line-height: 22px; letter-spacing: 0; }
+  .track p { margin-top: 2px; }
+  .close { padding: 0 12px 12px; }
+  .band { min-height: 0; align-items: stretch; gap: 24px; padding: 56px 20px; text-align: left; }
+  .band h2 { font-size: 44px; line-height: 46px; }
+  .band p { font-size: 15px; line-height: 22px; }
 }

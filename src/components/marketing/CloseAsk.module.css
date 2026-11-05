@@ -1,0 +1,29 @@
+/* The raise box on the teal close band (Paper: Home · 09 Close). */
+.box {
+  width: min(100%, 680px); display: flex; align-items: center; gap: 12px; min-height: 72px; padding: 8px 8px 8px 28px;
+  border: 2px solid transparent; border-radius: 999px;
+  background: linear-gradient(var(--nh-card), var(--nh-card)) padding-box, var(--nh-gold-ring) border-box;
+  box-shadow: 0 20px 60px rgb(0 40 46 / 0.35); transition: box-shadow 160ms var(--nh-ease);
+}
+.box:focus-within { box-shadow: 0 0 0 5px rgb(240 194 58 / 0.3), 0 20px 60px rgb(0 40 46 / 0.35); }
+.input { flex: 1; min-width: 0; height: 28px; padding: 0; border: 0; outline: 0; background: transparent; font-size: 19px; line-height: 28px; color: var(--nh-ink); }
+.input::placeholder { color: var(--nh-mute); }
+.go {
+  flex: none; height: 52px; padding: 0 22px; border: 0; border-radius: 999px; background: var(--nh-brand); color: #fff; cursor: pointer;
+  font-size: 16px; line-height: 20px; font-weight: 600; white-space: nowrap; transition: background 160ms var(--nh-ease), transform 150ms var(--nh-ease);
+}
+.go:hover { background: var(--nh-brand-hover); }
+.go:active { transform: scale(0.97); }
+.go:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 2px; }
+
+@media (max-width: 760px) {
+  /* Phone: the field and the button stack; the button is the white block of the band. */
+  .box { flex-direction: column; align-items: stretch; gap: 12px; min-height: 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
+  .box:focus-within { box-shadow: none; }
+  .input { flex: none; height: 52px; padding: 0 16px; border-radius: var(--nh-r); background: var(--nh-card); font-size: 16px; } /* flex: none - in a column the base flex: 1 would collapse the height */
+  .input:focus { box-shadow: 0 0 0 3px rgb(255 255 255 / 0.45); }
+  .go { border-radius: var(--nh-r); background: #fff; color: var(--nh-brand); }
+  .go:hover { background: var(--nh-brand-tint); }
+  .go:focus-visible { outline-color: #fff; }
+}
+@media (prefers-reduced-motion: reduce) { .go:active { transform: none; } }

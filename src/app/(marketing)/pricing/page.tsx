@@ -1,136 +1,99 @@
-// PRICING. Free pilot, one flat company plan, and "talk to us" for groups. Per company, not per seat.
+// PRICING (Paper: 04 · Pricing). Priced per seat; no prices are set yet. A paid pilot first, then seats.
+// Nothing on this page states a number until the first pilots have closed.
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/Button";
-import { PRINCIPLES, SITE } from "@/config/site";
+import { SeatQuote } from "@/components/marketing/SeatQuote";
+import { Avatar, Pill, type Tone } from "@/components/product/elements";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "Pricing",
-  description: "A free five-day pilot, then one flat price per company. No seats to count, nothing to integrate.",
+  description: "NextUp is priced per seat. Start as a pilot partner; per-seat prices follow after the first pilots.",
 };
 
-// Company plan is anchored on the canvas: a department head signs off alone under about €5k a year.
-const COMPANY_MONTH = 390;
-const COMPANY_YEAR = COMPANY_MONTH * 12;
-const fmt = (n: number) => n.toLocaleString("en-IE"); // "4,680"
-
-const TIERS = [
-  {
-    key: "pilot",
-    eyebrow: "Start here",
-    name: "Pilot",
-    price: "€0",
-    per: "five working days",
-    lead: "One department, one decision type, real requests. You leave with two numbers you did not have before.",
-    items: [
-      "Routing table for your decision type, filled in with you",
-      "Inbox with a clock for the owners it names",
-      "The wait ledger at the end of the week",
-      "A one-page report you can forward to your boss",
-    ],
-    ask: "In return: thirty minutes of feedback and permission to quote the numbers, anonymised.",
-    cta: { label: "Book a pilot", href: "/contact", variant: "accent" as const },
-    featured: true,
-  },
-  {
-    key: "company",
-    eyebrow: "After the pilot",
-    name: "Company",
-    price: `€${COMPANY_MONTH}`,
-    per: `per month, billed yearly (€${fmt(COMPANY_YEAR)})`,
-    lead: "Everyone in the company can raise a case. Every leader gets an inbox. Management gets the ledger.",
-    items: [
-      "Unlimited people and departments - no seats to count",
-      "The three home screens: My cases, Inbox, Overview",
-      `Wait ledger with the ${SITE.promiseDays}-day promise, stall reasons, movement since baseline`,
-      "Routing table editor, members and roles, anonymous raising as a company switch",
-      "Hosting in the EU, export of everything at any time, e-mail support",
-    ],
-    ask: "Under the line most department heads can sign alone - no procurement round needed.",
-    cta: { label: "Start with a pilot", href: "/contact", variant: "primary" as const },
-    featured: false,
-  },
-  {
-    key: "group",
-    eyebrow: "Several companies",
-    name: "Group",
-    price: "Let's talk",
-    per: "per group, yearly",
-    lead: "Several companies or sites under one roof, each with its own data, branding and routing table.",
-    items: [
-      "Everything in Company, per tenant",
-      "Single sign-on and a data processing agreement (AVV)",
-      "A works-council-ready description of what is and is not measured",
-      "Onboarding for each department head - twenty minutes each",
-    ],
-    ask: "Priced per group, not per company, once we know the shape of yours.",
-    cta: { label: "Contact us", href: "/contact", variant: "ghost" as const },
-    featured: false,
-  },
-];
+const SEATS: Array<[string, Tone]> = [["N. Demir", "blue"], ["T. Vogel", "green"], ["A. Schulz", "amber"], ["M. Hoffmann", "violet"], ["K. Yilmaz", "teal"], ["J. Schmidt", "pink"]];
 
 const FAQ = [
-  ["Why per company and not per seat?", "A tool for raising things fails the moment you count who is allowed to raise them. Everyone raises; the price does not change when you add people."],
-  ["What exactly is a pilot?", "Five working days in one department, timing one recurring decision type - approve a tool, sign off a clause, answer a data request. Real requests, real owners. At the end you see the median time to first answer and where the waiting went. It is free; we ask for thirty minutes of feedback."],
-  ["Do you need access to our systems?", "No. Cases are raised in one field on the site. Optionally, an employee forwards a single e-mail thread to one address - consent is the act of forwarding. There is no mailbox connection and no monitoring."],
-  ["We have a works council. Is this a problem?", `Usually not, and we would rather have the conversation early. ${SITE.name} leads with problems and blockers, not an ideas scheme, and it records no per-person metrics. We can provide a written description of what is measured for the works council before the pilot starts.`],
-  ["Where is our data stored?", "On servers in the EU. The privacy policy names the hosting provider. Your data is keyed to your company and never visible to another tenant."],
+  ["What counts as a seat?", "One seat is one person who uses NextUp. Who needs a seat in your company is agreed in the pilot scope."],
+  ["What exactly is a pilot?", "A paid build project in three phases. We agree the scope and the price, build NextUp with your people on your org chart and routing, and run it in your plant with real ideas. How long it takes depends on the scope."],
+  ["Do you need access to our systems?", "Not to start. Ideas are raised in one field. What gets connected later, such as single sign-on, is part of the pilot scope."],
+  ["We have a works council. Is this a problem?", "Talk to us early. The works council should be part of the pilot scope from the first conversation."],
+  ["Where is our data stored?", "On servers in the EU. The privacy policy names the hosting provider. Your data is keyed to your company and never visible to another company."],
 ];
 
 export default function PricingPage() {
   return (
-    <>
+    <div className={styles.page}>
       <section className={styles.head}>
-        <p className="nh-eyebrow">Pricing</p>
-        <h1>Per company, not per seat.</h1>
-        <p className={styles.lead}>A free pilot first, because a number is a better argument than a demo. Then one flat price a department head can sign alone.</p>
-      </section>
-
-      <section className={styles.tiers} aria-label="Plans">
-        {TIERS.map((t) => (
-          <article key={t.key} className={`${styles.tier} ${t.featured ? styles.featured : ""}`}>
-            <p className="nh-eyebrow">{t.eyebrow}</p>
-            <h2>{t.name}</h2>
-            <p className={styles.price}><span className="nh-mono">{t.price}</span><small>{t.per}</small></p>
-            <p className={styles.tierLead}>{t.lead}</p>
-            <ul className={styles.items}>
-              {t.items.map((i) => <li key={i}>{i}</li>)}
-            </ul>
-            <p className={styles.ask}>{t.ask}</p>
-            <Button href={t.cta.href} variant={t.cta.variant} block>{t.cta.label}</Button>
-          </article>
-        ))}
-      </section>
-      <p className={`${styles.fine} nh-mono`}>Prices are net of VAT and indicative until the first pilots close.</p>
-
-      <section className={styles.every}>
-        <p className="nh-eyebrow">In every plan</p>
-        <div className={styles.everyGrid}>
-          {PRINCIPLES.map(([h, b]) => (
-            <div key={h}>
-              <h3>{h}</h3>
-              <p>{b}</p>
-            </div>
-          ))}
+        <div>
+          <p className="nh-eyebrow">Pricing</p>
+          <h1>Priced per seat.</h1>
         </div>
+        <p className={styles.lead}>
+          Start as a pilot partner: your company invests, and we build NextUp into a ready solution with you. Per-seat prices follow.
+        </p>
       </section>
+
+      <section className={styles.plans} aria-label="Plans">
+        <div className={styles.row}>
+          <article className={styles.pilot}>
+            <div className={styles.top}>
+              <p className={styles.kicker}>Start here · Pilot partner</p>
+              <h2 className={styles.price}>Paid pilot</h2>
+              <p className={styles.per}>scope and price by agreement</p>
+            </div>
+            <p className={styles.planLead}>Your company invests in the pilot. Together we build NextUp into a solution that is ready for your plant.</p>
+            <ul className={styles.items}>
+              <li>Scope and price agreed before we start</li>
+              <li>Built with your departments and your routing</li>
+              <li>Per-seat pricing once it runs</li>
+            </ul>
+            <Button href="/contact" variant="white" block>Book a pilot</Button>
+          </article>
+
+          <article className={styles.seat}>
+            <div className={styles.seatTop}>
+              <div className={styles.top}>
+                <p className={styles.kicker}>After the pilot · Company</p>
+                <h2 className={styles.price}>Per seat</h2>
+                <p className={styles.per}>per month · price on request</p>
+              </div>
+              <Pill status="clock">Prices in progress</Pill>
+            </div>
+            <div className={styles.seats}>
+              <span className={styles.faces} aria-hidden="true">
+                {SEATS.map(([name, tone]) => <Avatar key={name} name={name} tone={tone} size={48} />)}
+              </span>
+              <p>One seat for each person who uses NextUp. Add and remove seats as teams change.</p>
+            </div>
+            <ul className={`${styles.items} ${styles.two}`}>
+              <li>Ideas, Inbox, Projects and Dashboard</li>
+              <li>Hosting in the EU</li>
+              <li>Every department, one list</li>
+              <li>E-mail support</li>
+            </ul>
+            <SeatQuote />
+          </article>
+        </div>
+
+        <article className={styles.group}>
+          <p><strong>Several companies or sites</strong><span>Each with its own data and routing table. Single sign-on.</span></p>
+          <Button href="/contact" variant="ghost">Contact us</Button>
+        </article>
+      </section>
+      <p className={`${styles.fine} nh-mono`}>No prices are set yet. Per-seat prices follow after the first pilots.</p>
 
       <section className={styles.faq}>
-        <p className="nh-eyebrow">Questions we get</p>
-        <div className={styles.faqList}>
+        <h2>Questions before a pilot</h2>
+        <div>
           {FAQ.map(([q, a]) => (
-            <details key={q} className={styles.faqItem} name="faq">
-              <summary>
-                {q}
-                <span className={styles.faqIcon} aria-hidden="true">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M7 1v12M1 7h12" /></svg>
-                </span>
-              </summary>
+            <details key={q}>
+              <summary>{q}<i aria-hidden="true" /></summary>
               <p>{a}</p>
             </details>
           ))}
         </div>
       </section>
-    </>
+    </div>
   );
 }

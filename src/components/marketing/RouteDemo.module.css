@@ -1,58 +1,68 @@
-/* The hero's raise box and its answer. One white field with the raise box's gold edge; the answer stands under it as type, not as a card. */
+/* The hero's raise box and its answer (Paper: Home · 02 Hero). One white field with the gold ring; under it the
+   owner, the day the answer is owed and the deputy, each as a small white card with a tinted face. */
 
-.demo { width: min(100%, 760px); display: grid; gap: clamp(22px, 2.8vw, 34px); }
+.demo { width: min(100%, 720px); display: grid; gap: 40px; justify-items: center; }
 
 /* The box: one line and the send arrow. */
 .box {
-  display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 28px;
+  width: 100%; display: flex; align-items: center; gap: 12px; min-height: 72px; padding: 10px 10px 10px 28px;
   border: 2px solid transparent; border-radius: 999px; color: var(--nh-ink);
-  /* the gold edge: a gradient under a transparent border, white painted over everything inside it */
-  background: linear-gradient(var(--nh-card), var(--nh-card)) padding-box, linear-gradient(90deg, var(--nh-gold), var(--nh-gold-soft) 50%, var(--nh-gold)) border-box;
-  box-shadow: 0 22px 44px -22px rgb(25 50 70 / 0.24), 0 4px 12px rgb(25 50 70 / 0.05); transition: box-shadow 0.2s ease;
+  /* the gold ring: a gradient under a transparent border, white painted over everything inside it */
+  background: linear-gradient(var(--nh-card), var(--nh-card)) padding-box, var(--nh-gold-ring) border-box;
+  box-shadow: 0 12px 40px rgb(230 169 25 / 0.18), 0 2px 6px rgb(40 60 100 / 0.06); transition: box-shadow 160ms var(--nh-ease);
 }
-.box:focus-within { box-shadow: 0 0 0 5px rgb(240 196 64 / 0.2), 0 22px 44px -22px rgb(25 50 70 / 0.24), 0 4px 12px rgb(25 50 70 / 0.05); }
+.box:focus-within { box-shadow: 0 0 0 5px rgb(240 194 58 / 0.22), 0 12px 40px rgb(230 169 25 / 0.18), 0 2px 6px rgb(40 60 100 / 0.06); }
 .input {
-  flex: 1; min-width: 0; height: 1.5em; padding: 0; border: 0; outline: 0; resize: none; background: transparent;
-  font-size: clamp(17px, 1.5vw, 20px); font-weight: 500; line-height: 1.5; text-align: left; overflow: hidden;
+  flex: 1; min-width: 0; height: 28px; padding: 0; border: 0; outline: 0; resize: none; background: transparent;
+  font-size: 19px; font-weight: 500; line-height: 28px; text-align: left; overflow: hidden; white-space: nowrap;
 }
 .input::placeholder { color: var(--nh-mute-2); }
 .send {
   flex: none; width: 48px; height: 48px; border-radius: 50%; border: 0;
-  display: grid; place-items: center; background: var(--nh-ink); color: #fff; cursor: pointer;
-  transition: background 0.15s ease, transform 0.1s ease;
+  display: grid; place-items: center; background: var(--nh-brand); color: #fff; cursor: pointer;
+  transition: background 160ms var(--nh-ease), transform 150ms var(--nh-ease);
 }
-.send:hover { background: var(--nh-brand); }
-.send:active { transform: translateY(1px); }
-.send:disabled { background: var(--nh-mute-2); cursor: default; transform: none; }
+.send:hover { background: var(--nh-brand-hover); }
+.send:active { transform: scale(0.97); }
+.send:disabled { background: var(--nh-brand-line); cursor: default; transform: none; }
 .send:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 2px; }
 
-/* The answer: three names in the display serif, a caption over each, one quiet line under them. */
-.answer { display: grid; gap: 16px; }
-.facts { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.facts > div { display: grid; gap: 6px; align-content: start; padding: 2px 16px; border-left: 1px solid var(--nh-line); }
-.facts > div:first-child { border-left: 0; }
-.facts dt { font-family: var(--nh-mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--nh-mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.facts dd {
-  margin: 0; font-family: var(--nh-serif); font-size: clamp(26px, 3vw, 40px); line-height: 1.05;
-  opacity: 0.25; transition: opacity 0.3s ease;
+/* The answer: three small cards. */
+.answer { display: grid; gap: 16px; justify-items: center; }
+.facts { margin: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; }
+.facts > div {
+  display: flex; align-items: center; gap: 12px; padding: 12px 20px 12px 12px; border-radius: var(--nh-r-lg);
+  background: var(--nh-card); box-shadow: var(--nh-card-shadow); text-align: left;
+  opacity: 0.45; transition: opacity 320ms var(--nh-ease);
 }
-.answer[data-on="true"] .facts dd { opacity: 1; }
-.note { font-size: 13.5px; line-height: 1.45; color: var(--nh-mute); }
-.note[data-raised="true"] { color: var(--nh-ok); font-weight: 700; }
+.answer[data-on="true"] .facts > div { opacity: 1; }
+.facts > div > span:last-child { display: grid; gap: 2px; }
+.facts dt { font-size: 13px; line-height: 16px; color: var(--nh-mute); white-space: nowrap; }
+.facts dd { margin: 0; font-size: 17px; line-height: 21px; font-weight: 600; color: var(--nh-ink); white-space: nowrap; }
+.clock, .blank { flex: none; width: 44px; height: 44px; border-radius: 999px; display: grid; place-items: center; }
+.clock { background: var(--nh-blue-tint); color: var(--nh-blue); }
+.blank { background: var(--nh-surface); }
+.note { font-size: 15px; line-height: 22px; color: var(--nh-mute); }
+.note[data-raised="true"] { color: var(--nh-ok); font-weight: 600; }
 
 /* Page load: the box, then the answer, then the typing starts. */
-@keyframes rise { from { opacity: 0; transform: translateY(16px); } }
-.box, .answer { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-.box { animation-delay: 0.18s; }
-.answer { animation-delay: 0.28s; }
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } }
+.box, .answer { animation: rise 420ms var(--nh-ease) both; }
+.box { animation-delay: 120ms; }
+.answer { animation-delay: 180ms; }
 @media (prefers-reduced-motion: reduce) {
   .box, .answer { animation: none; }
+  .send:active { transform: none; }
 }
 
-@media (max-width: 640px) {
-  /* A phone cannot hold a request on one line: two lines, and the corners follow. */
-  .box { align-items: flex-end; padding: 14px 12px 12px 18px; border-radius: var(--nh-r-xl); }
-  .input { height: 3em; align-self: flex-start; }
-  .facts { grid-template-columns: minmax(0, 1fr); gap: 14px; }
-  .facts > div { border-left: 0; padding: 0; }
+@media (max-width: 760px) {
+  /* A phone cannot hold a request on one line: three lines, the corners follow, the cards stack. */
+  .demo { gap: 24px; justify-items: stretch; }
+  .box { align-items: flex-end; padding: 14px 10px 10px 18px; border-radius: 22px; }
+  .input { height: 72px; align-self: flex-start; font-size: 17px; line-height: 24px; white-space: normal; }
+  .send { width: 44px; height: 44px; }
+  .answer { justify-items: stretch; }
+  .facts { flex-direction: column; gap: 8px; }
+  .facts > div { padding: 10px 12px; }
+  .facts dd { font-size: 16px; }
 }

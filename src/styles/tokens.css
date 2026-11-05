@@ -1,92 +1,74 @@
-/* Design tokens. Imported once by src/app/globals.css. Same palette as legacy/demo (warm greige, ink, one orange for time) plus the logo blue for actions. */
+/* Design tokens. Imported once by src/app/globals.css. The landing speaks the app's language: teal carries the
+   structure and the one filled action, blue shows what is in progress, people and departments bring the colour.
+   Values are those of the Paper page "Landing · redesign" (tokens --lp-*). */
 :root {
-  --nh-ground: #f9fcfc;      /* page background: the Ground's base (shell/Ground), so an overscroll edge matches it */
-  --nh-surface: #faf9f7;     /* panels */
-  --nh-card: #ffffff;        /* cards, inputs */
-  --nh-line: #e6e5e0;
-  --nh-line-soft: #eeede8;
-  --nh-ink: #141414;
-  --nh-ink-2: #5b5b5b;
-  --nh-mute: #8c8c88;
-  --nh-mute-2: #a3a29a;
-  --nh-dark: #1a1a17;        /* dark panel */
-  --nh-dark-2: #232320;
-  --nh-dark-line: #2c2c27;
-  --nh-on-dark: #fbfbf9;
-  --nh-on-dark-mute: #a0a099;
-  --nh-accent: #ff5a1f;      /* time: due now, overdue, worsening */
-  /* Decision Blue: the product's interactive brand colour. */
-  --nh-brand: #0b70d1;
-  --nh-brand-hover: #085dae;
-  --nh-brand-active: #064b8c;
-  --nh-brand-tint: #eaf3ff;
-  --nh-brand-line: #b8d9ff;
-  --nh-brand-2: var(--nh-brand-hover); /* compatibility alias for existing components */
-  --nh-ok: #2f8f5b;
-  --nh-ok-tint: #edf7f0;
-  --nh-danger: #b3261e;      /* a field that will not go through; admin's destructive actions */
-  --nh-danger-tint: #fdf1f0;
-  /* The signed-in app: light grey ground, white cards that float on a soft shadow instead of a border. */
-  --nh-app-ground: #f5f5f7;
-  --nh-card-shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px -12px rgb(0 0 0 / 0.12);
-  /* The two kinds of thing an employee raises. Tint the surface, never the action button. */
-  --nh-problem: #c2410c;      /* terracotta: something hurts */
-  --nh-problem-tint: #fff1ea;
-  --nh-problem-line: #f5c4a8;
-  --nh-idea: #6d4fc2;         /* violet: something could be */
-  --nh-idea-tint: #f2eefb;
-  --nh-idea-line: #cfc2f0;
-  /* The raise box's gold edge, as on the landing's hero box: strong at the sides, pale across the middle. */
-  --nh-gold: #f0c440;
-  --nh-gold-soft: #fdefc5;
+  --nh-ground: #f9fcfc;      /* page background: the Ground's base (shell/Ground) */
+  --nh-surface: #f2f6f9;     /* tinted panel inside a card */
+  --nh-card: #ffffff;
+  --nh-line: #e5e5ea;
+  --nh-line-2: #d1d1d6;      /* field borders */
+  --nh-line-soft: #f0f0f3;
+  --nh-ink: #1c1c1e;         /* text only, never a fill */
+  --nh-ink-2: #3a3a3c;
+  --nh-mute: #6e6e73;
+  --nh-mute-2: #8e8e93;
+  --nh-quiet: #93a5b4;       /* a chapter that is not the current one */
+  --nh-pale: #b4c3cf;        /* words not yet reached */
+  --nh-open: #d5dee6;        /* a step that has not started */
 
-  --nh-font: var(--font-sans, "Manrope"), system-ui, -apple-system, "Segoe UI", sans-serif;   /* --font-sans set by next/font in layout.tsx */
+  /* Teal: the top bar, the one filled button per view, the close band. */
+  --nh-brand: #00626e;
+  --nh-brand-hover: #005059;
+  --nh-brand-active: #003f47;
+  --nh-brand-deep: #003f47;
+  --nh-brand-tint: #e1f1f2;
+  --nh-brand-line: #a8d4d8;
+  --nh-brand-focus: rgb(0 98 110 / 0.16);
+  /* Blue: in progress, clocks, the route line. */
+  --nh-blue: #0b70d1;
+  --nh-blue-bright: #1286fc;
+  --nh-blue-ink: #085dae;
+  --nh-blue-tint: #eaf3ff;
+
+  --nh-ok: #1f7a3a;
+  --nh-ok-tint: #eaf8ee;
+  --nh-warn: #9a5300;
+  --nh-warn-tint: #fff1dc;
+  --nh-danger: #d70015;      /* late, blocked, a field that will not go through */
+  --nh-danger-tint: #fff0f0;
+
+  /* The raise box's gold ring. Nothing else is gold. */
+  --nh-gold-ring: linear-gradient(110deg, #f0c23a 0%, #f7dd93 30%, #fff3d0 52%, #f2cb55 76%, #e6a919 100%);
+
+  --nh-card-shadow: 0 6px 20px rgb(40 60 100 / 0.06);
+  --nh-float-shadow: 0 6px 20px rgb(40 60 100 / 0.1);
+  --nh-window-shadow: 0 30px 80px rgb(20 50 90 / 0.18), 0 2px 6px rgb(20 50 90 / 0.08);
+
+  --nh-font: var(--font-inter, "Inter"), -apple-system, "Segoe UI", sans-serif;   /* --font-inter set by next/font in layout.tsx */
   --nh-mono: var(--font-mono, "IBM Plex Mono"), ui-monospace, SFMono-Regular, Menlo, monospace;
-  --nh-serif: var(--font-serif, "Instrument Serif"), Georgia, "Times New Roman", serif;   /* section headings on the raise page */
 
-  --nh-r-sm: 8px;
-  --nh-r: 11px;
-  --nh-r-lg: 18px;
-  --nh-r-xl: 22px;
+  --nh-r-sm: 6px;   /* department chips */
+  --nh-r: 8px;      /* buttons, pills, fields */
+  --nh-r-lg: 12px;  /* cards */
+  --nh-r-xl: 20px;  /* large landing surfaces */
+
+  --nh-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 
   --nh-space: 8px;
-  --nh-page-x: clamp(16px, 5vw, 56px);
   --nh-max: 1120px;
+  /* The side gutter of a section: 160px at 1440, never under 20px. Sections use it as padding-inline. */
+  --nh-page-x: max(20px, calc((100% - var(--nh-max)) / 2));
 
-  /* Page scale, applied as `zoom` on <html> in globals.css. The design is drawn for a ~1920x950
-     canvas; a laptop at 100% shows it ~25% too large, so mouse-driven screens scale down to 0.9
-     at most (0.8 made text too small), big monitors scale up a little. Phones and tablets stay at 1:
-     their sizes are tuned per breakpoint. The smaller of the width and height factor wins. */
-  --nh-zoom-w: 1;
-  --nh-zoom-h: 1;
+  /* Sizes do not grow with the window: no page zoom. The variables stay because the pinned scenes size by them.
+     Height is the small viewport (svh): on phones 100vh is taller than the screen while the toolbar shows. */
   --nh-zoom: 1;
-  /* The viewport in page pixels. Viewport units are scaled by `zoom` too, so a full-height box
-     uses these instead of 100vh / 100vw. Height is the small viewport (svh): on iOS Safari and
-     Android Chrome 100vh is taller than the screen while the toolbar shows, and dvh changes as the
-     toolbar slides away, so every box sized by it jumps mid-scroll. svh fits the screen with the
-     toolbar showing and never moves. Browsers without svh (Safari < 15.4) get vh. */
-  --nh-screen-h: calc(100vh / var(--nh-zoom));
-  --nh-screen-w: calc(100vw / var(--nh-zoom));
+  --nh-screen-h: 100vh;
+  --nh-screen-w: 100vw;
   --nh-head: 64px; /* the sticky site header (SiteHeader.module.css) */
 }
 @supports (height: 100svh) {
-  :root { --nh-screen-h: calc(100svh / var(--nh-zoom)); }
+  :root { --nh-screen-h: 100svh; }
 }
-
-@supports (zoom: 1) {
-  @media (hover: hover) and (pointer: fine) {
-    :root { --nh-zoom: min(var(--nh-zoom-w), var(--nh-zoom-h)); }
-    @media (min-width: 900px) { :root { --nh-zoom-w: 0.96; } }
-    @media (min-width: 1000px) { :root { --nh-zoom-w: 0.93; } }
-    @media (min-width: 1100px) { :root { --nh-zoom-w: 0.9; } }
-    @media (min-width: 1700px) { :root { --nh-zoom-w: 0.94; } }
-    @media (min-width: 1800px) { :root { --nh-zoom-w: 0.97; } }
-    @media (min-width: 1900px) { :root { --nh-zoom-w: 1; } }
-    @media (min-width: 2300px) and (min-height: 1150px) { :root { --nh-zoom-w: 1.08; } }
-    @media (min-width: 2800px) and (min-height: 1400px) { :root { --nh-zoom-w: 1.16; } }
-    /* Laptops are short: below ~900px of height the page shrinks with it, never below 0.9 -
-       under that, body text drops toward 12px and reads too small on a laptop. */
-    @media (min-width: 1100px) and (max-height: 899px) { :root { --nh-zoom-h: 0.95; } }
-    @media (min-width: 1100px) and (max-height: 819px) { :root { --nh-zoom-h: 0.9; } }
-  }
+@media (max-width: 760px) {
+  :root { --nh-head: 56px; }
 }

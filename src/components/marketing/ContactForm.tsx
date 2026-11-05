@@ -3,7 +3,7 @@
 // again in the server action (src/server/actions/pilot.ts), which forwards a real request to the
 // dev admin (admin.sellux.ch /requests). With no intake configured it falls back to a
 // pre-filled mailto: draft. The privacy policy describes both - keep them in sync.
-import { useActionState, useEffect, useRef, useState } from "react";
+import { useActionState, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
@@ -15,17 +15,43 @@ import {
   type PilotRequest,
 } from "@/features/pilot/request";
 import { requestPilot, type PilotState } from "@/server/actions/pilot";
+import { CARRIED_DECISION } from "./CloseAsk";
+import { CARRIED_SEATS } from "./SeatQuote";
 import styles from "./ContactForm.module.css";
 
 type Props = { to: string };
 
 const EMPTY: PilotRequest = { name: "", company: "", email: "", decision: "", council: "not sure", message: "" };
 
+// What the visitor typed on the way here (the close band's box, the pricing page's seat count). It lives in
+// this tab's session storage, is read once and stands in the form; nothing of it is in the address.
+const never = () => () => {};
+const SEP = String.fromCharCode(31); // between the seat count and the decision in one snapshot string
+function carried() {
+  try {
+    const decision = window.sessionStorage.getItem(CARRIED_DECISION) ?? "";
+    const seats = window.sessionStorage.getItem(CARRIED_SEATS) ?? "";
+    return seats + SEP + decision;
+  } catch { return SEP; }
+}
+
 export function ContactForm({ to }: Props) {
   const [state, submit, pending] = useActionState<PilotState, FormData>(requestPilot, { status: "idle" });
   const [values, setValues] = useState<PilotRequest>(EMPTY);
   const [errors, setErrors] = useState<PilotErrors>({});
   const formRef = useRef<HTMLFormElement>(null);
+
+  const brought = useSyncExternalStore(never, carried, () => SEP);
+  const [taken, setTaken] = useState(SEP);
+  if (brought !== taken) {
+    setTaken(brought);
+    const [seats, decision = ""] = brought.split(SEP);
+    setValues((v) => ({
+      ...v,
+      decision: v.decision || decision,
+      message: v.message || (seats ? `We would need about ${seats} seats.` : ""),
+    }));
+  }
 
   // The server had the last word: show its messages, keep what was typed. Adjusted during render
   // (the React-sanctioned way to derive state from a prop), not in an effect.
@@ -74,8 +100,8 @@ export function ContactForm({ to }: Props) {
         </span>
         <h3>Request received.</h3>
         <p>
-          We reply to <strong>{state.email}</strong> within two working days - the promise applies to us too.
-          Day 1 is a twenty-minute call with your department head; we suggest times in the reply.
+          We reply to <strong>{state.email}</strong> within two working days and suggest times for a first call
+          about the scope.
         </p>
         <p className={styles.sentNote}>
           Nothing to do until then. If something changes, write to <a href={`mailto:${to}`}>{to}</a>.
@@ -103,11 +129,11 @@ export function ContactForm({ to }: Props) {
         <input className="nh-input" id="email" name="email" type="email" autoComplete="email" placeholder="you@company.com" value={values.email}
           onChange={(e) => set("email", e.target.value)} onBlur={() => touch("email")} {...a11y("email")} />
       </Field>
-      <Field id="decision" label="The decision that keeps waiting" hint="One recurring decision type. Approving a tool, signing off a clause, answering a data request." error={errors.decision}>
-        <input className="nh-input" id="decision" name="decision" type="text" placeholder="e.g. approving a tool under €5k" value={values.decision}
+      <Field id="decision" label="Which decision keeps waiting?" hint="One sentence is enough. Approving a tool, signing off a change, answering a request." error={errors.decision}>
+        <input className="nh-input" id="decision" name="decision" type="text" placeholder="e.g. tool approvals for the night shift take three weeks" value={values.decision}
           onChange={(e) => set("decision", e.target.value)} onBlur={() => touch("decision")} {...a11y("decision")} />
       </Field>
-      <Field id="council" label="Do you have a works council?" hint="Changes nothing about the pilot - only about who we talk to first.">
+      <Field id="council" label="Do you have a works council?" hint="Tells us who should be in the first conversation.">
         <select className="nh-input nh-select" id="council" name="council" value={values.council} onChange={(e) => set("council", e.target.value)}>
           <option value="no">No</option>
           <option value="yes">Yes</option>
@@ -132,12 +158,13 @@ export function ContactForm({ to }: Props) {
         </p>
       ) : null}
 
-      <Button type="submit" variant="accent" block disabled={pending}>
-        {pending ? "Sending…" : "Request the pilot"}
+      <Button type="submit" block disabled={pending}>
+        {pending ? "Sending…" : "Send request"}
       </Button>
 
       <p className={styles.privacy}>
-        Stored only to reply to you, then deleted once the pilot is set up or declined. <Link href="/privacy">Privacy policy</Link>.
+        No newsletter. Your request goes to the NextUp team and nowhere else. It is stored only to reply to you,
+        then deleted once the pilot is set up or declined. <Link href="/privacy">Privacy policy</Link>.
       </p>
     </form>
   );
