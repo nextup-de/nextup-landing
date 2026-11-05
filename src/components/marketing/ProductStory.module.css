@@ -1,37 +1,45 @@
-/* The product story (Paper: Home · 05 Product story). Pinned on a wide screen: chapters left, one app window
-   right. The window's content cross-fades per chapter (420ms, the one ease). */
+/* The product tour: the five steps as tabs on the left (4 columns), the chosen step's screen on the right
+   (8 columns) in one app window on the lit frame, 48px in and cut by the frame's foot. The window's content is the
+   product: Inter, the app's sizes and elements. */
 
-.story { height: calc(var(--nh-screen-h) * 5); background: var(--nh-card); }
-.pin {
-  position: sticky; top: var(--nh-head); height: calc(var(--nh-screen-h) - var(--nh-head));
-  padding: 0 var(--nh-page-x);
-  display: grid; grid-template-columns: 304px minmax(0, 1fr); column-gap: 64px; row-gap: 11px; align-content: center;
+.tour { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--s-5); }
+.side { grid-column: 1 / span 4; display: flex; flex-direction: column; min-height: 0; }
+
+/* The steps: a hairline rail on the left; the chosen step's bar slides along it. Each step is one line, the
+   chosen one opens its sentence. */
+.steps { position: relative; display: grid; border-left: 1px solid var(--hair); }
+.step { position: relative; padding-left: var(--s-5); }
+.step::before {
+  content: ""; position: absolute; left: -1px; top: 0; bottom: 0; width: 2px; background: var(--nh-brand);
+  transform: scaleY(0); transform-origin: top; transition: transform var(--m-out) var(--m-ease);
 }
-.chapter { display: contents; }
-
-/* The chapter list: the current one is open, the others are one quiet line. */
-.text { grid-column: 1; min-width: 0; }
-.jump {
-  display: block; padding: 0; border: 0; background: none; cursor: pointer; text-align: left;
-  font-size: 16px; line-height: 21px; font-weight: 600; color: var(--nh-quiet); transition: color 160ms var(--nh-ease);
+.step[data-on="true"]::before { transform: scaleY(1); }
+.step button {
+  width: 100%; display: flex; align-items: center; gap: var(--s-3); padding: 14px 0; border: 0; background: none; cursor: pointer; text-align: left;
+  font-family: var(--nh-font); font-size: 20px; line-height: 26px; font-weight: 500; letter-spacing: -0.02em; color: var(--muted);
+  transition: color var(--m-out) var(--m-ease);
 }
-.jump:hover { color: var(--nh-brand); }
-.jump:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 2px; border-radius: 2px; }
-.open { display: none; gap: 13px; margin: 11px 0; padding-left: 16px; border-left: 2px solid var(--nh-brand); }
-.chapter[data-on="true"] .jump { display: none; }
-.chapter[data-on="true"] .open { display: grid; }
-.step { font-family: var(--nh-mono); font-size: 10px; line-height: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--nh-brand); }
-.open h2 { font-size: 38px; line-height: 42px; font-weight: 700; letter-spacing: -0.03em; color: var(--nh-ink); }
-.lede { font-size: 14px; line-height: 21px; color: var(--nh-ink-2); }
+.step button:hover { color: var(--ink); transition-duration: var(--m-in); }
+.step[data-on="true"] button { color: var(--ink); }
+.step button:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 2px; border-radius: 4px; }
+.num {
+  flex: none; width: 26px; height: 26px; border-radius: 999px; display: grid; place-items: center;
+  font-size: 13px; line-height: 1; font-weight: 500; letter-spacing: 0; background: var(--g-alt); color: var(--muted);
+  transition: background var(--m-out) var(--m-ease), color var(--m-out) var(--m-ease);
+}
+.step[data-on="true"] .num { background: var(--nh-brand); color: #fff; }
+.body { display: none; }
+.step[data-on="true"] .body { display: block; padding: 0 0 var(--s-4) 38px; font-size: 16px; line-height: 25px; color: var(--muted); max-width: 40ch; }
 
-/* The windows: all five stand in the same cell, one is visible. */
-.screen { grid-column: 2; grid-row: 1 / span 5; align-self: center; min-width: 0; opacity: 0; visibility: hidden; transition: opacity 420ms var(--nh-ease), visibility 0s 420ms; }
-.chapter[data-on="true"] .screen { opacity: 1; visibility: visible; transition-delay: 0s; }
+.frame { grid-column: 6 / span 7; min-height: 480px; }
+.screen { position: absolute; left: 48px; right: 48px; top: 48px; bottom: -28px; animation: in 360ms var(--m-ease) both; }
+@keyframes in { from { opacity: 0; transform: translateY(8px); } }
 
 .window {
-  display: flex; flex-direction: column; height: min(480px, calc(var(--nh-screen-h) - var(--nh-head) - 77px)); border-radius: var(--nh-r-xl); overflow: hidden;
+  display: flex; flex-direction: column; height: 100%; border-radius: var(--r-md); overflow: hidden;
   background: var(--nh-ground) radial-gradient(ellipse 70% 60% at 0% 0%, #cfe0fa 0%, rgb(207 224 250 / 0) 70%);
-  box-shadow: var(--nh-window-shadow);
+  font-family: var(--nh-ui); color: var(--nh-ink); font-size: 14px; line-height: 20px;
+  box-shadow: 0 0 0 1px rgb(20 50 90 / 0.06), 0 32px 64px -24px rgb(20 50 90 / 0.35);
 }
 .appBar { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; height: 42px; padding: 0 13px; background: var(--nh-brand); }
 .appBar img { width: 49px; height: 21px; }
@@ -40,12 +48,12 @@
 .appNav span[data-on="true"] { background: #fff; color: var(--nh-brand); }
 .me { flex: none; width: 24px; height: 24px; border-radius: 999px; display: grid; place-items: center; background: #fff; font-size: 10px; font-weight: 700; color: var(--nh-brand); }
 
-.body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 13px; padding: 19px 22px; }
+.page { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 14px; padding: 28px 32px; }
 .center { align-items: center; justify-content: center; gap: 19px; padding-inline: 45px; }
 .head { display: flex; align-items: center; justify-content: space-between; gap: 13px; }
-.head h3 { font-size: 19px; line-height: 24px; font-weight: 600; letter-spacing: -0.02em; }
+.head h3 { font-family: var(--nh-ui); font-size: 19px; line-height: 24px; font-weight: 600; letter-spacing: -0.02em; }
 .card { padding: 18px; border-radius: var(--nh-r-lg); background: var(--nh-card); box-shadow: 0 5px 16px rgb(40 60 100 / 0.08); }
-.card h4 { font-size: 18px; line-height: 22px; font-weight: 600; letter-spacing: -0.015em; }
+.card h4 { font-family: var(--nh-ui); font-size: 18px; line-height: 22px; font-weight: 600; letter-spacing: -0.015em; }
 .by { display: flex; align-items: center; gap: 6px; font-size: 11px; line-height: 14px; color: var(--nh-mute); }
 .code { font-family: var(--nh-mono); font-size: 10px; line-height: 13px; color: var(--nh-mute); }
 
@@ -110,29 +118,30 @@
 .numbers strong[data-tone="teal"] { color: var(--nh-brand); }
 .numbers strong[data-tone="blue"] { color: var(--nh-blue); }
 
-/* Stacked: a narrow screen, a short one, or reduced motion. Nothing pins; every chapter shows with its window. */
-@media (max-width: 1000px), (max-height: 620px), (prefers-reduced-motion: reduce) {
-  .story { height: auto; }
-  .pin { position: static; height: auto; display: grid; grid-template-columns: minmax(0, 1fr); row-gap: 45px; padding-block: 51px; }
-  .chapter { display: grid; gap: 16px; max-width: 576px; }
-  .text, .screen { grid-column: auto; grid-row: auto !important; }
-  .jump { display: none; }
-  .open, .chapter[data-on="true"] .open { display: grid; gap: 8px; margin: 0; padding-left: 0; border-left: 0; }
-  .screen { opacity: 1; visibility: visible; transition: none; }
-  .window { height: auto; min-height: 256px; }
+
+@media (max-width: 1279px) {
+  .side { grid-column: 1 / span 5; }
+  .frame { grid-column: 6 / span 7; }
+  .screen { left: 32px; right: 32px; top: 32px; }
 }
-@media (max-width: 760px) {
-  .pin { padding-block: 38px; row-gap: 38px; }
-  .open h2 { font-size: 26px; line-height: 29px; }
-  .window { border-radius: 13px; min-height: 0; box-shadow: 0 16px 40px rgb(20 50 90 / 0.16), 0 2px 5px rgb(20 50 90 / 0.08); }
+@media (max-width: 1023px) {
+  .tour { display: flex; flex-direction: column; gap: var(--s-6); }
+  .frame { min-height: 460px; flex: 1 1 auto; }
+}
+@media (max-width: 639px) {
+  .step button { font-size: 17px; line-height: 22px; padding: 10px 0; }
+  .step[data-on="true"] .body { font-size: 15px; line-height: 23px; padding-left: 38px; }
+  .frame { min-height: 260px; }
+  .screen { left: 16px; right: 16px; top: 16px; }
+  .window { border-radius: 10px; }
   .appBar { height: 32px; padding: 0 11px; }
   .appBar img { width: 42px; height: 18px; }
   .appNav { padding: 0; background: none; }
   .appNav span:not([data-on="true"]) { display: none; }
   .appNav span { padding: 3px 10px; font-size: 10px; }
   .me { width: 21px; height: 21px; }
-  .body { padding: 13px; gap: 10px; }
-  .center { padding-inline: 13px; padding-block: 22px; gap: 14px; }
+  .page { padding: 14px; gap: 10px; }
+  .center { padding-inline: 14px; padding-block: 22px; gap: 14px; }
   .hello { font-size: 18px; line-height: 22px; }
   .head h3 { font-size: 16px; line-height: 21px; }
   .card { padding: 13px; }
@@ -146,3 +155,4 @@
   .numbers .card { height: 134px; }
   .numbers strong { font-size: 45px; line-height: 45px; }
 }
+@media (prefers-reduced-motion: reduce) { .screen { animation: none; } .step::before { transition: none; } }

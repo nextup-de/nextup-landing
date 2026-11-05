@@ -44,7 +44,8 @@
   --nh-float-shadow: 0 5px 16px rgb(40 60 100 / 0.1);
   --nh-window-shadow: 0 24px 64px rgb(20 50 90 / 0.18), 0 2px 5px rgb(20 50 90 / 0.08);
 
-  --nh-font: var(--font-inter, "Inter"), -apple-system, "Segoe UI", sans-serif;   /* --font-inter set by next/font in layout.tsx */
+  --nh-font: var(--font-onest, "Onest"), -apple-system, "Segoe UI", sans-serif;   /* the site's face; --font-onest set by next/font in layout.tsx */
+  --nh-ui: var(--font-inter, "Inter"), -apple-system, "Segoe UI", sans-serif;     /* the product's screens: Inter, as in the app */
   --nh-mono: var(--font-mono, "IBM Plex Mono"), ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --nh-r-sm: 5px;   /* department chips */
@@ -64,11 +65,37 @@
   --nh-zoom: 1;
   --nh-screen-h: 100vh;
   --nh-screen-w: 100vw;
-  --nh-head: 51px; /* the sticky site header (SiteHeader.module.css) */
+  --nh-head: 72px; /* the sticky site header (SiteHeader.module.css), 56px on a phone */
+
+  /* The page system (the home page, the header and the footer), from the Taste Skill: every section exactly one
+     or two screens, a 1280px wrap on 12 columns with 24px gutters, the h2 --padt under a section's top. */
+  --wrap: 1280px;
+  --gut: 80px;               /* the wrap's side margin: 48 on a tablet, 24 on a phone */
+  --padt: 120px;             /* the header plus 48: where a section's h2 starts */
+  --padb: 72px;
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px; --s-10: 128px;
+  /* Grounds: the light page and, one step down, the app's pale blue. No dark or saturated panels: the site
+     looks like the product. */
+  --g-main: #fbfcfd;
+  --g-alt: #f0f5f9;
+  --ink: #15191c;            /* text people read, 7:1 and more */
+  --muted: #5b6670;          /* labels, meta and a heading's grey run-on, 4.5:1 and more */
+  --hair: rgb(21 25 28 / 0.1);
+  /* The lit ground under the product's windows: the app's own ground (soft blue light and its dot grid). */
+  --ground-bg: #e3edf9;
+  --ground-light: #bfd6f8;
+  --ground-dots: rgb(60 100 170 / 0.22);
+  /* Radius (soft): controls 8, panels 12, frames and cards 20. */
+  --r-sm: 8px; --r-md: 12px; --r-lg: 20px;
+  /* Motion (the Taste Skill's hover layer): in 140ms, out 200ms, press 90ms. */
+  --m-in: 140ms; --m-out: 200ms; --m-press: 90ms; --m-cycle: 3.2s;
+  --m-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
+@media (max-width: 1023px) { :root { --gut: 48px; } }
+@media (max-width: 639px) { :root { --gut: 24px; --padt: 96px; --padb: 48px; } }
 @supports (height: 100svh) {
   :root { --nh-screen-h: 100svh; }
 }
 @media (max-width: 760px) {
-  :root { --nh-head: 45px; }
+  :root { --nh-head: 56px; }
 }

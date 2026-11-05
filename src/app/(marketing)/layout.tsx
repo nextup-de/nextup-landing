@@ -7,9 +7,10 @@ import styles from "./layout.module.css";
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className={styles.site}>
+      <a className="nh-skip" href="#main">Skip to content</a>
       <Ground />
       <SiteHeader />
-      <main>{children}</main>
+      <main id="main">{children}</main>
       <SiteFooter />
     </div>
   );

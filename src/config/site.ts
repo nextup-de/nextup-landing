@@ -13,6 +13,16 @@ export const PILOT_PHASES = [
   ["Run", "Live in your plant", "Real ideas, real owners, real clocks. The result is measured."],
 ] as const;
 
+// The questions people ask before a pilot, on / and /pricing: [question, answer]. Every answer is a claim the
+// pilot has to keep - change them here only.
+export const FAQ = [
+  ["What counts as a seat?", "One seat is one person who uses NextUp. Who needs a seat in your company is agreed in the pilot scope."],
+  ["What exactly is a pilot?", "A paid build project in three phases. We agree the scope and the price, build NextUp with your people on your org chart and routing, and run it in your plant with real ideas. How long it takes depends on the scope."],
+  ["Do you need access to our systems?", "Not to start. Ideas are raised in one field. What gets connected later, such as single sign-on, is part of the pilot scope."],
+  ["We have a works council. Is this a problem?", "Talk to us early. The works council should be part of the pilot scope from the first conversation."],
+  ["Where is our data stored?", "On servers in the EU. The privacy policy names the hosting provider. Your data is keyed to your company and never visible to another company."],
+] as const;
+
 // The product lives elsewhere: each company runs its own NextUp at its own address. "Log in"
 // opens this site's /login, which asks for the company and sends people there
 // (src/server/actions/login.ts). COMPANY_URL is read on the server; {slug} is the company.

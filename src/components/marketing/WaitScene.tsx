@@ -1,5 +1,5 @@
 "use client";
-// One request, both ways. A pinned stage scrubbed by the scroll position: first the request wanders from
+// One request, both ways: the page's one scroll moment, two screens tall. A pinned stage scrubbed by the scroll position: first the request wanders from
 // desk to desk (red is waiting) until an answer comes on day 19; then the same request is matched on the
 // routing map and goes straight to its owner. Scroll drives it; the two buttons jump to either end.
 //
@@ -169,10 +169,14 @@ export function WaitScene({ request, from, decision, promiseDays, owner, ownerRo
   const here: DeskId = !today ? (view.beat >= 2 ? "lead" : "sender") : view.arrived ? HOPS[view.arrived - 1].to : "sender";
 
   return (
-    <section className={styles.scene} ref={root} id="wait" data-side={view.side} data-beat={view.beat} aria-labelledby="wait-title">
-      <div className={styles.stage} ref={stage}>
+    <section className={`section ${styles.scene}`} ref={root} id="wait" data-pin="" data-screen="free" data-side={view.side} data-beat={view.beat}
+      style={{ "--h": 2 } as React.CSSProperties} aria-labelledby="wait-title">
+      <div className={`wrap ${styles.stage}`} ref={stage}>
         <div className={styles.top}>
-          <h2 id="wait-title" className={styles.eyebrow}>One request, both ways</h2>
+          <div className="section-head">
+            <h2 id="wait-title">One parts order, routed two ways</h2>
+            <p>Today a small request wanders from desk to desk. With NextUp the routing map finds its owner on day 0.</p>
+          </div>
           <div className={styles.toggle} role="group" aria-label="Which way the request goes">
             <button type="button" aria-pressed={today} onClick={() => go("today")}>Today</button>
             <button type="button" aria-pressed={!today} onClick={() => go("next")}>With NextUp</button>
@@ -183,7 +187,7 @@ export function WaitScene({ request, from, decision, promiseDays, owner, ownerRo
           <div className={styles.story}>
             <p className={styles.ask}>&ldquo;{request}&rdquo;</p>
 
-            <div className={styles.count}>
+            <div className={styles.count} data-edge-free="">
               <span className={styles.num}>{view.day}</span>
               <p className={styles.unit}>
                 <strong>{view.day === 1 ? "day" : "days"} {today ? "without an answer" : "to the answer"}</strong>
@@ -262,7 +266,6 @@ export function WaitScene({ request, from, decision, promiseDays, owner, ownerRo
           </div>
         </div>
 
-        <p className={styles.note}>An illustrative request on the demo company&rsquo;s routing map. A pilot measures your own.</p>
       </div>
     </section>
   );

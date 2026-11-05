@@ -1,27 +1,27 @@
 "use client";
-// The product in five chapters (Paper: Home · 05 Product story and "Product story · five states").
-// On a wide screen the section pins: the chapters stand on the left, one app window on the right, and the
-// scroll position picks the chapter. The windows cross-fade. On a phone, on a short screen and with reduced
-// motion nothing pins: the five chapters stack, each with its window.
-// Every window is real product UI built from the app's elements, with the demo company's own names.
+// The product in five steps, from the first word to the measured result. The steps stand on the left as tabs,
+// each named by what a person does there; the one chosen opens its line and shows its screen on the right, in
+// one app window on the lit frame. Clicks and arrow keys choose a step; nothing changes by itself or by scroll.
+// Every screen is real product UI built from the app's elements, with the demo company's own names.
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { ArrowUp, Avatar, Clock, Dept, Pill, Progress, Spark } from "@/components/product/elements";
+import { cn } from "@/lib/utils/cn";
 import styles from "./ProductStory.module.css";
 
 const TABS = ["Ideas", "Inbox", "Feed", "Projects", "Dashboard"] as const;
 type Tab = (typeof TABS)[number];
 
 const CHAPTERS: Array<{ key: string; step: string; title: string; body: string; tab: Tab }> = [
-  { key: "raise", step: "Raise", title: "One box for every idea.", tab: "Ideas",
+  { key: "raise", step: "Raise an idea", title: "One box for every idea.", tab: "Ideas",
     body: "A problem or an idea, in one line. No form and no category tree." },
-  { key: "check", step: "AI check", title: "A first read in seconds.", tab: "Ideas",
+  { key: "check", step: "Check it with AI", title: "A first read in seconds.", tab: "Ideas",
     body: "The coach asks what is missing and reads the idea for fit, impact, feasibility and clarity. It suggests. It does not decide." },
-  { key: "decide", step: "Decide", title: "An owner and a date.", tab: "Inbox",
-    body: "The idea lands on one desk with a clock. The owner answers yes, no with a reason, or hands it over. Five working days, in plain sight." },
-  { key: "build", step: "Build", title: "A yes becomes a project.", tab: "Projects",
+  { key: "decide", step: "Decide in five days", title: "An owner and a date.", tab: "Inbox",
+    body: "The idea lands on one desk with a clock. The owner answers yes, no with a reason, or hands it over." },
+  { key: "build", step: "Build the project", title: "A yes becomes a project.", tab: "Projects",
     body: "Steps, a lead and a due date. Everyone sees what is done, what is in progress and what is blocked." },
-  { key: "measure", step: "Measure", title: "The result, measured.", tab: "Dashboard",
+  { key: "measure", step: "Measure the result", title: "The result, measured.", tab: "Dashboard",
     body: "Fourteen days after launch the project reports what it changed." },
 ];
 
@@ -39,7 +39,7 @@ function Bars() {
 function Screen({ which }: { which: string }) {
   if (which === "raise") {
     return (
-      <div className={`${styles.body} ${styles.center}`}>
+      <div className={`${styles.page} ${styles.center}`}>
         <p className={styles.hello}>Raise it, M. Hoffmann</p>
         <div className={styles.composer}>
           <p>Reusable crates for door modules instead of cardboard</p>
@@ -53,7 +53,7 @@ function Screen({ which }: { which: string }) {
   }
   if (which === "check") {
     return (
-      <div className={styles.body}>
+      <div className={styles.page}>
         <div className={styles.head}><h3>Reusable crates for door modules</h3><Pill status="clock">AI check</Pill></div>
         <div className={`${styles.card} ${styles.coach}`}>
           <span className={styles.spark}><Spark /></span>
@@ -65,7 +65,7 @@ function Screen({ which }: { which: string }) {
   }
   if (which === "decide") {
     return (
-      <div className={styles.body}>
+      <div className={styles.page}>
         <div className={styles.head}><h3>Inbox</h3><Pill status="move">3 waiting on you</Pill></div>
         <div className={`${styles.card} ${styles.decision}`}>
           <div className={styles.cardTop}>
@@ -96,7 +96,7 @@ function Screen({ which }: { which: string }) {
   }
   if (which === "build") {
     return (
-      <div className={styles.body}>
+      <div className={styles.page}>
         <div className={styles.head}><h3>Projects</h3><Pill status="move">Your move</Pill></div>
         <div className={`${styles.card} ${styles.project}`}>
           <span className={styles.code}>P-4</span>
@@ -113,7 +113,7 @@ function Screen({ which }: { which: string }) {
     );
   }
   return (
-    <div className={styles.body}>
+    <div className={styles.page}>
       <div className={styles.head}><h3>Dashboard</h3><Pill status="new">This month</Pill></div>
       <div className={styles.numbers}>
         <div className={styles.card}>
@@ -133,7 +133,7 @@ function Screen({ which }: { which: string }) {
 
 function Window({ which, tab }: { which: string; tab: Tab }) {
   return (
-    <div className={styles.window}>
+    <div className={styles.window} data-ui={which}>
       <div className={styles.appBar}>
         <Image src="/brand/nextup-logo-white.png" alt="" width={494} height={212} />
         <span className={styles.appNav}>{TABS.map((t) => <span key={t} data-on={t === tab}>{t}</span>)}</span>
@@ -144,66 +144,49 @@ function Window({ which, tab }: { which: string; tab: Tab }) {
   );
 }
 
-const clamp = (n: number) => Math.min(1, Math.max(0, n));
-
 export function ProductStory() {
-  const root = useRef<HTMLElement>(null);
-  const pin = useRef<HTMLDivElement>(null);
+  const id = useId();
   const [at, setAt] = useState(0);
+  const tabs = useRef<Array<HTMLButtonElement | null>>([]);
 
-  // The scroll position picks the chapter while the section is pinned (same pattern as WaitScene).
-  useEffect(() => {
-    const el = root.current, st = pin.current;
-    if (!el || !st) return;
-    let raf = 0;
-    const measure = () => {
-      raf = 0;
-      if (getComputedStyle(st).position !== "sticky") return; // stacked: every chapter shows
-      const r = el.getBoundingClientRect();
-      const span = r.height - st.offsetHeight;
-      const top = parseFloat(getComputedStyle(st).top) || 0;
-      const p = span > 0 ? clamp((top - r.top) / span) : 0;
-      setAt(Math.min(CHAPTERS.length - 1, Math.floor(p * CHAPTERS.length)));
-    };
-    const queue = () => { if (!raf) raf = requestAnimationFrame(measure); };
-    queue();
-    window.addEventListener("scroll", queue, { passive: true });
-    window.addEventListener("resize", queue);
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", queue);
-      window.removeEventListener("resize", queue);
-    };
-  }, []);
-
-  function go(i: number) {
-    const el = root.current, st = pin.current;
-    if (!el || !st || getComputedStyle(st).position !== "sticky") return;
-    const r = el.getBoundingClientRect();
-    const top = parseFloat(getComputedStyle(st).top) || 0;
-    const p = (i + 0.5) / CHAPTERS.length;
-    window.scrollTo({ top: window.scrollY + r.top - top + p * (r.height - st.offsetHeight), behavior: "smooth" });
+  // Arrow keys move along the steps, as in any tab list; Home and End jump to either end.
+  function onKey(e: React.KeyboardEvent, i: number) {
+    const last = CHAPTERS.length - 1;
+    const to = e.key === "ArrowDown" || e.key === "ArrowRight" ? (i === last ? 0 : i + 1)
+      : e.key === "ArrowUp" || e.key === "ArrowLeft" ? (i === 0 ? last : i - 1)
+      : e.key === "Home" ? 0 : e.key === "End" ? last : null;
+    if (to === null) return;
+    e.preventDefault();
+    setAt(to);
+    tabs.current[to]?.focus();
   }
 
+  const c = CHAPTERS[at];
   return (
-    <section className={styles.story} ref={root} id="product" aria-label="The product in five chapters">
-      <div className={styles.pin} ref={pin}>
-        {CHAPTERS.map((c, i) => (
-          <article key={c.key} className={styles.chapter} data-on={i === at}>
-            <div className={styles.text} style={{ gridRow: i + 1 }}>
-              <button type="button" className={styles.jump} onClick={() => go(i)} aria-current={i === at ? "step" : undefined}>
-                {i + 1} · {c.title.replace(/\.$/, "")}
+    <div className={styles.tour}>
+      <div className={styles.side}>
+        <div className="section-head">
+          <h2 id={`${id}-h`}>From the first word to the measured result</h2>
+        </div>
+        <div className={styles.steps} role="tablist" aria-orientation="vertical" aria-labelledby={`${id}-h`} style={{ "--i": at } as React.CSSProperties}>
+          {CHAPTERS.map((ch, i) => (
+            <div key={ch.key} className={styles.step} data-on={i === at}>
+              <button
+                ref={(el) => { tabs.current[i] = el; }} type="button" role="tab" id={`${id}-t${i}`}
+                aria-selected={i === at} aria-controls={`${id}-p`} tabIndex={i === at ? 0 : -1}
+                onClick={() => setAt(i)} onKeyDown={(e) => onKey(e, i)}
+              >
+                <span className={styles.num}>{i + 1}</span>{ch.step}
               </button>
-              <div className={styles.open}>
-                <p className={styles.step}>{i + 1} · {c.step}</p>
-                <h2>{c.title}</h2>
-                <p className={styles.lede}>{c.body}</p>
-              </div>
+              <p className={styles.body} aria-hidden={i !== at} data-edge-free="">{ch.body}</p>
             </div>
-            <div className={styles.screen} aria-hidden="true"><Window which={c.key} tab={c.tab} /></div>
-          </article>
-        ))}
+          ))}
+        </div>
       </div>
-    </section>
+      <div className={cn("nh-lit", styles.frame)} role="tabpanel" id={`${id}-p`} aria-labelledby={`${id}-t${at}`}>
+        <p className="nh-sr">{c.title} {c.body}</p>
+        <div className={styles.screen} key={c.key} aria-hidden="true"><Window which={c.key} tab={c.tab} /></div>
+      </div>
+    </div>
   );
 }
