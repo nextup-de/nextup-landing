@@ -84,6 +84,21 @@
 }
 .mini i { width: 24px; height: 24px; border-radius: 999px; display: grid; place-items: center; background: var(--nh-brand); color: #fff; }
 
+/* 07b Security and the works council: six white cards on the ground, three by two. The icon chips carry the
+   people tints (components/product/elements.module.css, .avatar). */
+.trust { display: flex; flex-direction: column; justify-content: center; gap: 38px; padding: 77px var(--nh-page-x) 26px; }
+.cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; }
+.cards li { display: grid; align-content: start; gap: 5px; padding: 19px; border-radius: var(--nh-r-xl); background: var(--nh-card); box-shadow: var(--nh-card-shadow); min-width: 0; }
+.chip { width: 32px; height: 32px; margin-bottom: 11px; border-radius: var(--nh-r-lg); display: grid; place-items: center; }
+.chip[data-tone="teal"] { background: #e1f3f4; color: #0f6b70; }
+.chip[data-tone="violet"] { background: #f1e9fb; color: #6b3fa0; }
+.chip[data-tone="amber"] { background: #fff1d1; color: #8a5d00; }
+.chip[data-tone="blue"] { background: #e8f1ff; color: #0062cc; }
+.chip[data-tone="green"] { background: #e6f6ea; color: #1f7a3a; }
+.chip[data-tone="pink"] { background: #fce7f3; color: #b0246e; }
+.cards h3 { font-size: 16px; line-height: 21px; font-weight: 600; letter-spacing: -0.01em; color: var(--nh-ink); }
+.cards p { font-size: 13px; line-height: 19px; color: var(--nh-ink-2); }
+
 /* 08 Pilot: three phases as one track, in the app's progress colours. No durations. */
 .pilot { min-height: 640px; display: flex; flex-direction: column; justify-content: center; gap: 51px; padding: 77px var(--nh-page-x); }
 .track { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr); gap: 5px; }
@@ -123,6 +138,7 @@
   .aside { width: auto; max-width: 416px; padding-bottom: 0; }
   .bento { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: none; }
   .tileAi { grid-row: auto; grid-column: 1 / -1; min-height: 288px; }
+  .cards { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .tile { min-height: 176px; }
   /* The list becomes one card per idea. */
   .table { padding: 0; background: none; box-shadow: none; display: grid; gap: 10px; }
@@ -153,6 +169,12 @@
   .rail li { font-size: 12px; }
   .rail li:not(:last-child)::after { width: 13px; margin-left: 2px; }
   .desk, .principles, .pilot { min-height: 0; gap: 19px; padding: 45px 16px; }
+  .trust { gap: 19px; padding: 45px 16px 13px; }
+  .cards { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .cards li { grid-template-columns: 32px minmax(0, 1fr); column-gap: 13px; padding: 16px 19px; }
+  .chip { grid-row: 1 / span 2; margin-bottom: 0; }
+  .cards h3 { font-size: 14px; line-height: 19px; }
+  .cards p { grid-column: 2; font-size: 12px; line-height: 18px; }
   .row:nth-child(n + 5) { display: none; } /* three ideas are enough on a phone */
   .bento { grid-template-columns: minmax(0, 1fr); gap: 10px; }
   .tileAi { min-height: 0; padding: 19px; gap: 16px; }

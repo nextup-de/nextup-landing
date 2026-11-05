@@ -1,12 +1,14 @@
 // LANDING (Paper: "Landing · redesign", artboard 01 · Home). The question, answered live: the hero is one box that
 // routes whatever a visitor types on the demo company's map. Then one request both ways (the pinned scene), one
-// sentence, the product in five chapters (the pinned window), the ideas list, five principles, the pilot, one ask.
+// sentence, the product in five chapters (the pinned window), the ideas list, five principles, six answers for the
+// works council and IT, the pilot, one ask.
 // Every picture is product UI built from the app's own elements - no screenshots to retake.
 import { CloseAsk } from "@/components/marketing/CloseAsk";
 import { ProductStory } from "@/components/marketing/ProductStory";
 import { RouteDemo } from "@/components/marketing/RouteDemo";
 import { WaitScene } from "@/components/marketing/WaitScene";
 import { ArrowUp, Avatar, Dept, Pill, Spark, type Status, type Tone } from "@/components/product/elements";
+import { Icon, type IconName } from "@/components/ui/Icon";
 import { PILOT_PHASES, SITE } from "@/config/site";
 import { ROUTES } from "@/features/demo/routes";
 import styles from "./page.module.css";
@@ -38,6 +40,17 @@ const IDEAS: Idea[] = [
   { what: "Standby for welding robots during breaks", dept: "Maintenance", deptTone: "teal", since: "9 d", stage: "Project", who: "A. Schulz", role: "Lead, body shop maintenance", tone: "amber", status: "ok", label: "Running" },
   { what: "Paint booth filter change by sensor", dept: "Paint shop", deptTone: "green", since: "2 d", stage: "Team lead", who: "T. Vogel", role: "Team lead, paint shop", tone: "green", status: "clock", label: "4 d left" },
   { what: "Shift handover checklist on one page", dept: "Engineering", deptTone: "violet", since: "Today", stage: "AI check", who: "J. Schmidt", role: "Process engineer", tone: "pink", status: "new", label: "New" },
+];
+
+// Security and the works council: what the two ask first. Each card says only what the app does today
+// (the landing checklist TRUTH-L in the app repo): [icon, its tint, title, body].
+const TRUST: ReadonlyArray<readonly [IconName, Tone, string, string]> = [
+  ["people", "teal", "Cases, not people", "Numbers are counted per case and per unit, never per person. There is no ranking of people."],
+  ["eyeOff", "violet", "Raise without your name", "A stable handle stands in for the name. The name stays hidden, from the owner too."],
+  ["doc", "amber", "A description for the works council", "What is and is not measured, in writing, before the pilot starts."],
+  ["plug", "blue", "Nothing to integrate first", "Microsoft sign-in, Microsoft 365 and Jira are connectors, all off by default. A pilot needs one field and one routing table."],
+  ["shield", "green", "Hosted in the EU", "On servers in the EU. One stack per company, with its own database."],
+  ["export", "pink", "Export and deletion", "An admin exports the company's data, or one person's, at any time. A person who leaves is pseudonymised on request."],
 ];
 
 export default function LandingPage() {
@@ -133,6 +146,25 @@ export default function LandingPage() {
             <div><h3>One field to start</h3><p>A pilot needs one field and one routing table.</p></div>
           </article>
         </div>
+      </section>
+
+      <section className={styles.trust} id="security">
+        <div className={styles.head}>
+          <div>
+            <p className="nh-eyebrow">Security and the works council</p>
+            <h2 className={styles.title}>It measures cases.<br />Never people.</h2>
+          </div>
+          <p className={styles.aside}>What a works council and an IT department ask first, answered before the pilot starts.</p>
+        </div>
+        <ul className={styles.cards}>
+          {TRUST.map(([icon, tone, title, body]) => (
+            <li key={title}>
+              <span className={styles.chip} data-tone={tone}><Icon name={icon} /></span>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className={styles.pilot} id="pilot">
