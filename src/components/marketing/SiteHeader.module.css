@@ -1,45 +1,45 @@
-/* The top bar in the brand colour (Paper: Home · Header). 64px, logo left, pill nav centred, two buttons right. */
+/* The top bar in the brand colour (Paper: Home · Header). 51px, logo left, pill nav centred, two buttons right. */
 .bar {
   position: sticky; top: 0; z-index: 10;
   /* Three columns: the pill sits in the exact middle of the bar, whatever the widths left and right of it. */
-  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 16px;
-  height: var(--nh-head); padding: 0 40px; background: var(--nh-brand);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 13px;
+  height: var(--nh-head); padding: 0 32px; background: var(--nh-brand);
 }
-.logo { display: block; justify-self: start; line-height: 0; border-radius: 4px; }
-.logo img { display: block; height: 34px; width: 79px; }
-.logo:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+.logo { display: block; justify-self: start; line-height: 0; border-radius: 3px; }
+.logo img { display: block; height: 27px; width: 63px; }
+.logo:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 
-.pill { display: flex; gap: 2px; padding: 4px; border-radius: 999px; background: rgb(255 255 255 / 0.14); }
+.pill { display: flex; gap: 2px; padding: 3px; border-radius: 999px; background: rgb(255 255 255 / 0.14); }
 .pill a {
-  padding: 8px 18px; border-radius: 999px; font-size: 15px; line-height: 20px; font-weight: 600; color: #fff;
+  padding: 6px 14px; border-radius: 999px; font-size: 12px; line-height: 16px; font-weight: 600; color: #fff;
   transition: background 160ms var(--nh-ease), color 160ms var(--nh-ease);
 }
 .pill a:hover { background: rgb(255 255 255 / 0.14); color: #fff; }
 .pill a[aria-current="page"] { background: #fff; color: var(--nh-brand); }
 .pill a:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
 
-.actions { grid-column: 3; justify-self: end; display: flex; align-items: center; gap: 10px; }
+.actions { grid-column: 3; justify-self: end; display: flex; align-items: center; gap: 8px; }
 
 /* Phone: the pill and Log in fold into a menu. */
 .menu { display: none; position: relative; }
 .menu summary {
-  list-style: none; width: 36px; height: 36px; border-radius: var(--nh-r); display: grid; place-items: center;
+  list-style: none; width: 29px; height: 29px; border-radius: var(--nh-r); display: grid; place-items: center;
   background: rgb(255 255 255 / 0.14); color: #fff; cursor: pointer;
 }
 .menu summary::-webkit-details-marker { display: none; }
 .menu summary:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 .sheet {
-  position: absolute; right: 0; top: calc(100% + 10px); min-width: 200px; padding: 8px; border-radius: var(--nh-r-lg);
-  display: grid; background: var(--nh-card); box-shadow: 0 12px 32px rgb(20 30 60 / 0.16), 0 1px 2px rgb(20 30 60 / 0.06);
+  position: absolute; right: 0; top: calc(100% + 8px); min-width: 160px; padding: 6px; border-radius: var(--nh-r-lg);
+  display: grid; background: var(--nh-card); box-shadow: 0 10px 26px rgb(20 30 60 / 0.16), 0 1px 2px rgb(20 30 60 / 0.06);
 }
-.sheet a { padding: 12px 14px; border-radius: var(--nh-r); font-size: 16px; line-height: 20px; font-weight: 600; color: var(--nh-ink); }
+.sheet a { padding: 10px 11px; border-radius: var(--nh-r); font-size: 13px; line-height: 16px; font-weight: 600; color: var(--nh-ink); }
 .sheet a:hover { background: var(--nh-brand-tint); color: var(--nh-brand); }
 
 @media (max-width: 760px) {
-  .bar { padding: 0 16px; }
-  .logo img { height: 28px; width: 65px; }
+  .bar { padding: 0 13px; }
+  .logo img { height: 22px; width: 52px; }
   .pill, .login { display: none; }
-  .actions { gap: 8px; }
-  .actions :global(.nh-btn-sm) { height: 36px; padding: 0 14px; font-size: 14px; }
+  .actions { gap: 6px; }
+  .actions :global(.nh-btn-sm) { height: 29px; padding: 0 11px; font-size: 11px; }
   .menu { display: block; }
 }

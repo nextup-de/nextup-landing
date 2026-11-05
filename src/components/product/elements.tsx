@@ -20,7 +20,7 @@ export function toneOf(name: string): Tone {
 }
 
 type AvatarProps = { name: string; tone?: Tone; size?: number; className?: string };
-export function Avatar({ name, tone, size = 40, className }: AvatarProps) {
+export function Avatar({ name, tone, size = 32, className }: AvatarProps) {
   return (
     <span className={`${styles.avatar} ${className ?? ""}`} data-tone={tone ?? toneOf(name)} aria-hidden="true"
       style={{ "--s": `${size}px` } as React.CSSProperties}>
@@ -46,21 +46,21 @@ export function Progress({ parts, className }: { parts: Array<["done" | "doing" 
   );
 }
 
-export function Clock({ size = 15 }: { size?: number }) {
+export function Clock({ size = 12 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
       <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
     </svg>
   );
 }
-export function Spark({ size = 18 }: { size?: number }) {
+export function Spark({ size = 14 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z" />
     </svg>
   );
 }
-export function ArrowUp({ size = 20 }: { size?: number }) {
+export function ArrowUp({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <path d="M12 19V5M6 11l6-6 6 6" />

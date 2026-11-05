@@ -81,15 +81,15 @@ export function RouteDemo({ routes, promiseDays, examples }: Props) {
       <div className={styles.answer} data-on={route ? "true" : "false"}>
         <dl className={styles.facts}>
           <div>
-            {route ? <Avatar name={route.owner} size={44} /> : <span className={styles.blank} />}
+            {route ? <Avatar name={route.owner} size={35} /> : <span className={styles.blank} />}
             <span><dt>Owner{route ? ` · ${route.role}` : ""}</dt><dd>{route?.owner ?? "—"}</dd></span>
           </div>
           <div>
-            <span className={styles.clock}><Clock size={20} /></span>
+            <span className={styles.clock}><Clock size={16} /></span>
             <span><dt>Answer owed by</dt><dd>{route ? due ?? `Day ${promiseDays}` : "—"}</dd></span>
           </div>
           <div>
-            {route ? <Avatar name={route.deputy} size={44} /> : <span className={styles.blank} />}
+            {route ? <Avatar name={route.deputy} size={35} /> : <span className={styles.blank} />}
             <span><dt>Deputy</dt><dd>{route?.deputy ?? "—"}</dd></span>
           </div>
         </dl>

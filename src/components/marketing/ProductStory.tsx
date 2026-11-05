@@ -45,7 +45,7 @@ function Screen({ which }: { which: string }) {
           <p>Reusable crates for door modules instead of cardboard</p>
           <div>
             <span className={styles.chips}><span className={styles.attach}>Attach</span><Dept tone="blue">Logistics</Dept></span>
-            <span className={styles.send}><ArrowUp size={16} /></span>
+            <span className={styles.send}><ArrowUp size={13} /></span>
           </div>
         </div>
       </div>
@@ -72,7 +72,7 @@ function Screen({ which }: { which: string }) {
             <div>
               <Dept tone="blue">Logistics</Dept>
               <h4>Reusable crates for door modules</h4>
-              <p className={styles.by}><Avatar name="M. Hoffmann" tone="violet" size={26} />M. Hoffmann · Team lead, final assembly</p>
+              <p className={styles.by}><Avatar name="M. Hoffmann" tone="violet" size={21} />M. Hoffmann · Team lead, final assembly</p>
             </div>
             <Pill status="clock"><Clock />3 d left</Pill>
           </div>
@@ -101,7 +101,7 @@ function Screen({ which }: { which: string }) {
         <div className={`${styles.card} ${styles.project}`}>
           <span className={styles.code}>P-4</span>
           <h4>Returnable trays for door modules</h4>
-          <p className={styles.by}><Avatar name="T. Vogel" tone="green" size={26} />Lead T. Vogel · 2 people</p>
+          <p className={styles.by}><Avatar name="T. Vogel" tone="green" size={21} />Lead T. Vogel · 2 people</p>
           <Progress parts={[["done", 2], ["doing", 1], ["blocked", 1]]} />
           <div className={styles.projectFoot}><span>2 of 4 steps done · 1 blocked</span><Pill status="move">Your move: take the baseline</Pill></div>
         </div>

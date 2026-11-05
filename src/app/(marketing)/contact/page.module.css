@@ -1,32 +1,32 @@
 /* Contact / book a pilot (Paper: 05 · Contact · desktop 1440). */
 .wrap {
-  min-height: calc(var(--nh-screen-h) - var(--nh-head) - 104px);
-  display: grid; grid-template-columns: minmax(0, 1fr) 480px; gap: 56px; align-items: center; /* 56, not the draft's 96: the headline needs 584px to stand on two lines */
-  padding: 72px var(--nh-page-x);
+  min-height: calc(var(--nh-screen-h) - var(--nh-head) - 83px);
+  display: grid; grid-template-columns: minmax(0, 1fr) 384px; gap: 45px; align-items: center; /* narrower than the draft's gap: the headline needs 467px to stand on two lines */
+  padding: 58px var(--nh-page-x);
 }
-.intro { display: grid; gap: 20px; align-content: start; }
-.intro h1 { font-size: clamp(44px, 4.44vw, 64px); line-height: 1.03; font-weight: 700; letter-spacing: -0.04em; color: var(--nh-ink); }
-.lead { max-width: 440px; font-size: 17px; line-height: 26px; color: var(--nh-ink-2); }
+.intro { display: grid; gap: 16px; align-content: start; }
+.intro h1 { font-size: clamp(35px, 3.55vw, 51px); line-height: 1.03; font-weight: 700; letter-spacing: -0.04em; color: var(--nh-ink); }
+.lead { max-width: 352px; font-size: 14px; line-height: 21px; color: var(--nh-ink-2); }
 
 /* The pilot's three phases, small: the same track as on the home page. */
-.track { list-style: none; margin: 12px 0 0; padding: 0; max-width: 440px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr); gap: 4px; }
-.track li { display: grid; gap: 12px; font-size: 14px; line-height: 18px; font-weight: 600; color: var(--nh-brand); }
-.track li i { display: block; height: 8px; background: var(--nh-brand); }
-.track li:first-child i { border-radius: 4px 0 0 4px; }
-.track li:last-child i { border-radius: 0 4px 4px 0; }
+.track { list-style: none; margin: 10px 0 0; padding: 0; max-width: 352px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr); gap: 3px; }
+.track li { display: grid; gap: 10px; font-size: 11px; line-height: 14px; font-weight: 600; color: var(--nh-brand); }
+.track li i { display: block; height: 6px; background: var(--nh-brand); }
+.track li:first-child i { border-radius: 3px 0 0 3px; }
+.track li:last-child i { border-radius: 0 3px 3px 0; }
 .track li[data-phase="1"] { color: var(--nh-blue); }
 .track li[data-phase="1"] i { background: var(--nh-blue-bright); }
 .track li[data-phase="2"] { color: var(--nh-mute); }
 .track li[data-phase="2"] i { background: var(--nh-open); }
 
-.card { padding: 36px; border-radius: var(--nh-r-xl); background: var(--nh-card); box-shadow: 0 30px 80px rgb(20 50 90 / 0.14), 0 2px 6px rgb(20 50 90 / 0.06); }
+.card { padding: 29px; border-radius: var(--nh-r-xl); background: var(--nh-card); box-shadow: 0 24px 64px rgb(20 50 90 / 0.14), 0 2px 5px rgb(20 50 90 / 0.06); }
 
 @media (max-width: 1000px) {
-  .wrap { grid-template-columns: minmax(0, 1fr); gap: 40px; align-items: start; }
-  .card { max-width: 560px; }
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 32px; align-items: start; }
+  .card { max-width: 448px; }
 }
 @media (max-width: 760px) {
-  .wrap { min-height: 0; padding: 48px 20px 56px; gap: 32px; }
-  .intro h1 { font-size: 40px; line-height: 44px; letter-spacing: -0.035em; }
-  .card { padding: 24px 20px; }
+  .wrap { min-height: 0; padding: 38px 16px 45px; gap: 26px; }
+  .intro h1 { font-size: 32px; line-height: 35px; letter-spacing: -0.035em; }
+  .card { padding: 19px 16px; }
 }

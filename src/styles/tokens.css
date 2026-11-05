@@ -40,35 +40,35 @@
   /* The raise box's gold ring. Nothing else is gold. */
   --nh-gold-ring: linear-gradient(110deg, #f0c23a 0%, #f7dd93 30%, #fff3d0 52%, #f2cb55 76%, #e6a919 100%);
 
-  --nh-card-shadow: 0 6px 20px rgb(40 60 100 / 0.06);
-  --nh-float-shadow: 0 6px 20px rgb(40 60 100 / 0.1);
-  --nh-window-shadow: 0 30px 80px rgb(20 50 90 / 0.18), 0 2px 6px rgb(20 50 90 / 0.08);
+  --nh-card-shadow: 0 5px 16px rgb(40 60 100 / 0.06);
+  --nh-float-shadow: 0 5px 16px rgb(40 60 100 / 0.1);
+  --nh-window-shadow: 0 24px 64px rgb(20 50 90 / 0.18), 0 2px 5px rgb(20 50 90 / 0.08);
 
   --nh-font: var(--font-inter, "Inter"), -apple-system, "Segoe UI", sans-serif;   /* --font-inter set by next/font in layout.tsx */
   --nh-mono: var(--font-mono, "IBM Plex Mono"), ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --nh-r-sm: 6px;   /* department chips */
-  --nh-r: 8px;      /* buttons, pills, fields */
-  --nh-r-lg: 12px;  /* cards */
-  --nh-r-xl: 20px;  /* large landing surfaces */
+  --nh-r-sm: 5px;   /* department chips */
+  --nh-r: 6px;      /* buttons, pills, fields */
+  --nh-r-lg: 10px;  /* cards */
+  --nh-r-xl: 16px;  /* large landing surfaces */
 
   --nh-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 
-  --nh-space: 8px;
-  --nh-max: 1120px;
-  /* The side gutter of a section: 160px at 1440, never under 20px. Sections use it as padding-inline. */
-  --nh-page-x: max(20px, calc((100% - var(--nh-max)) / 2));
+  --nh-space: 6px;
+  --nh-max: 896px;
+  /* The side gutter of a section: 272px at 1440, never under 16px. Sections use it as padding-inline. */
+  --nh-page-x: max(16px, calc((100% - var(--nh-max)) / 2));
 
   /* Sizes do not grow with the window: no page zoom. The variables stay because the pinned scenes size by them.
      Height is the small viewport (svh): on phones 100vh is taller than the screen while the toolbar shows. */
   --nh-zoom: 1;
   --nh-screen-h: 100vh;
   --nh-screen-w: 100vw;
-  --nh-head: 64px; /* the sticky site header (SiteHeader.module.css) */
+  --nh-head: 51px; /* the sticky site header (SiteHeader.module.css) */
 }
 @supports (height: 100svh) {
   :root { --nh-screen-h: 100svh; }
 }
 @media (max-width: 760px) {
-  :root { --nh-head: 56px; }
+  :root { --nh-head: 45px; }
 }

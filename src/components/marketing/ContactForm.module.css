@@ -1,30 +1,30 @@
-.form { display: grid; gap: 20px; }
-.two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.privacy { font-size: 14px; color: var(--nh-mute); line-height: 20px; }
-.privacy a { color: var(--nh-ink); font-weight: 600; text-decoration: underline; text-decoration-color: var(--nh-line); text-underline-offset: 3px; }
+.form { display: grid; gap: 16px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+.privacy { font-size: 11px; color: var(--nh-mute); line-height: 16px; }
+.privacy a { color: var(--nh-ink); font-weight: 600; text-decoration: underline; text-decoration-color: var(--nh-line); text-underline-offset: 2px; }
 
 /* The honeypot. Off-screen, not display:none - some bots skip fields that are not rendered. */
 .trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
 
 .failed {
-  font-size: 14px; line-height: 20px; color: var(--nh-danger);
+  font-size: 11px; line-height: 16px; color: var(--nh-danger);
   background: var(--nh-danger-tint); border: 1px solid rgb(215 0 21 / 0.18); border-radius: var(--nh-r);
-  padding: 10px 12px;
+  padding: 8px 10px;
 }
-.failed a { font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.failed a { font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
 
 /* After a successful send: the form is gone, this stands in its place. */
-.sent { display: grid; gap: 10px; padding: 8px 0 4px; animation: sentIn 0.35s ease both; }
+.sent { display: grid; gap: 8px; padding: 6px 0 3px; animation: sentIn 0.35s ease both; }
 .sentMark {
-  width: 40px; height: 40px; border-radius: 999px; display: grid; place-items: center;
-  background: var(--nh-ok-tint); color: var(--nh-ok); margin-bottom: 6px;
+  width: 32px; height: 32px; border-radius: 999px; display: grid; place-items: center;
+  background: var(--nh-ok-tint); color: var(--nh-ok); margin-bottom: 5px;
 }
-.sentMark svg { width: 20px; height: 20px; }
-.sent h3 { font-size: 22px; line-height: 28px; font-weight: 600; letter-spacing: -0.015em; }
-.sent p { font-size: 16px; line-height: 24px; color: var(--nh-ink-2); }
-.sent .sentNote { font-size: 14px; line-height: 20px; color: var(--nh-mute); }
-.sentNote a { color: var(--nh-ink); font-weight: 600; text-decoration: underline; text-decoration-color: var(--nh-line); text-underline-offset: 3px; }
+.sentMark svg { width: 16px; height: 16px; }
+.sent h3 { font-size: 18px; line-height: 22px; font-weight: 600; letter-spacing: -0.015em; }
+.sent p { font-size: 13px; line-height: 19px; color: var(--nh-ink-2); }
+.sent .sentNote { font-size: 11px; line-height: 16px; color: var(--nh-mute); }
+.sentNote a { color: var(--nh-ink); font-weight: 600; text-decoration: underline; text-decoration-color: var(--nh-line); text-underline-offset: 2px; }
 
-@keyframes sentIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@keyframes sentIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .sent { animation: none; } }
 @media (max-width: 520px) { .two { grid-template-columns: 1fr; } }
