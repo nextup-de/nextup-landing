@@ -51,7 +51,17 @@
 }
 .sheetIn > nav { opacity: 1; transform: none; }
 
-.rows { list-style: none; margin: 0; padding: 0; display: grid; }
+/* The menu's pages are stations on one line: a thin teal line down the left, a tick at each page, the current
+   page's tick filled. */
+.rows { position: relative; list-style: none; margin: 0; padding: 0 0 0 26px; display: grid; }
+.rows::before { content: ""; position: absolute; left: 5px; top: 30px; bottom: 30px; width: 2px; border-radius: 1px; background: var(--nh-brand-line); }
+.rows a { position: relative; }
+.rows a::before {
+  content: ""; position: absolute; left: -26px; top: 50%; width: 12px; height: 12px; margin-top: -6px; border-radius: 999px;
+  background: var(--g-main); box-shadow: inset 0 0 0 2.5px var(--nh-brand);
+  transition: transform var(--m-out) var(--m-ease), background var(--m-out) var(--m-ease);
+}
+.rows a[aria-current="page"]::before, .rows a:hover::before { background: var(--nh-brand); transform: scale(1.15); }
 .rows a {
   display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); padding: var(--s-5) 0;
   border-bottom: 1px solid var(--hair); color: var(--ink);

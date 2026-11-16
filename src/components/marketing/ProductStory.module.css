@@ -1,38 +1,102 @@
-/* The product tour: the five steps as tabs on the left (4 columns), the chosen step's screen on the right
-   (8 columns) in one app window on the lit frame, 48px in and cut by the frame's foot. The window's content is the
-   product: Inter, the app's sizes and elements. */
+/* The product tour: the five steps as five stations on one horizontal line (a line band, as above a U-Bahn door),
+   and under it the chosen step - its words on 5 columns, its screen on 6, small, in one app window on the lit
+   frame, 32px in and cut by the frame's foot. The window's content is the product: Inter, the app's sizes. */
 
-.tour { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--s-5); }
-.side { grid-column: 1 / span 4; display: flex; flex-direction: column; min-height: 0; }
+.tour { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; --ly: 15px; --ease: cubic-bezier(0.65, 0, 0.25, 1); }
+.intro { margin-bottom: var(--s-6); }
 
-/* The steps: a hairline rail on the left; the chosen step's bar slides along it. Each step is one line, the
-   chosen one opens its sentence. */
-.steps { position: relative; display: grid; border-left: 1px solid var(--hair); }
-.step { position: relative; padding-left: var(--s-5); }
-.step::before {
-  content: ""; position: absolute; left: -1px; top: 0; bottom: 0; width: 2px; background: var(--nh-brand);
-  transform: scaleY(0); transform-origin: top; transition: transform var(--m-out) var(--m-ease);
+/* The band: a white strip with the line's bullet and its five stations. */
+.band {
+  position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: var(--s-4);
+  padding: 20px 24px 18px; border-radius: var(--r-lg); background: var(--nh-card);
+  box-shadow: 0 0 0 1px var(--hair), 0 18px 40px -28px rgb(20 50 90 / 0.35);
 }
-.step[data-on="true"]::before { transform: scaleY(1); }
-.step button {
-  width: 100%; display: flex; align-items: center; gap: var(--s-3); padding: 14px 0; border: 0; background: none; cursor: pointer; text-align: left;
-  font-family: var(--nh-font); font-size: 20px; line-height: 26px; font-weight: 500; letter-spacing: -0.02em; color: var(--muted);
+.bullet {
+  width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; margin-top: calc(var(--ly) - 15px);
+  background: var(--nh-brand); color: #fff; font-size: 15px; line-height: 1; font-weight: 700;
+}
+.steps { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+
+/* The line runs from the first station's middle to the last one's; the stretch already travelled is the brand
+   teal (scaleX), the rest pale. */
+.track { position: absolute; left: 10%; right: 10%; top: var(--ly); height: 4px; margin-top: -2px; border-radius: 2px; background: var(--nh-brand-line); }
+.done { position: absolute; inset: 0; border-radius: inherit; background: var(--nh-brand); transform-origin: 0 50%; transform: scaleX(calc(var(--i) / var(--n))); transition: transform 620ms var(--ease); }
+
+/* The train: a capsule behind the chosen station, its windows lit. Its carrier is one column wide, so moving it
+   by its own width per step puts it on any station without measuring. */
+.carrier { position: absolute; z-index: 1; left: 0; top: var(--ly); width: 20%; height: 0; transform: translateX(calc(var(--i) * 100%)); transition: transform 620ms var(--ease); }
+/* Only while riding: at rest the train is gone, so it never pokes out from behind a ring. */
+.carrier { opacity: 0; transition: transform 620ms var(--ease), opacity 160ms var(--m-ease) 460ms; }
+.tour[data-moving] .carrier { opacity: 1; transition: transform 620ms var(--ease), opacity 120ms var(--m-ease); }
+.train {
+  position: absolute; left: 50%; top: 0; width: 64px; height: 20px; margin: -10px 0 0 -32px; border-radius: 10px;
+  background:
+    repeating-linear-gradient(to right, var(--berlin-gold) 0 4px, transparent 4px 8px) 6px 7px / 12px 6px no-repeat,
+    repeating-linear-gradient(to right, var(--berlin-gold) 0 4px, transparent 4px 8px) 46px 7px / 12px 6px no-repeat,
+    var(--nh-brand-deep);
+  box-shadow: 0 0 0 3px var(--nh-card), 0 6px 18px rgb(0 63 71 / 0.3);
+}
+
+.stop {
+  position: relative; z-index: 2; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 0 6px; border: 0; background: none; cursor: pointer; text-align: center;
+  font-family: var(--nh-font); font-size: 16px; line-height: 21px; font-weight: 500; letter-spacing: -0.01em; color: var(--muted);
   transition: color var(--m-out) var(--m-ease);
 }
-.step button:hover { color: var(--ink); transition-duration: var(--m-in); }
-.step[data-on="true"] button { color: var(--ink); }
-.step button:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 2px; border-radius: 4px; }
+.stop:hover { color: var(--ink); transition-duration: var(--m-in); }
+.stop[data-on="true"] { color: var(--ink); }
+.stop:focus-visible { outline: none; }
+.stop:focus-visible .name { outline: 2px solid var(--nh-brand); outline-offset: 3px; border-radius: 4px; }
 .num {
-  flex: none; width: 26px; height: 26px; border-radius: 999px; display: grid; place-items: center;
-  font-size: 13px; line-height: 1; font-weight: 500; letter-spacing: 0; background: var(--g-alt); color: var(--muted);
-  transition: background var(--m-out) var(--m-ease), color var(--m-out) var(--m-ease);
+  flex: none; width: 30px; height: 30px; border-radius: 999px; display: grid; place-items: center;
+  font-size: 13px; line-height: 1; font-weight: 600; letter-spacing: 0; background: var(--nh-card); color: var(--muted);
+  box-shadow: inset 0 0 0 3px var(--nh-brand-line);
+  transition: background var(--m-out) var(--m-ease), color var(--m-out) var(--m-ease), box-shadow var(--m-out) var(--m-ease), transform var(--m-out) var(--m-ease);
 }
-.step[data-on="true"] .num { background: var(--nh-brand); color: #fff; }
-.body { display: none; }
-.step[data-on="true"] .body { display: block; padding: 0 0 var(--s-4) 38px; font-size: 16px; line-height: 25px; color: var(--muted); max-width: 40ch; }
+.stop[data-past="true"] .num { color: var(--nh-brand); box-shadow: inset 0 0 0 3px var(--nh-brand); }
+.stop[data-on="true"] .num {
+  background: var(--nh-brand); color: #fff;
+  box-shadow: inset 0 0 0 3px var(--nh-brand), 0 0 0 3px var(--nh-card), 0 0 0 5px var(--berlin-gold);
+}
+.stop:hover .num { transform: scale(1.08); }
+.short { display: none; }
 
-.frame { grid-column: 6 / span 7; min-height: 480px; }
-.screen { position: absolute; left: 48px; right: 48px; top: 48px; bottom: -28px; animation: in 360ms var(--m-ease) both; }
+/* The chosen step. */
+.stage {
+  flex: 1 1 auto; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--s-5);
+  align-items: center; margin-top: var(--s-6);
+}
+.text { grid-column: 1 / span 5; display: grid; justify-items: start; gap: var(--s-4); animation: in 360ms var(--m-ease) both; }
+.kicker {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--nh-mono); font-size: 11px; line-height: 14px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--nh-brand);
+}
+.kicker span {
+  width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center;
+  background: var(--nh-brand-tint); color: var(--nh-brand); font-family: var(--nh-font); font-size: 12px; font-weight: 700; letter-spacing: 0;
+}
+.text h3 { font-size: clamp(28px, 1.1vw + 18px, 38px); line-height: 1.08; font-weight: 500; letter-spacing: -0.03em; color: var(--ink); text-wrap: balance; }
+.text .body { font-size: 18px; line-height: 28px; color: var(--muted); max-width: 40ch; }
+.next {
+  margin-top: var(--s-3); display: grid; gap: 2px; justify-items: start; padding: 10px 18px 11px 16px;
+  border: 0; border-radius: var(--r-md); background: var(--nh-card); cursor: pointer; text-align: left;
+  box-shadow: 0 0 0 1px var(--hair), 0 8px 20px -14px rgb(20 50 90 / 0.4);
+  transition: transform var(--m-out) var(--m-ease), box-shadow var(--m-out) var(--m-ease);
+}
+.next small { font-family: var(--nh-mono); font-size: 10px; line-height: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.next > span { display: inline-flex; align-items: center; gap: 8px; font-size: 16px; line-height: 22px; font-weight: 500; color: var(--ink); }
+.next i { font-style: normal; color: var(--nh-brand); transition: transform var(--m-out) var(--m-ease); }
+.next:hover { transform: translateY(-1px); box-shadow: 0 0 0 1px var(--nh-brand-line), 0 12px 24px -14px rgb(20 50 90 / 0.45); transition-duration: var(--m-in); }
+.next:hover i { transform: translateX(3px); }
+.next:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 2px; }
+
+.frame { grid-column: 7 / span 6; height: 360px; }
+.screen {
+  position: absolute; left: 40px; right: 40px; top: 32px; bottom: -24px; animation: in 420ms var(--m-ease) both;
+  /* The frame's foot cuts the window: the cut is a fade, so it reads as the screen running on, not as a crop. */
+  -webkit-mask-image: linear-gradient(#000 calc(100% - 80px), transparent calc(100% - 24px));
+  mask-image: linear-gradient(#000 calc(100% - 80px), transparent calc(100% - 24px));
+}
 @keyframes in { from { opacity: 0; transform: translateY(8px); } }
 
 .window {
@@ -48,8 +112,8 @@
 .appNav span[data-on="true"] { background: #fff; color: var(--nh-brand); }
 .me { flex: none; width: 24px; height: 24px; border-radius: 999px; display: grid; place-items: center; background: #fff; font-size: 10px; font-weight: 700; color: var(--nh-brand); }
 
-.page { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 14px; padding: 28px 32px; }
-.center { align-items: center; justify-content: center; gap: 19px; padding-inline: 45px; }
+.page { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 12px; padding: 22px 24px; }
+.center { align-items: center; justify-content: flex-start; gap: 19px; padding: 34px 45px 22px; }
 .head { display: flex; align-items: center; justify-content: space-between; gap: 13px; }
 .head h3 { font-family: var(--nh-ui); font-size: 19px; line-height: 24px; font-weight: 600; letter-spacing: -0.02em; }
 .card { padding: 18px; border-radius: var(--nh-r-lg); background: var(--nh-card); box-shadow: 0 5px 16px rgb(40 60 100 / 0.08); }
@@ -111,28 +175,42 @@
 
 /* 5 Measure */
 .numbers { flex: 1; display: flex; gap: 13px; align-items: center; }
-.numbers .card { flex: 1; height: 192px; display: flex; flex-direction: column; justify-content: space-between; }
+.numbers .card { flex: 1; height: 168px; display: flex; flex-direction: column; justify-content: space-between; }
 .numbers span, .numbers em { font-size: 11px; line-height: 14px; font-style: normal; color: var(--nh-mute); }
 .numbers em { color: var(--nh-ok); }
-.numbers strong { font-size: 58px; line-height: 58px; font-weight: 700; letter-spacing: -0.04em; }
+.numbers strong { font-size: 52px; line-height: 52px; font-weight: 700; letter-spacing: -0.04em; }
 .numbers strong[data-tone="teal"] { color: var(--nh-brand); }
 .numbers strong[data-tone="blue"] { color: var(--nh-blue); }
 
 
+
 @media (max-width: 1279px) {
-  .side { grid-column: 1 / span 5; }
-  .frame { grid-column: 6 / span 7; }
-  .screen { left: 32px; right: 32px; top: 32px; }
+  .text { grid-column: 1 / span 6; }
+  .frame { grid-column: 7 / span 6; height: 360px; }
+  .screen { left: 24px; right: 24px; top: 24px; }
 }
 @media (max-width: 1023px) {
-  .tour { display: flex; flex-direction: column; gap: var(--s-6); }
-  .frame { min-height: 460px; flex: 1 1 auto; }
+  .stage { display: flex; flex-direction: column; align-items: stretch; gap: var(--s-6); }
+  .frame { width: 100%; max-width: 600px; height: 340px; }
+  .full { display: none; }
+  .short { display: inline; }
 }
 @media (max-width: 639px) {
-  .step button { font-size: 17px; line-height: 22px; padding: 10px 0; }
-  .step[data-on="true"] .body { font-size: 15px; line-height: 23px; padding-left: 38px; }
-  .frame { min-height: 260px; }
-  .screen { left: 16px; right: 16px; top: 16px; }
+  .tour { --ly: 13px; }
+  .intro { margin-bottom: var(--s-5); }
+  .band { display: block; padding: 16px 4px 14px; }
+  .bullet { display: none; }
+  .stop { padding: 0 2px; gap: 8px; font-size: 13px; line-height: 17px; }
+  .num { width: 26px; height: 26px; font-size: 12px; }
+  .train { width: 50px; height: 18px; margin: -9px 0 0 -25px; background:
+    repeating-linear-gradient(to right, var(--berlin-gold) 0 3px, transparent 3px 6px) 5px 6px / 9px 6px no-repeat,
+    repeating-linear-gradient(to right, var(--berlin-gold) 0 3px, transparent 3px 6px) 36px 6px / 9px 6px no-repeat,
+    var(--nh-brand-deep); }
+  .stage { margin-top: var(--s-5); gap: var(--s-5); }
+  .text { gap: var(--s-3); }
+  .text .body { font-size: 16px; line-height: 25px; }
+  .frame { height: 290px; }
+  .screen { left: 14px; right: 14px; top: 14px; }
   .window { border-radius: 10px; }
   .appBar { height: 32px; padding: 0 11px; }
   .appBar img { width: 42px; height: 18px; }
@@ -141,18 +219,22 @@
   .appNav span { padding: 3px 10px; font-size: 10px; }
   .me { width: 21px; height: 21px; }
   .page { padding: 14px; gap: 10px; }
-  .center { padding-inline: 14px; padding-block: 22px; gap: 14px; }
+  .center { padding: 20px 14px 14px; gap: 14px; }
   .hello { font-size: 18px; line-height: 22px; }
   .head h3 { font-size: 16px; line-height: 21px; }
   .card { padding: 13px; }
   .card h4 { font-size: 14px; line-height: 19px; }
   .cardTop { flex-wrap: wrap; }
   .read { flex-direction: column; gap: 11px; }
-  .read .bars { width: 100%; }
+  .read .bars { display: none; }
   .answers span { height: 35px; padding: 0 13px; }
   .queued { padding: 10px 13px; flex-wrap: wrap; }
   .numbers { flex-direction: column; align-items: stretch; }
-  .numbers .card { height: 134px; }
-  .numbers strong { font-size: 45px; line-height: 45px; }
+  .numbers .card { height: 100px; }
+  .numbers strong { font-size: 40px; line-height: 40px; }
 }
-@media (prefers-reduced-motion: reduce) { .screen { animation: none; } .step::before { transition: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .screen, .text { animation: none; }
+  .done, .carrier, .num, .next, .next i { transition: none; }
+  .carrier { display: none; }
+}

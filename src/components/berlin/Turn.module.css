@@ -1,0 +1,19 @@
+/* The turn's kicker: three stations on a short teal line, the current one gold, the ones passed filled. */
+.turn {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--nh-mono); font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--nh-brand);
+}
+.line { position: relative; display: inline-flex; align-items: center; gap: 14px; }
+.line::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 3px; margin-top: -1.5px; border-radius: 2px; background: var(--nh-brand); }
+.line i {
+  position: relative; width: 11px; height: 11px; border-radius: 999px; background: var(--g-main);
+  box-shadow: inset 0 0 0 2.5px var(--nh-brand);
+}
+.line i[data-past] { background: var(--nh-brand); }
+.line i[data-on] { background: var(--berlin-gold); box-shadow: inset 0 0 0 2.5px var(--berlin-gold-deep), 0 0 0 3px rgb(255 207 90 / 0.25); }
+
+.turn[data-dark] { color: var(--berlin-gold); }
+.turn[data-dark] .line::before { background: rgb(255 255 255 / 0.5); }
+.turn[data-dark] .line i { background: var(--berlin-board); box-shadow: inset 0 0 0 2.5px rgb(255 255 255 / 0.7); }
+.turn[data-dark] .line i[data-on] { background: var(--berlin-gold); box-shadow: 0 0 0 3px rgb(255 207 90 / 0.25), 0 0 14px 2px rgb(255 207 90 / 0.45); }

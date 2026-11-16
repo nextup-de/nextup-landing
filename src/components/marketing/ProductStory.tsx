@@ -1,10 +1,12 @@
 "use client";
-// The product in five steps, from the first word to the measured result. The steps stand on the left as tabs,
-// each named by what a person does there; the one chosen opens its line and shows its screen on the right, in
-// one app window on the lit frame. Clicks and arrow keys choose a step; nothing changes by itself or by scroll.
+// The product in five steps, from the first word to the measured result. The steps are five stations on one
+// horizontal line, like the line band above a U-Bahn door: when another station is chosen a train rides there
+// and is gone again once it arrives. Under the line, the chosen step: its title and sentence on the left, its screen on
+// the right, small, in one app window on the lit frame. Clicks and arrow keys choose a step; nothing changes by
+// itself or by scroll.
 // Every screen is real product UI built from the app's elements, with the demo company's own names.
 import Image from "next/image";
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { ArrowUp, Avatar, Clock, Dept, Pill, Progress, Spark } from "@/components/product/elements";
 import { cn } from "@/lib/utils/cn";
 import styles from "./ProductStory.module.css";
@@ -12,16 +14,16 @@ import styles from "./ProductStory.module.css";
 const TABS = ["Ideas", "Inbox", "Feed", "Projects", "Dashboard"] as const;
 type Tab = (typeof TABS)[number];
 
-const CHAPTERS: Array<{ key: string; step: string; title: string; body: string; tab: Tab }> = [
-  { key: "raise", step: "Raise an idea", title: "One box for every idea.", tab: "Ideas",
+const CHAPTERS: Array<{ key: string; step: string; short: string; title: string; body: string; tab: Tab }> = [
+  { key: "raise", step: "Raise an idea", short: "Raise", title: "One box for every idea.", tab: "Ideas",
     body: "A problem or an idea, in one line. No form and no category tree." },
-  { key: "check", step: "Check it with AI", title: "A first read in seconds.", tab: "Ideas",
+  { key: "check", step: "Check it with AI", short: "Check", title: "A first read in seconds.", tab: "Ideas",
     body: "The coach asks what is missing and reads the idea for fit, impact, feasibility and clarity. It suggests. It does not decide." },
-  { key: "decide", step: "Decide in five days", title: "An owner and a date.", tab: "Inbox",
+  { key: "decide", step: "Decide in five days", short: "Decide", title: "An owner and a date.", tab: "Inbox",
     body: "The idea lands on one desk with a clock. The owner answers yes, no with a reason, or hands it over." },
-  { key: "build", step: "Build the project", title: "A yes becomes a project.", tab: "Projects",
+  { key: "build", step: "Build the project", short: "Build", title: "A yes becomes a project.", tab: "Projects",
     body: "Steps, a lead and a due date. Everyone sees what is done, what is in progress and what is blocked." },
-  { key: "measure", step: "Measure the result", title: "The result, measured.", tab: "Dashboard",
+  { key: "measure", step: "Measure the result", short: "Measure", title: "The result, measured.", tab: "Dashboard",
     body: "Fourteen days after launch the project reports what it changed." },
 ];
 
@@ -76,15 +78,15 @@ function Screen({ which }: { which: string }) {
             </div>
             <Pill status="clock"><Clock />3 d left</Pill>
           </div>
+          <div className={styles.answers}>
+            <span data-kind="yes">Yes, start it</span><span data-kind="no">No, with a reason</span><span data-kind="pass">Hand over</span>
+          </div>
           <div className={styles.read}>
             <div>
               <strong>AI read · a suggestion, not a decision</strong>
               <p>Replaces about 40 cardboard boxes per shift. Needs 120 crates and one return lane at gate 3.</p>
             </div>
             <Bars />
-          </div>
-          <div className={styles.answers}>
-            <span data-kind="yes">Yes, start it</span><span data-kind="no">No, with a reason</span><span data-kind="pass">Hand over</span>
           </div>
         </div>
         <div className={styles.queued}>
@@ -144,14 +146,27 @@ function Window({ which, tab }: { which: string; tab: Tab }) {
   );
 }
 
-export function ProductStory() {
+/** headingHidden  keeps the h2 for the outline but hides it (a page that heads the section itself). */
+export function ProductStory({ headingHidden = false }: { headingHidden?: boolean }) {
   const id = useId();
-  const [at, setAt] = useState(0);
+  const [at, setStep] = useState(0);
+  // The train shows only while it rides between two stations (the 620ms of the line's transition); at rest the
+  // chosen station's ring stands alone.
+  const [moving, setMoving] = useState(false);
+  const rideTimer = useRef(0);
   const tabs = useRef<Array<HTMLButtonElement | null>>([]);
+  const last = CHAPTERS.length - 1;
+  const setAt = (i: number) => {
+    if (i === at) return;
+    setStep(i);
+    setMoving(true);
+    window.clearTimeout(rideTimer.current);
+    rideTimer.current = window.setTimeout(() => setMoving(false), 680);
+  };
+  useEffect(() => () => window.clearTimeout(rideTimer.current), []);
 
-  // Arrow keys move along the steps, as in any tab list; Home and End jump to either end.
+  // Arrow keys move along the stations, as in any tab list; Home and End jump to either end.
   function onKey(e: React.KeyboardEvent, i: number) {
-    const last = CHAPTERS.length - 1;
     const to = e.key === "ArrowDown" || e.key === "ArrowRight" ? (i === last ? 0 : i + 1)
       : e.key === "ArrowUp" || e.key === "ArrowLeft" ? (i === 0 ? last : i - 1)
       : e.key === "Home" ? 0 : e.key === "End" ? last : null;
@@ -162,30 +177,45 @@ export function ProductStory() {
   }
 
   const c = CHAPTERS[at];
+  const next = at === last ? 0 : at + 1;
   return (
-    <div className={styles.tour}>
-      <div className={styles.side}>
-        <div className="section-head">
-          <h2 id={`${id}-h`}>From the first word to the measured result</h2>
-        </div>
-        <div className={styles.steps} role="tablist" aria-orientation="vertical" aria-labelledby={`${id}-h`} style={{ "--i": at } as React.CSSProperties}>
+    <div className={styles.tour} data-moving={moving || undefined} style={{ "--i": at, "--n": last } as React.CSSProperties}>
+      <div className={cn("section-head", styles.intro, headingHidden && "nh-sr")}>
+        <h2 id={`${id}-h`}>From the first word to the measured result</h2>
+      </div>
+
+      <div className={styles.band}>
+        <span className={styles.bullet} aria-hidden="true">N</span>
+        <div className={styles.steps} role="tablist" aria-orientation="horizontal" aria-labelledby={`${id}-h`}>
+          <span className={styles.track} aria-hidden="true"><span className={styles.done} /></span>
+          <span className={styles.carrier} aria-hidden="true"><span className={styles.train} /></span>
           {CHAPTERS.map((ch, i) => (
-            <div key={ch.key} className={styles.step} data-on={i === at}>
-              <button
-                ref={(el) => { tabs.current[i] = el; }} type="button" role="tab" id={`${id}-t${i}`}
-                aria-selected={i === at} aria-controls={`${id}-p`} tabIndex={i === at ? 0 : -1}
-                onClick={() => setAt(i)} onKeyDown={(e) => onKey(e, i)}
-              >
-                <span className={styles.num}>{i + 1}</span>{ch.step}
-              </button>
-              <p className={styles.body} aria-hidden={i !== at} data-edge-free="">{ch.body}</p>
-            </div>
+            <button
+              key={ch.key} ref={(el) => { tabs.current[i] = el; }} type="button" role="tab" id={`${id}-t${i}`}
+              className={styles.stop} data-on={i === at} data-past={i < at}
+              aria-selected={i === at} aria-controls={`${id}-p`} tabIndex={i === at ? 0 : -1}
+              onClick={() => setAt(i)} onKeyDown={(e) => onKey(e, i)}
+            >
+              <span className={styles.num}>{i + 1}</span>
+              <span className={styles.name}><span className={styles.full}>{ch.step}</span><span className={styles.short}>{ch.short}</span></span>
+            </button>
           ))}
         </div>
       </div>
-      <div className={cn("nh-lit", styles.frame)} role="tabpanel" id={`${id}-p`} aria-labelledby={`${id}-t${at}`}>
-        <p className="nh-sr">{c.title} {c.body}</p>
-        <div className={styles.screen} key={c.key} aria-hidden="true"><Window which={c.key} tab={c.tab} /></div>
+
+      <div className={styles.stage} role="tabpanel" id={`${id}-p`} aria-labelledby={`${id}-t${at}`}>
+        <div className={styles.text} key={`t-${c.key}`}>
+          <p className={styles.kicker}><span>{at + 1}</span>Step {at + 1} of {CHAPTERS.length} · {c.step}</p>
+          <h3>{c.title}</h3>
+          <p className={styles.body}>{c.body}</p>
+          <button type="button" className={styles.next} onClick={() => setAt(next)}>
+            <small>{at === last ? "Back to the start" : "Next stop"}</small>
+            <span>{CHAPTERS[next].step}<i aria-hidden="true">{at === last ? "↺" : "→"}</i></span>
+          </button>
+        </div>
+        <div className={cn("nh-lit", styles.frame)}>
+          <div className={styles.screen} key={c.key} aria-hidden="true"><Window which={c.key} tab={c.tab} /></div>
+        </div>
       </div>
     </div>
   );

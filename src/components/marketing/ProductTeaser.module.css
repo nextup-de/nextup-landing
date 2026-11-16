@@ -1,0 +1,89 @@
+/* #product: the interchange. Text left; right, one app window on the lit frame standing at a platform edge. Only
+   transform and opacity move: the arrival once, the hover lift. */
+.grid { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: var(--s-8); align-items: center; }
+.text { display: grid; gap: var(--s-5); justify-items: start; max-width: 560px; }
+.kicker {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--nh-mono); font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--nh-brand);
+}
+/* The interchange mark: two linked rings, as on the rail. */
+.change { position: relative; display: inline-flex; gap: 2px; }
+.change i { position: relative; width: 16px; height: 16px; border-radius: 999px; background: var(--g-alt); box-shadow: inset 0 0 0 3px var(--nh-brand); }
+.change::before { content: ""; position: absolute; left: 8px; right: 8px; top: 5px; height: 6px; background: var(--nh-brand); }
+.change i:last-child { box-shadow: inset 0 0 0 3px var(--nh-brand), 0 0 0 3px rgb(255 207 90 / 0.35); }
+.title { font-size: clamp(36px, 3.4vw + 12px, 72px); line-height: 1; letter-spacing: -0.045em; font-weight: 500; color: var(--ink); text-wrap: balance; }
+.lead { font-size: 18px; line-height: 28px; color: var(--muted); max-width: 46ch; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-4) var(--s-6); margin-top: var(--s-2); }
+.ghost { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; line-height: 20px; font-weight: 500; color: var(--nh-brand); }
+.ghost:hover { color: var(--nh-brand-deep); }
+.ghost:hover :global(.nh-link) { background-size: 100% 1px; }
+.ghost :global(.nh-arrow) path:first-child { transform: scaleX(1); }
+.ghost:hover :global(.nh-arrow) path:last-child { transform: translateX(3px); }
+
+/* The platform: the frame, the window in it, the edge under it. */
+.platform { position: relative; width: 100%; max-width: 560px; justify-self: end; }
+.frame { padding: 40px 0 40px 40px; box-shadow: var(--nh-window-shadow); }
+.window {
+  display: flex; flex-direction: column; overflow: hidden; margin-right: -2px; border-radius: var(--r-md) 0 0 var(--r-md);
+  background: var(--nh-ground); font-family: var(--nh-ui); color: var(--nh-ink);
+  box-shadow: 0 0 0 1px rgb(20 50 90 / 0.06), 0 32px 64px -24px rgb(20 50 90 / 0.35);
+  transition: transform var(--m-out) var(--m-ease), box-shadow var(--m-out) var(--m-ease);
+}
+.window:hover { color: var(--nh-ink); transform: translateY(-4px); box-shadow: 0 0 0 1px rgb(20 50 90 / 0.08), 0 40px 72px -24px rgb(20 50 90 / 0.42); transition-duration: var(--m-in); }
+.window:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 4px; }
+.bar { flex: none; display: flex; align-items: center; gap: 14px; height: 44px; padding: 0 16px; background: var(--nh-brand); }
+.bar img { width: 52px; height: auto; }
+.tabs { display: flex; gap: 2px; padding: 2px; border-radius: 999px; background: rgb(255 255 255 / 0.14); }
+.tabs span { padding: 4px 11px; border-radius: 999px; font-size: 11px; line-height: 14px; font-weight: 600; color: #fff; }
+.tabs span[data-on] { background: #fff; color: var(--nh-brand); }
+.me { margin-left: auto; flex: none; width: 26px; height: 26px; border-radius: 999px; display: grid; place-items: center; background: #fff; font-size: 10px; font-weight: 700; color: var(--nh-brand); }
+
+.body { display: grid; gap: 16px; padding: 24px 28px 28px 24px; }
+.hello { font-size: 19px; line-height: 25px; font-weight: 600; letter-spacing: -0.02em; }
+.box {
+  display: flex; align-items: flex-end; gap: 10px; padding: 14px 10px 10px 16px; border: 2px solid transparent; border-radius: 14px;
+  background: linear-gradient(var(--nh-card), var(--nh-card)) padding-box, var(--nh-gold-ring) border-box;
+  box-shadow: 0 10px 28px rgb(230 169 25 / 0.16);
+}
+.input { flex: 1; min-width: 0; min-height: 44px; font-size: 15px; line-height: 22px; font-weight: 500; }
+.send { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--nh-brand); color: #fff; }
+.routed { display: grid; gap: 10px; padding: 14px; border-radius: 12px; background: var(--nh-card); box-shadow: 0 1px 2px rgb(20 50 90 / 0.06), 0 6px 18px rgb(20 50 90 / 0.06); }
+.kind { font-size: 12px; line-height: 16px; font-weight: 600; color: var(--nh-brand); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rowLine { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.who { flex: 1; min-width: 0; display: grid; }
+.who b { font-size: 14px; line-height: 18px; font-weight: 600; }
+.who small { font-size: 12px; line-height: 16px; color: var(--nh-mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dep { display: inline-flex; align-items: center; gap: 8px; padding-top: 10px; border-top: 1px solid var(--nh-line-soft); font-size: 12px; line-height: 16px; color: var(--nh-mute); }
+
+/* The platform edge: a 2px line with its yellow safety strip, and its sign. */
+.edge { position: relative; margin-top: 18px; height: 2px; background: var(--nh-line-2); }
+.edge::before { content: ""; position: absolute; left: 0; right: 0; top: 6px; height: 4px; background: repeating-linear-gradient(90deg, var(--berlin-gold) 0 14px, transparent 14px 22px); opacity: 0.55; }
+.edge span { position: absolute; right: 0; top: 16px; font-family: var(--nh-mono); font-size: 11px; line-height: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+
+/* The arrival: armed by script, once 30% in view, the window pulls into the lit frame from the right like a train
+   into a platform; the frame clips it, so nothing reaches past the page. */
+.platform[data-armed] .window { opacity: 0; transform: translateX(12%); }
+.platform[data-armed][data-in] .window {
+  opacity: 1; transform: none;
+  transition: opacity 700ms var(--nh-ease), transform 700ms var(--nh-ease), box-shadow var(--m-out) var(--m-ease);
+}
+.platform[data-armed][data-in] .window:hover { transform: translateY(-4px); transition-duration: var(--m-in); }
+
+@media (max-width: 1023px) {
+  .grid { grid-template-columns: minmax(0, 1fr); gap: var(--s-7); }
+  .platform { justify-self: stretch; max-width: none; }
+}
+@media (max-width: 759px) {
+  .lead { font-size: 16px; line-height: 25px; }
+  .actions { flex-direction: column; align-items: stretch; }
+  .actions :global(.nh-btn) { width: 100%; }
+  .ghost { justify-content: center; min-height: 44px; }
+  .frame { padding: 20px 0 20px 16px; }
+  .body { padding: 18px 16px 20px; }
+  .rowLine { flex-wrap: wrap; }
+  .who { min-width: 150px; }
+  .tabs span:nth-child(n + 3) { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .window, .window:hover { transition: none; transform: none; }
+}

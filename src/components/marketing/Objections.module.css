@@ -1,0 +1,124 @@
+/* #questions: four stations on one line, each stretch in its person's colour. Wide (1100px and up) the line runs
+   across the top and the platforms hang under their stations in four columns; narrower it runs down the left and
+   the platforms stand beside it. Under each station a platform sign (the board's near-black, the person's colour
+   as its top stripe, the question in big white type, the icon as line art) and the plain answer below.
+   Armed (script, motion allowed): --fill (0..1, written by the scroll job) grows the line stretch by stretch, and
+   data-lit lights a station, raises its sign and draws its icon. Without data-armed everything stands lit. */
+.head { display: grid; gap: var(--s-4); max-width: 900px; margin-bottom: var(--s-7); }
+.kicker {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--nh-mono); font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--nh-brand);
+}
+.kicker i { width: 28px; height: 4px; border-radius: 2px; background: var(--nh-brand); }
+.title { font-size: clamp(36px, 3.4vw + 12px, 72px); line-height: 1; letter-spacing: -0.045em; font-weight: 500; color: var(--ink); text-wrap: balance; }
+
+.line {
+  --ring: 26px; --bar: 6px; --fill: 1; --n: 4;
+  position: relative; list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--s-5);
+}
+.stop { position: relative; display: grid; align-content: start; padding-top: calc(var(--ring) + 22px); }
+
+/* The stretch from this station to the next, in this person's colour, over a pale track; the last one ends in a
+   terminus bar. The stretch grows (scaleX) as --fill reaches it. */
+.seg {
+  position: absolute; left: 0; right: calc(-1 * var(--s-5)); top: calc(var(--ring) / 2 - var(--bar) / 2); height: var(--bar);
+  border-radius: calc(var(--bar) / 2); background: var(--nh-line-2);
+}
+.stop:last-child .seg { right: 0; }
+.seg::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--line); transform-origin: 0 50%;
+  transform: scaleX(clamp(0, calc(var(--fill) * var(--n) - var(--i)), 1));
+}
+.stop:last-child .seg::before {
+  content: ""; position: absolute; right: -2px; top: calc(var(--bar) / 2 - 14px); width: 8px; height: 28px; border-radius: 4px; background: var(--line);
+}
+
+/* The station: a ring in the person's colour; lit, it fills and wears the idea's gold halo. */
+.ring {
+  position: absolute; z-index: 1; left: 0; top: 0; width: var(--ring); height: var(--ring); border-radius: 999px;
+  background: var(--line); box-shadow: inset 0 0 0 5px var(--line), inset 0 0 0 9px #fff, 0 0 0 4px var(--g-main), 0 0 0 8px rgb(255 207 90 / 0.5);
+  transition: background 320ms var(--m-ease), box-shadow 320ms var(--m-ease), transform 420ms var(--nh-ease);
+}
+
+/* The platform: the sign, then the answer. */
+.platform { display: grid; gap: var(--s-4); align-content: start; }
+.platform::before {
+  content: ""; position: absolute; left: calc(var(--ring) / 2 - 1px); top: calc(var(--ring) + 4px); width: 2px; height: 14px; background: var(--line); opacity: 0.6;
+}
+.sign {
+  position: relative; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; min-height: 148px;
+  padding: 22px 18px 20px 20px; border-radius: var(--r-lg); overflow: hidden; color: #fff;
+  background:
+    radial-gradient(90% 80% at 100% 0%, color-mix(in srgb, var(--line) 30%, transparent), transparent 70%),
+    radial-gradient(circle, rgb(255 255 255 / 0.06) 1px, transparent 1.6px) 0 0 / 16px 16px,
+    var(--berlin-board);
+  box-shadow: 0 26px 48px -30px rgb(16 36 42 / 0.6), inset 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+/* The sign's top stripe in the person's colour, as on a platform's station sign. */
+.sign::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 6px; background: var(--line); }
+.signText { display: grid; gap: 10px; min-width: 0; }
+.who {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--nh-mono); font-size: 11px; line-height: 14px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgb(255 255 255 / 0.74);
+}
+.who b {
+  width: 20px; height: 20px; border-radius: 5px; display: grid; place-items: center; background: var(--line); color: #fff;
+  font-family: var(--nh-font); font-size: 11px; letter-spacing: 0;
+}
+.ask { font-size: clamp(22px, 0.9vw + 13px, 28px); line-height: 1.1; font-weight: 500; letter-spacing: -0.025em; color: #fff; text-wrap: balance; }
+.answer { font-size: 16px; line-height: 25px; color: var(--muted); max-width: 48ch; }
+
+/* The icon: Berlin line art in the sign's light. */
+.icon { flex: none; width: auto; height: 40px; margin-top: 2px; overflow: visible; }
+.sil { fill: var(--berlin-board); }
+.ln { fill: none; stroke: #8fd3da; stroke-width: var(--sw, 2); stroke-linecap: round; stroke-linejoin: round; }
+.gold { fill: var(--berlin-gold); stroke: var(--berlin-gold-deep); stroke-width: calc(var(--sw, 2) * 0.5); }
+
+.more { margin-top: var(--s-6); }
+.link { display: inline-flex; align-items: center; gap: 8px; font-size: 16px; line-height: 24px; font-weight: 500; color: var(--nh-brand); }
+.link:hover { color: var(--nh-brand-deep); }
+.link:hover :global(.nh-link) { background-size: 100% 1px; }
+.link :global(.nh-arrow) path:first-child { transform: scaleX(1); }
+.link:hover :global(.nh-arrow) path:last-child { transform: translateX(3px); }
+
+/* Armed: a station not yet reached is a hollow ring, its sign low and faint, its icon undrawn. */
+.line[data-armed] .stop:not([data-lit]) .ring { background: var(--g-main); box-shadow: inset 0 0 0 5px var(--nh-line-2), 0 0 0 4px var(--g-main); transform: scale(0.86); }
+.line[data-armed] .sign, .line[data-armed] .answer { transition: opacity 520ms var(--m-ease), transform 620ms var(--nh-ease); }
+.line[data-armed] .stop:not([data-lit]) .sign { opacity: 0.25; transform: translateY(14px); }
+.line[data-armed] .stop:not([data-lit]) .answer { opacity: 0.35; transform: translateY(10px); }
+.line[data-armed] .ln { stroke-dasharray: 1 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1000ms var(--m-ease) calc(200ms + var(--k, 0) * 120ms); }
+.line[data-armed] .stop[data-lit] .ln { stroke-dashoffset: 0; }
+.line[data-armed] .gold { opacity: 0; transition: opacity 400ms var(--m-ease) 900ms; }
+.line[data-armed] .stop[data-lit] .gold { opacity: 1; }
+
+/* Narrower: the line down the left, each platform beside its station; the sign and its answer side by side
+   where there is room. */
+@media (max-width: 1099px) {
+  .line { grid-template-columns: minmax(0, 1fr); row-gap: var(--s-6); padding-left: calc(var(--ring) + 24px); }
+  .stop { padding-top: 0; }
+  .seg { left: calc(-1 * (var(--ring) + 24px) + var(--ring) / 2 - var(--bar) / 2); right: auto; top: calc(var(--ring) / 2); bottom: calc(-1 * var(--s-6) - var(--ring) / 2); width: var(--bar); height: auto; }
+  .stop:last-child .seg { bottom: 0; }
+  .seg::after { transform-origin: 50% 0; transform: scaleY(clamp(0, calc(var(--fill) * var(--n) - var(--i)), 1)); }
+  .stop:last-child .seg::before { right: auto; left: calc(var(--bar) / 2 - 14px); top: auto; bottom: -2px; width: 28px; height: 8px; }
+  .ring { left: calc(-1 * (var(--ring) + 24px)); top: 18px; }
+  .platform::before { left: -22px; top: calc(18px + var(--ring) / 2 - 1px); width: 16px; height: 2px; }
+  .platform { grid-template-columns: minmax(0, 360px) minmax(0, 1fr); column-gap: var(--s-5); align-items: center; }
+  .sign { min-height: 120px; }
+}
+@media (max-width: 759px) {
+  .line { --ring: 22px; --bar: 5px; row-gap: var(--s-5); padding-left: calc(var(--ring) + 18px); }
+  .seg { left: calc(-1 * (var(--ring) + 18px) + var(--ring) / 2 - var(--bar) / 2); bottom: calc(-1 * var(--s-5) - var(--ring) / 2); }
+  .ring { left: calc(-1 * (var(--ring) + 18px)); top: 16px; }
+  .platform { grid-template-columns: minmax(0, 1fr); gap: var(--s-3); }
+  .platform::before { left: -16px; top: calc(16px + var(--ring) / 2 - 1px); width: 12px; }
+  .sign { min-height: 0; padding: 18px 14px 16px 16px; }
+  .ask { font-size: 22px; line-height: 26px; }
+  .answer { font-size: 15px; line-height: 23px; }
+  .icon { height: 32px; }
+  .head { margin-bottom: var(--s-6); }
+  .more { margin-top: var(--s-5); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ring, .sign, .answer, .ln, .gold { transition: none !important; }
+}

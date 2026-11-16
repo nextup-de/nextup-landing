@@ -31,6 +31,16 @@ export const RAIL = {
   tracks: [-90, -84, -76, -70, -62, -56, -50],  // z of each track's centre line
   xFrom: -1400, xTo: 700,
 } as const;
+// West of the bridge the tracks climb out of the cut onto the Stadtbahn viaduct, toward Ostbahnhof and Mitte: the
+// cut ends where the rails reach street level, and from there brick arches carry them, ten metres up.
+export const CLIMB = { from: -60, to: -420, top: 10, cutEnd: -205 } as const;
+/** The height of the rails at x along the corridor. */
+export function railY(x: number) {
+  if (x >= CLIMB.from) return RAIL.y;
+  if (x <= CLIMB.to) return CLIMB.top;
+  const t = (x - CLIMB.from) / (CLIMB.to - CLIMB.from);
+  return RAIL.y + (CLIMB.top - RAIL.y) * t * t * (3 - 2 * t);
+}
 // Warschauer Bruecke: the street crossing the cut.
 export const BRIDGE = { zFrom: -104, zTo: -38, y: 0, deck: 1.2 } as const;
 

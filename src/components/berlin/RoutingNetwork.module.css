@@ -1,0 +1,157 @@
+/* #owner: the page's one dark section after the tower. The routing map as a night transit network: white
+   interchange, eight coloured lines, white termini that light gold when the token arrives. Without script (no
+   data-armed) the figure is the finished map. Only stroke-dashoffset, opacity and transform move. */
+
+/* The night ground (also set in globals.css by the shared rule; repeated here so the beat stands on its own). */
+.owner[data-ground="night"] {
+  --night: var(--berlin-board);
+  --soft: rgb(255 255 255 / 0.68);
+  background:
+    radial-gradient(52% 46% at 86% 0%, rgb(255 207 90 / 0.08), transparent 70%),
+    radial-gradient(46% 52% at 0% 100%, rgb(63 193 201 / 0.1), transparent 70%),
+    radial-gradient(circle, rgb(255 255 255 / 0.05) 1px, transparent 1.6px) 0 0 / 28px 28px,
+    var(--night);
+  color: #fff;
+}
+
+.head { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: var(--s-6) var(--s-8); align-items: end; margin-bottom: var(--s-7); }
+.headTitle { display: grid; gap: var(--s-4); }
+.title { font-size: clamp(56px, 10vw, 152px); line-height: 0.9; letter-spacing: -0.055em; font-weight: 500; color: #fff; }
+.copy { display: grid; gap: var(--s-4); max-width: 54ch; padding-bottom: 10px; }
+.copy p { font-size: 17px; line-height: 27px; color: var(--soft); }
+.copy p:first-child { font-size: 19px; line-height: 29px; color: rgb(255 255 255 / 0.92); }
+.caption { margin-top: var(--s-5); font-family: var(--nh-mono); font-size: 12px; line-height: 18px; letter-spacing: 0.04em; color: rgb(255 255 255 / 0.55); }
+
+/* The figure ------------------------------------------------------------------------------------------- */
+.fig { position: relative; display: grid; gap: var(--s-6); }
+.stage { position: relative; }
+.svg { display: block; width: 100%; height: auto; overflow: visible; }
+.tall { display: none; max-width: 420px; margin-inline: auto; }
+
+.path { fill: none; stroke: var(--c); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+.tall .path { stroke-width: 4; }
+.line { transition: opacity 500ms var(--m-ease); }
+
+.ko { fill: var(--berlin-board); }
+.bullet { fill: var(--c); }
+.bulletText { font-family: var(--nh-mono); font-size: 10px; font-weight: 700; fill: var(--berlin-board); letter-spacing: 0.02em; }
+.lab { font-family: var(--nh-font); font-size: 12.5px; font-weight: 500; fill: rgb(255 255 255 / 0.8); }
+
+.hub rect { fill: var(--berlin-board); stroke: #fff; stroke-width: 3.5; }
+.hub circle { fill: #fff; }
+.hubLabel { font-family: var(--nh-mono); font-size: 11px; letter-spacing: 0.12em; fill: rgb(255 255 255 / 0.7); }
+.tall .hubLabel { font-size: 10px; }
+
+.bar { fill: #fff; transition: fill 400ms var(--m-ease); }
+.glow { fill: var(--berlin-gold); opacity: 0; transition: opacity 500ms var(--m-ease); }
+.fig[data-arrived] .term[data-on] .bar { fill: var(--berlin-gold); }
+.fig[data-arrived] .term[data-on] .glow { opacity: 0.22; }
+.kind { font-family: var(--nh-mono); font-size: 10px; letter-spacing: 0.14em; fill: rgb(255 255 255 / 0.5); }
+.fig[data-arrived] .term[data-on] .kind { fill: var(--berlin-gold); }
+.role { font-size: 19px; font-weight: 500; letter-spacing: -0.01em; fill: #fff; }
+.roleS { font-size: 13px; font-weight: 500; fill: #fff; }
+.dep { font-size: 12px; fill: rgb(255 255 255 / 0.6); }
+.depName { font-size: 12px; font-weight: 600; fill: rgb(255 255 255 / 0.9); }
+.depLink { fill: none; stroke: rgb(255 255 255 / 0.5); stroke-width: 2; stroke-dasharray: 3 3; }
+.depBar { fill: var(--berlin-board); stroke: rgb(255 255 255 / 0.7); stroke-width: 2; }
+.fig[data-arrived] .term[data-on] .depBar { stroke: var(--berlin-gold); }
+
+/* The token: the scene's gold idea, riding the line. */
+.token { will-change: transform; }
+.halo { fill: var(--berlin-gold); opacity: 0.25; }
+.disc { fill: var(--berlin-gold); stroke: #fff6d8; stroke-width: 2; }
+.core { fill: #fff; }
+.pulse { fill: none; stroke: var(--berlin-gold); stroke-width: 2.5; opacity: 0; transform-box: fill-box; transform-origin: center; }
+
+/* Arrived: the other lines step back, the terminus pulses twice. */
+.fig[data-arrived] .line:not([data-on]) { opacity: 0.3; }
+.fig[data-arrived] .term:not([data-on]) { opacity: 0.55; }
+.term { transition: opacity 500ms var(--m-ease); }
+.fig[data-armed][data-arrived] .pulse { animation: pulse 1500ms var(--m-ease) 2; }
+@keyframes pulse {
+  from { opacity: 0.9; transform: scale(0.5); }
+  to { opacity: 0; transform: scale(2.8); }
+}
+
+/* Drawing in: armed by script, drawn once the figure is 30% in view, labels and token last. */
+.fig[data-armed] .path { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+.fig[data-armed][data-drawn] .path { stroke-dashoffset: 0; transition: stroke-dashoffset 700ms var(--m-ease) calc(var(--i, 0) * 90ms); }
+.fig[data-armed] .late, .fig[data-armed] .token, .fig[data-armed] .hubLabel { opacity: 0; }
+.fig[data-armed][data-drawn] .late, .fig[data-armed][data-drawn] .token, .fig[data-armed][data-drawn] .hubLabel {
+  opacity: 1; transition: opacity 600ms var(--m-ease) 1100ms;
+}
+.fig[data-armed][data-drawn] .hubLabel { transition-delay: 200ms; }
+
+/* The legend: the lines as a numbered list. Visible below 760px, for screen readers everywhere. */
+.legend {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  list-style: none; margin: 0; padding: 0;
+}
+.legend li { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 10px; align-items: baseline; }
+.legend b {
+  grid-row: span 2; align-self: center; display: inline-grid; place-items: center; min-width: 30px; height: 18px; padding: 0 5px; border-radius: 4px;
+  background: var(--c); color: var(--berlin-board); font-family: var(--nh-mono); font-size: 10.5px; font-weight: 700;
+}
+.legend span { font-size: 14px; line-height: 19px; font-weight: 500; color: #fff; }
+.legend small { font-size: 12px; line-height: 16px; color: rgb(255 255 255 / 0.6); }
+
+/* The chips and the owner's card ----------------------------------------------------------------------- */
+.row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 420px); gap: var(--s-6); align-items: center; }
+.send { display: grid; gap: var(--s-3); }
+.sendLabel { font-family: var(--nh-mono); font-size: 12px; line-height: 16px; letter-spacing: 0.12em; text-transform: uppercase; color: rgb(255 255 255 / 0.6); }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 18px 0 8px; border-radius: 999px; cursor: pointer;
+  border: 1px solid rgb(255 255 255 / 0.22); background: rgb(255 255 255 / 0.04); color: #fff;
+  font-size: 15px; line-height: 20px; font-weight: 500;
+  transition: background var(--m-out) var(--m-ease), border-color var(--m-out) var(--m-ease), transform var(--m-out) var(--m-ease);
+}
+.chip i {
+  display: inline-grid; place-items: center; min-width: 32px; height: 22px; padding: 0 6px; border-radius: 999px; font-style: normal;
+  background: var(--c); color: var(--berlin-board); font-family: var(--nh-mono); font-size: 10.5px; font-weight: 700;
+}
+.chip:hover { background: rgb(255 255 255 / 0.1); transform: translateY(-1px); transition-duration: var(--m-in); }
+.chip:active { transform: scale(0.98); transition-duration: var(--m-press); }
+.chip[aria-pressed="true"] { background: #fff; border-color: #fff; color: var(--berlin-board); box-shadow: 0 0 0 4px rgb(255 207 90 / 0.25); }
+.chip:focus-visible { outline: 2px solid var(--berlin-gold); outline-offset: 3px; }
+
+.card {
+  display: grid; gap: 14px; padding: 18px 20px; border-radius: var(--r-lg);
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.04));
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14), 0 24px 48px -24px rgb(0 0 0 / 0.6);
+  transition: opacity 500ms var(--m-ease), transform 600ms var(--m-ease);
+}
+.cardKind {
+  display: flex; align-items: center; gap: 8px; min-width: 0;
+  font-family: var(--nh-mono); font-size: 10.5px; line-height: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--berlin-gold);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cardKind i { flex: none; width: 7px; height: 7px; border-radius: 999px; background: var(--berlin-gold); box-shadow: 0 0 8px 1px rgb(255 207 90 / 0.6); }
+.cardOwner { display: flex; align-items: center; gap: 14px; }
+.cardOwner > span { display: grid; min-width: 0; }
+.cardOwner strong { font-size: 20px; line-height: 26px; font-weight: 600; letter-spacing: -0.01em; }
+.cardOwner small { font-size: 14px; line-height: 19px; color: rgb(255 255 255 / 0.66); }
+.cardFoot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.cardDep { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; line-height: 18px; color: rgb(255 255 255 / 0.75); }
+.fig[data-armed]:not([data-arrived]) .card { opacity: 0.18; transform: translateY(8px); }
+
+@media (max-width: 1023px) {
+  .head { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .row { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 759px) {
+  .wide { display: none; }
+  .tall { display: block; }
+  .legend {
+    position: static; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px 16px;
+  }
+  .copy p, .copy p:first-child { font-size: 16px; line-height: 25px; }
+  .chip { font-size: 14px; }
+  .card { padding: 16px; }
+  .cardOwner strong { font-size: 18px; line-height: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .line, .term, .bar, .glow, .card, .chip { transition: none; }
+  .pulse { animation: none; }
+}

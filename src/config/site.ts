@@ -50,3 +50,24 @@ export const LEGAL = {
   } as null | { provider: string; location: string; privacyUrl: string },
   updated: "2026-09-28", // last change to /privacy, ISO date
 } as const;
+
+// Where the product is hosted, in the English the pages speak. LEGAL.hosting.location is the provider's German
+// ("Nürnberg, Deutschland"); the pages say Nuremberg, Germany. Keep the two in step: while LEGAL.hosting is null
+// the pages only say "the EU".
+export const HOSTING_PLACE = LEGAL.hosting ? "Nuremberg, Germany" : "the EU";
+
+// The header's links, left of the logo: label, the line under it in the phone menu, and the path prefix that
+// marks it as the current page (none: an anchor on the home page). Log in and Book a pilot stay on the right.
+export const NAV: ReadonlyArray<{ href: string; label: string; line: string; match?: string }> = [
+  { href: "/product", label: "Product", line: "The software: raise box, ideas list, five steps, hosting", match: "/product" },
+  { href: "/#ring", label: "How it works", line: "Why decisions wait, and how they stop waiting" },
+  { href: "/pricing", label: "Pricing", line: "Per seat, after a paid pilot", match: "/pricing" },
+];
+
+// The footer's link columns: [title, [label, href][]].
+export const FOOTER_COLUMNS: ReadonlyArray<readonly [string, ReadonlyArray<readonly [string, string]>]> = [
+  ["Product", [["The software", "/product"], ["Raise box", "/product#try"], ["Ideas list", "/product#ideas"], ["Five steps", "/product#steps"], ["Rules", "/product#rules"], ["Hosting and data", "/product#security"]]],
+  ["How it works", [["Why it waits", "/#why"], ["One owner", "/#owner"], ["Questions", "/#questions"], ["Pilot", "/#pilot"]]],
+  ["Pilot", [["Pricing", "/pricing"], ["Pilot questions", "/pricing#questions"], ["Book a pilot", "/contact"], ["Log in", LOGIN_URL]]],
+  ["Legal", [["Imprint", "/imprint"], ["Privacy", "/privacy"]]],
+];

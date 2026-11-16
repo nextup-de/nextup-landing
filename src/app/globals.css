@@ -120,6 +120,14 @@ main > .section, footer.closing {
 main > .section > .wrap, footer.closing > .wrap { flex: 1 0 auto; display: flex; flex-direction: column; }
 main > .section[id] { scroll-margin-top: calc(-1 * var(--nh-head)); } /* a jump to a section frames it whole, header over its padding */
 main > .section[data-ground="alt"] { background: var(--g-alt); }
+/* The night ground: the landing's one dark section. Text in white, the grey run-on and links readable at AA
+   (the muted white is 9:1 and more on --g-night, the light teal of links 8:1). */
+main > .section[data-ground="night"] { --muted: rgb(255 255 255 / 0.72); --hair: rgb(255 255 255 / 0.14); background: var(--g-night); color: #fff; }
+main > .section[data-ground="night"] .section-head h2, main > .section[data-ground="night"] h2, main > .section[data-ground="night"] h3 { color: #fff; }
+main > .section[data-ground="night"] .muted, main > .section[data-ground="night"] .section-head > p { color: var(--muted); }
+main > .section[data-ground="night"] a:not(.nh-btn) { color: #8fd3da; }
+main > .section[data-ground="night"] a:not(.nh-btn):hover { color: #bfe8ec; }
+main > .section[data-ground="night"] :focus-visible { outline-color: #8fd3da; }
 @media (max-width: 639px) { main > .section:not(.hero), footer.closing { min-height: calc(var(--hm, var(--h, 1)) * var(--nh-screen-h)); } }
 /* The one scroll moment (data-pin): exactly its screens tall, its stage pinned for the screens past the first.
    Without motion, or on a screen too short to hold the stage, it is an ordinary section. */

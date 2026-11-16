@@ -11,15 +11,13 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Avatar } from "@/components/product/elements";
 import { Button } from "@/components/ui/Button";
-import { LOGIN_URL, SITE } from "@/config/site";
+import { HOSTING_PLACE, LOGIN_URL, NAV, SITE } from "@/config/site";
 import { cn } from "@/lib/utils/cn";
 import styles from "./SiteHeader.module.css";
 
-const LINKS = [
-  { href: "/#product", label: "Product", line: "Five steps, from the first word to the measured result", on: () => false },
-  { href: "/#pilot", label: "Pilot", line: "Three phases, built with your people", on: () => false },
-  { href: "/pricing", label: "Pricing", line: "Per seat, after a paid pilot", on: (p: string) => p.startsWith("/pricing") },
-];
+const LINKS = NAV;
+/** A link is the current page when the path starts with its `match`; an anchor on the home page never is. */
+const on = (l: (typeof NAV)[number], path: string) => (l.match ? path.startsWith(l.match) : false);
 const WIDE = "(min-width: 860px)";
 
 export function SiteHeader() {
@@ -53,7 +51,7 @@ export function SiteHeader() {
       <div className={cn("wrap", styles.in)}>
         <nav className={styles.links} aria-label="Site">
           {LINKS.map((l) => (
-            <Link key={l.href} className={styles.link} href={l.href} aria-current={l.on(path) ? "page" : undefined}>{l.label}</Link>
+            <Link key={l.href} className={styles.link} href={l.href} aria-current={on(l, path) ? "page" : undefined}>{l.label}</Link>
           ))}
         </nav>
         <Link className={cn("nav__logo", styles.logo)} href="/" aria-label={`${SITE.name} home`} onClick={() => setOpen(false)}>
@@ -75,7 +73,7 @@ export function SiteHeader() {
             <ul className={styles.rows}>
               {LINKS.map((l, i) => (
                 <li key={l.href} style={{ "--i": i } as React.CSSProperties}>
-                  <Link ref={i === 0 ? first : undefined} href={l.href} aria-current={l.on(path) ? "page" : undefined} onClick={() => setOpen(false)}>
+                  <Link ref={i === 0 ? first : undefined} href={l.href} aria-current={on(l, path) ? "page" : undefined} onClick={() => setOpen(false)}>
                     <span><strong>{l.label}</strong><small>{l.line}</small></span>
                     <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1 6h9M6.5 2.5 10 6l-3.5 3.5" /></svg>
                   </Link>
@@ -84,7 +82,7 @@ export function SiteHeader() {
             </ul>
           </nav>
 
-          <Link className={styles.glimpse} href="/#ideas" onClick={() => setOpen(false)} style={{ "--i": LINKS.length } as React.CSSProperties}>
+          <Link className={styles.glimpse} href="/product#ideas" onClick={() => setOpen(false)} style={{ "--i": LINKS.length } as React.CSSProperties}>
             <span className={styles.faces} aria-hidden="true">
               {["M. Hoffmann", "N. Demir", "K. Yilmaz"].map((n) => <Avatar key={n} name={n} size={28} />)}
             </span>
@@ -93,7 +91,7 @@ export function SiteHeader() {
 
           <div className={styles.foot} style={{ "--i": LINKS.length + 1 } as React.CSSProperties}>
             <Button href={LOGIN_URL} variant="ghost" size="lg" block>Log in</Button>
-            <p>No cookies. No tracking. Hosted in Nuremberg, Germany.</p>
+            <p>No cookies. No tracking. Hosted in {HOSTING_PLACE}.</p>
           </div>
         </div>
       </div>

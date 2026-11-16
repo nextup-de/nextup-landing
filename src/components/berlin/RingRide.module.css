@@ -1,0 +1,176 @@
+/* The ring. Unarmed (server markup, reduced motion, a short screen) it is an ordinary section showing the end of
+   the story: the ring drawn, every caption in a list, the end frame under it. Armed (data-armed, set with
+   data-pin by the script) it is --h screens of track with one sticky stage; the captions share one cell and the
+   end frame lies over the stage. --S is the ring's side. Only transform, opacity and stroke-dashoffset move. */
+.ring { --S: min(600px, calc(var(--nh-screen-h) - var(--nh-head) - 88px), 50vw); }
+.ring[data-pin] { --h: 3; }
+@media (max-width: 759px) { .ring[data-pin] { --h: 2.4; } }
+
+.stage { position: relative; }
+.stage { display: flex; flex-direction: column; }
+.ring[data-armed] .stage {
+  position: sticky; top: 0; height: var(--nh-screen-h); overflow: hidden; padding: calc(var(--nh-head) + 8px) 0 16px;
+}
+
+/* Wide: the words on 5 columns, the ring on 7, centred in the screen. */
+.scene {
+  flex: 1 1 auto; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--s-5);
+  grid-template-rows: 1fr auto auto auto 1fr; align-items: start;
+}
+.head { grid-column: 1 / span 5; grid-row: 2; display: grid; gap: var(--s-4); }
+.caps { grid-column: 1 / span 5; grid-row: 3; }
+.foot { grid-column: 1 / span 5; grid-row: 4; }
+.ringBox { grid-column: 6 / span 7; grid-row: 1 / -1; justify-self: center; align-self: center; }
+.boardLine { grid-column: 6 / span 7; grid-row: 1 / -1; justify-self: center; align-self: center; transform: translateY(calc(var(--S) * 0.13)); }
+
+.kicker {
+  display: inline-flex; align-items: center; gap: 10px; font-size: 12px; line-height: 16px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--nh-danger);
+}
+.kicker i { width: 8px; height: 8px; border-radius: 999px; background: var(--nh-danger); box-shadow: 0 0 0 4px rgb(215 0 21 / 0.12); }
+.head h2 {
+  font-size: clamp(34px, 2.4vw + 15px, 60px); line-height: 1.02; font-weight: 500; letter-spacing: -0.04em; color: var(--ink);
+  text-wrap: balance; max-width: 13ch;
+}
+
+/* The captions: Day N. on a small dark plate, then the line. */
+.caps { list-style: none; margin: var(--s-6) 0 0; padding: 0; display: grid; gap: var(--s-3); }
+.caps li { font-size: 19px; line-height: 29px; color: var(--ink); max-width: 34ch; text-wrap: pretty; }
+.caps b {
+  display: inline-block; margin-right: 6px; padding: 2px 8px; border-radius: 5px; transform: translateY(-2px);
+  background: var(--berlin-board); color: var(--berlin-gold); font-size: 13px; line-height: 20px; font-weight: 600; letter-spacing: 0.02em;
+}
+.foot { margin-top: var(--s-5); font-size: 12px; line-height: 16px; color: var(--muted); }
+
+.ring[data-armed] .caps { gap: 0; }
+.ring[data-armed] .caps li {
+  grid-area: 1 / 1; opacity: 0; transform: translateY(8px);
+  transition: opacity 220ms var(--m-ease), transform 220ms var(--m-ease);
+}
+.ring[data-armed] .caps li[data-on] { opacity: 1; transform: none; }
+
+/* The ring itself. */
+.ringBox { position: relative; width: var(--S); aspect-ratio: 1; }
+.art { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.ticks { fill: none; stroke: var(--muted); stroke-width: 2; stroke-linecap: round; opacity: 0.45; }
+.base { fill: none; stroke: var(--nh-line-2); stroke-width: 11; stroke-linejoin: round; }
+.trail { fill: none; stroke: var(--nh-danger); stroke-opacity: 0.55; stroke-width: 11; stroke-linejoin: round; }
+.pulse { fill: none; stroke: var(--nh-danger); stroke-opacity: 0.22; stroke-width: 30; stroke-linejoin: round; opacity: 0; }
+.spurBase { fill: none; stroke: var(--nh-brand-line); stroke-width: 11; stroke-linecap: round; stroke-linejoin: round; }
+.spurTrail { fill: none; stroke: var(--nh-brand); stroke-width: 11; stroke-linecap: round; stroke-linejoin: round; }
+.bar { stroke: var(--nh-brand); stroke-width: 11; stroke-linecap: round; }
+.stopDot { fill: #fff; stroke: var(--ink); stroke-width: 4; }
+.stopGlow { fill: var(--berlin-gold); opacity: 0; transition: opacity 260ms var(--m-ease); }
+.stop[data-on] .stopGlow { opacity: 0.5; }
+.stop[data-on] .stopDot { fill: var(--berlin-gold); }
+.disc { will-change: transform; }
+.halo { fill: var(--berlin-gold); opacity: 0.32; }
+.dot { fill: var(--berlin-gold); stroke: var(--berlin-gold-deep); stroke-width: 2.5; }
+
+.ring[data-armed] .trail, .ring[data-armed] .spurTrail { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+.ring[data-closed] .pulse { animation: pulse 600ms var(--m-ease) both; }
+@keyframes pulse { 0% { opacity: 0; } 25% { opacity: 0.4; } 50% { opacity: 1; } 75% { opacity: 0.4; } 100% { opacity: 0; } }
+
+/* The line's bullet: no number, only a question. */
+.bullet { position: absolute; left: 0; top: 2%; display: inline-flex; align-items: center; gap: 10px; }
+.bullet b {
+  width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center;
+  background: var(--ink); color: #fff; font-size: 17px; line-height: 1; font-weight: 700;
+}
+.bullet small { font-size: 11px; line-height: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+/* Stop names, outside the loop on the side the line faces. */
+.label {
+  position: absolute; display: grid; gap: 1px; white-space: nowrap; pointer-events: none;
+  transition: opacity 260ms var(--m-ease);
+}
+.label b { font-size: 15px; line-height: 19px; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+.label small { font-size: 11px; line-height: 15px; letter-spacing: 0.02em; color: var(--muted); }
+.label[data-side="e"] { transform: translate(0, -50%); }
+.label[data-side="w"] { transform: translate(-100%, -50%); text-align: right; }
+.label[data-side="n"] { transform: translate(-50%, -100%); text-align: center; }
+.label[data-side="s"] { transform: translate(-50%, 0); text-align: center; }
+.label.sender { transform: translate(calc(-100% - 18px), -30px); text-align: right; }
+.work b { color: var(--nh-brand); }
+.work small { color: var(--nh-brand); }
+.ring[data-armed] .label { opacity: 0.5; }
+.ring[data-armed] .label[data-past] { opacity: 0.8; }
+.ring[data-armed] .label[data-on] { opacity: 1; }
+.label[data-on] small { color: var(--nh-danger); }
+.label.work[data-on] small { color: var(--nh-brand); }
+
+/* Inside the loop: the day counter. */
+.counter {
+  position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 10px;
+  transform: translateY(calc(var(--S) * -0.05));
+}
+.counter small { font-size: 11px; line-height: 14px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.dayFlaps { --fs: clamp(30px, calc(var(--S) * 0.105), 64px); filter: drop-shadow(0 14px 22px rgb(16 36 42 / 0.25)); }
+
+/* The board line under the counter: one row of a departure board on its own plate. */
+.boardLine {
+  padding: 7px 8px; border-radius: 9px; background: var(--berlin-board);
+  box-shadow: 0 12px 28px -14px rgb(16 36 42 / 0.55), inset 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+.boardFlaps { --fs: clamp(9px, calc(var(--S) * 0.0235), 15px); }
+
+/* The end frame: the sum, at display size, on the page's text column (left, like every section's words). */
+.end { width: min(100% - 2 * var(--gut), var(--wrap)); margin: var(--s-8) auto 0; }
+.endKicker {
+  display: inline-flex; align-items: center; gap: 10px; margin-bottom: var(--s-5);
+  font-size: 12px; line-height: 16px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--nh-brand);
+}
+.endKicker i { width: 28px; height: 4px; border-radius: 2px; background: var(--nh-brand); }
+.endBig { font-size: var(--t-display, clamp(44px, 6.4vw + 8px, 112px)); line-height: 0.98; font-weight: 500; letter-spacing: -0.045em; color: var(--ink); text-wrap: balance; }
+.endBig span { display: block; }
+.endWork { color: var(--nh-brand); }
+.endRest { margin-top: var(--s-5); font-size: 20px; line-height: 30px; color: var(--muted); max-width: 36ch; text-wrap: balance; }
+/* Armed: a solid layer of the section's ground over the stage, shown only once the stage has gone. */
+.ring[data-armed] .end {
+  position: absolute; inset: 0; margin: 0; width: auto; padding: var(--nh-head) max(var(--gut), calc((100% - var(--wrap)) / 2)) 0;
+  display: grid; align-content: center; justify-items: start; text-align: left; pointer-events: none;
+  background: var(--g-alt); opacity: 0; visibility: hidden; will-change: transform, opacity;
+}
+.scene { will-change: opacity, transform; transform-origin: 50% 40%; }
+
+/* Narrower: one column - the words, the ring, the board line, the captions. */
+@media (max-width: 1023px) {
+  .ring { --S: min(560px, 52vh, 86vw); }
+  .scene { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; row-gap: var(--s-4); align-content: start; }
+  .head, .caps, .foot, .ringBox, .boardLine { grid-column: 1; grid-row: auto; }
+  .ringBox { order: 1; }
+  .boardLine { order: 2; }
+  .caps { order: 3; }
+  .foot { order: 4; }
+  .ringBox { justify-self: center; margin-top: var(--s-4); }
+  .boardLine { transform: none; justify-self: center; margin-top: calc(var(--s-2) * -1); }
+  .boardFlaps { --fs: min(15px, calc((100vw - 2 * var(--gut) - 16px) / 26 / 0.78)); }
+  .caps { margin-top: var(--s-2); }
+  .caps li { max-width: none; }
+  .head h2 { max-width: 18ch; }
+  .ring[data-armed] .scene { align-content: center; }
+}
+@media (max-width: 759px) {
+  .ring { --S: min(76vw, 42vh); }
+  .ring[data-armed] .stage { padding-top: calc(var(--nh-head) + 4px); }
+  .scene { row-gap: var(--s-3); }
+  .head { gap: var(--s-2); }
+  .head h2 { font-size: 27px; line-height: 31px; letter-spacing: -0.03em; }
+  .kicker { font-size: 11px; }
+  .caps li { font-size: 17px; line-height: 25px; }
+  .caps b { font-size: 12px; line-height: 18px; }
+  .foot { margin-top: 0; font-size: 11px; }
+  .label b { font-size: 12px; line-height: 15px; }
+  .label small { font-size: 10px; line-height: 13px; }
+  .label small { display: none; }
+  .label.work small { display: block; }
+  .label.work { white-space: normal; width: 76px; }
+  .bullet { top: 0; }
+  .bullet b { width: 24px; height: 24px; font-size: 14px; border-radius: 6px; }
+  .bullet small { display: none; }
+  .endRest { font-size: 17px; line-height: 26px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .caps li, .label, .stopGlow { transition: none; }
+  .pulse { animation: none; }
+}

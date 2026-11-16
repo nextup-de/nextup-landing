@@ -1,0 +1,86 @@
+/* A skyline strip between two sections. It wears the ground of the section it leads into and reaches into that
+   section's top padding (the lower 40% of the strip), so the city stands just above the next heading. The SVG
+   keeps its height and is cut at the sides on narrow screens (slice): the middle of every scene holds its main
+   landmark. Lines are pathLength 1, so drawing in is one dash moving from 1 to 0. */
+.strip {
+  --bg: var(--g-main);
+  --sh: clamp(132px, 15.3vw, 220px);
+  position: relative; z-index: 1; height: var(--sh); margin-bottom: calc(var(--sh) * -0.4);
+  background: var(--bg); pointer-events: none; overflow: hidden;
+}
+.strip[data-ground="alt"] { --bg: var(--g-alt); }
+/* After a section, the strip's own sky starts inside that section's bottom padding, so the two do not stack into
+   an empty band. */
+:global(main > .section) + .strip:not(.close) { margin-top: calc(var(--padb) * -0.5); }
+/* In the close: full width, at the foot of the close and above the links. */
+.close { margin: 0; background: transparent; }
+.strip svg { display: block; width: 100%; height: 100%; overflow: hidden; }
+
+/* Right after the 3D tower, while it is pinned: the strip rises over the scene's last screen. Its sky (--fade tall)
+   feathers from clear to the ground the scene lifts into, so the city arrives while the scene fades and the page
+   never shows an empty frame of fog or a seam. The tower is read-only, so the strip does this from its side; the
+   selector follows the tower's own rule for the section after it (TowerExperience.module.css). */
+:global(#story[data-pin]:not([data-still="true"]):not([data-shows="none"])) + .rise {
+  --fade: 40vh;
+  height: calc(var(--sh) + var(--fade)); padding-top: var(--fade);
+  margin-top: calc(-0.35 * var(--nh-screen-h) - var(--fade));
+  background: linear-gradient(to bottom, rgb(240 245 249 / 0) 0, var(--bg) var(--fade));
+}
+
+/* Wide screens: the fixed line rail (LineRail, x 28-60) stands on the left; the city and its trains fade out
+   before they reach it, so the two line systems never tangle. */
+@media (min-width: 1024px) {
+  .strip:not(.close) svg {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0 72px, #000 120px);
+    mask-image: linear-gradient(90deg, transparent 0 72px, #000 120px);
+  }
+}
+
+.sil { fill: var(--bg); stroke: none; }
+.ln {
+  fill: none; stroke: var(--berlin-ink); stroke-width: calc(1.5 / var(--s, 1)); stroke-linecap: round; stroke-linejoin: round;
+}
+.far .ln { stroke: var(--berlin-far); }
+.gold { fill: var(--berlin-gold); stroke: var(--berlin-gold-deep); stroke-width: calc(0.8 / var(--s, 1)); stroke-linejoin: round; }
+.water { fill: none; stroke: var(--berlin-water); stroke-width: 1.5; stroke-linecap: round; }
+
+/* The train: the ground's colour with ink lines, lit windows, a gold lamp at the front. */
+.train { will-change: transform; }
+.car { fill: var(--bg); stroke: var(--nh-brand-deep); stroke-width: 1.4; stroke-linejoin: round; }
+.win { fill: var(--berlin-gold); stroke: none; }
+.lamp { fill: #fff6d8; }
+.glow { fill: var(--berlin-gold); opacity: 0.35; }
+
+/* Drawing in: armed by script (so without script the city is simply there), drawn once in view. */
+.strip[data-armed] .ln { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+.strip[data-armed] .gold, .strip[data-armed] .water { opacity: 0; }
+.strip[data-armed][data-drawn] .ln {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1600ms var(--m-ease) calc(var(--i, 0) * 110ms + var(--k, 0) * 70ms);
+}
+.strip[data-armed][data-drawn] .gold, .strip[data-armed][data-drawn] .water {
+  opacity: 1; transition: opacity 600ms var(--m-ease) 1100ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strip .ln { stroke-dasharray: none; stroke-dashoffset: 0; transition: none; }
+  .strip .gold, .strip .water { opacity: 1; transition: none; }
+}
+
+/* The caption above the deck, on a flap plate like the ring's board line: over the bridge's western arches
+   (clear of its towers), standing --above viewBox units over the strip's foot (the SVG is scaled by its height
+   or, on a very wide screen, by its width). Shown without script; while armed it starts hidden and the train's
+   scroll job fades it in. */
+.caption {
+  position: absolute; z-index: 2; left: 30%; transform: translateX(-50%); margin: 0;
+  bottom: calc(var(--above, 120) * max(var(--sh) / 220, 100vw / 1440));
+  padding: 6px 7px; border-radius: 9px; background: var(--berlin-board); white-space: nowrap; line-height: 0;
+  box-shadow: 0 14px 30px -14px rgb(16 36 42 / 0.6), inset 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+.capFlaps { --fs: 19px; }
+@media (max-width: 759px) {
+  .caption { left: 50%; padding: 5px 6px; }
+  .capFlaps { --fs: 15px; }
+}
+.strip[data-armed] .caption { opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .strip .caption { opacity: 1 !important; } }

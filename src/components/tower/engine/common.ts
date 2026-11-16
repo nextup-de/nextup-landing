@@ -50,7 +50,7 @@ export function createShared(): Shared {
     // The afterglow sits west-north-west, behind the Fernsehturm: a unit vector on the ground plane (x, z).
     uGlowDir: { value: new Vector2(-0.85, -0.53).normalize() },
     // Haze: density per metre, how fast it thins with height, and the most it may ever cover.
-    uFog: { value: new Vector3(0.00042, 0.006, 0.9) },
+    uFog: { value: new Vector3(0.00032, 0.006, 0.86) },
     uSkyLight: c(PALETTE.skyLight), uGroundLight: c(PALETTE.groundLight), uGlowLight: c(PALETTE.glowLight),
     // The travelling light: the idea (or the answer) lights what it passes.
     uSparkPos: { value: new Vector3(0, -999, 0) }, uSparkColor: c(PALETTE.gold), uSparkPower: { value: 0 },

@@ -5,11 +5,29 @@
 
 .art { height: 100%; min-height: 0; --cut: 28px; }
 
+/* The frame is a night platform (the Berlin line's board): the line runs along its top past one station, the
+   window stands under it, the idea's gold glows behind. Replaces the lit blue ground of nh-lit. */
+.art:global(.nh-lit) {
+  background:
+    radial-gradient(55% 45% at 78% 18%, rgb(255 207 90 / 0.16), transparent 70%),
+    radial-gradient(70% 60% at 10% 0%, rgb(143 211 218 / 0.2), transparent 70%),
+    radial-gradient(circle, rgb(143 211 218 / 0.12) 1px, transparent 1.6px) 0 0 / 20px 20px,
+    var(--berlin-board);
+  box-shadow: 0 40px 80px -48px rgb(16 36 42 / 0.6);
+}
+.art::before, .art::after { content: ""; position: absolute; z-index: 1; pointer-events: none; }
+/* The line, cut by the frame's edges, and its station above the window's corner. */
+.art::before { left: 0; right: 0; top: 30px; height: 4px; background: linear-gradient(90deg, rgb(143 211 218 / 0.35), #8fd3da 30%, #8fd3da 70%, rgb(143 211 218 / 0.35)); }
+.art::after {
+  left: 56px; top: 24px; width: 16px; height: 16px; border-radius: 999px; background: var(--berlin-board);
+  box-shadow: inset 0 0 0 3.5px #8fd3da, 0 0 0 4px var(--berlin-board), 0 0 0 5.5px rgb(255 207 90 / 0.7);
+}
+
 .window {
   position: absolute; left: 64px; top: 64px; bottom: calc(-1 * var(--cut)); width: calc(100% - 64px + var(--cut));
   display: flex; flex-direction: column; overflow: hidden; border-radius: var(--r-md);
   background: var(--nh-ground); font-family: var(--nh-ui); color: var(--nh-ink);
-  box-shadow: 0 0 0 1px rgb(20 50 90 / 0.06), 0 32px 64px -24px rgb(20 50 90 / 0.35);
+  box-shadow: 0 0 0 1px rgb(143 211 218 / 0.25), 0 32px 64px -24px rgb(0 0 0 / 0.55);
 }
 .bar { flex: none; display: flex; align-items: center; gap: 14px; height: 44px; padding: 0 16px; background: var(--nh-brand); }
 .bar img { width: 52px; height: auto; }
@@ -62,6 +80,9 @@
 /* The list that runs on under the answer, past the frame's foot. */
 .waiting { list-style: none; margin: 4px 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
 .waiting li { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px; border-radius: 10px; background: rgb(255 255 255 / 0.7); }
+/* Where the owner's card lies on the frame (640px and up), the list stops after two rows: the card lands on the
+   empty window below them, never on a row's words. */
+@media (min-width: 640px) { .waiting li:nth-child(n + 3) { display: none; } }
 .waiting li > span:nth-child(2) { flex: 1; min-width: 0; font-size: 13px; line-height: 18px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* The owner's card, laid on the frame's lower left. */
@@ -82,16 +103,21 @@
 .pause { right: 16px; bottom: 16px; }
 
 @media (max-width: 1279px) {
-  .window { left: 48px; top: 48px; width: calc(100% - 48px + var(--cut)); }
+  .window { left: 48px; top: 64px; width: calc(100% - 48px + var(--cut)); }
   .note { left: 24px; bottom: 24px; width: 280px; }
+  .art::after { left: 40px; }
 }
 @media (max-width: 1023px) {
   .art { height: auto; flex: 1 1 0; min-height: 260px; }
-  .window { left: 32px; top: 32px; width: calc(100% - 32px + var(--cut)); }
+  .window { left: 32px; top: 56px; width: calc(100% - 32px + var(--cut)); }
+  .art::before { top: 24px; }
+  .art::after { left: 24px; top: 18px; }
 }
 /* A phone: the window alone, 16px in; the owner's card waits for a wider screen. */
 @media (max-width: 639px) {
-  .window { left: 16px; top: 16px; width: calc(100% - 16px + var(--cut)); }
+  .window { left: 16px; top: 40px; width: calc(100% - 16px + var(--cut)); }
+  .art::before { top: 18px; height: 3px; }
+  .art::after { left: 10px; top: 13px; width: 13px; height: 13px; box-shadow: inset 0 0 0 3px #8fd3da, 0 0 0 3px var(--berlin-board), 0 0 0 4.5px rgb(255 207 90 / 0.7); }
   .bar { height: 36px; gap: 10px; padding: 0 12px; }
   .bar img { width: 44px; }
   .tabs span:not([data-on="true"]) { display: none; }

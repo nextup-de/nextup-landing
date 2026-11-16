@@ -1,0 +1,53 @@
+/* The pilot's phases on /product: three stops on three equal columns, the line from the first badge to the last,
+   a gold train carried by a runner across it. --t (0..1) is the train's place, written by the scroll job; without
+   it (reduced motion, no script) the train stands at Run and everything is lit. Only transform and opacity move. */
+.phases { --t: 1; --b: 30px; position: relative; width: 100%; max-width: 560px; }
+
+.line, .fill { position: absolute; top: calc(var(--b) / 2 - 2px); height: 4px; border-radius: 2px; }
+/* From the first badge's middle to the last one's: each column is a third, its badge at its left. */
+.line { left: calc(var(--b) / 2); right: calc(100% / 3 - var(--b) / 2); background: var(--nh-brand-line); }
+.fill { left: 0; right: 0; top: 0; background: var(--nh-brand); transform-origin: 0 50%; transform: scaleX(var(--t)); }
+
+/* The train runs under the badges and is narrower than them: at a stop it is docked out of sight, between two
+   stops it rides the line. The runner is exactly as long as the line; the train sits on its start, and the runner moves its own length
+   times --t (a translate in % is of the runner itself), so the train reaches Run at --t 1. */
+.run {
+  position: absolute; z-index: 0; left: calc(var(--b) / 2); right: calc(100% / 3 - var(--b) / 2); top: calc(var(--b) / 2); height: 0;
+  pointer-events: none; transform: translateX(calc(var(--t) * 100%));
+}
+.train {
+  position: absolute; left: -13px; top: -6px; width: 26px; height: 12px; border-radius: 6px;
+  background:
+    repeating-linear-gradient(to right, var(--berlin-board) 0 3px, transparent 3px 6px) 5px 4px / 15px 4px no-repeat,
+    var(--berlin-gold);
+  box-shadow: 0 0 0 3px var(--g-main), 0 4px 14px rgb(230 169 25 / 0.5);
+}
+
+.stops { position: relative; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.stops li { position: relative; display: grid; gap: 4px; align-content: start; padding: calc(var(--b) + 16px) var(--s-4) 0 0; }
+.badge {
+  position: absolute; z-index: 1; left: 0; top: 0; width: var(--b); height: var(--b); border-radius: 8px; display: grid; place-items: center;
+  background: var(--nh-brand); color: #fff; font-size: 14px; line-height: 1; font-weight: 700;
+  box-shadow: 0 0 0 4px var(--g-main); transition: background 300ms var(--m-ease), color 300ms var(--m-ease), box-shadow 300ms var(--m-ease);
+}
+.kicker { font-family: var(--nh-mono); font-size: 11px; line-height: 15px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--nh-brand); }
+.title { font-size: 17px; line-height: 23px; font-weight: 500; letter-spacing: -0.015em; color: var(--ink); text-wrap: balance; }
+
+/* Armed: a phase the train has not reached yet waits with an outlined badge (the words stay full contrast). */
+.phases[data-armed] li:not([data-lit]) .badge { background: var(--g-main); color: var(--nh-brand); box-shadow: inset 0 0 0 2px var(--nh-brand-line), 0 0 0 4px var(--g-main); }
+.phases li[data-lit]:last-of-type .badge, .phases:not([data-armed]) li:last-of-type .badge { box-shadow: 0 0 0 4px var(--g-main), 0 0 0 7px rgb(255 207 90 / 0.6); }
+
+/* Upright on a phone: the line down the left, the train riding down it. */
+@media (max-width: 759px) {
+  .phases { --row: 64px; max-width: none; }
+  .stops { grid-template-columns: minmax(0, 1fr); }
+  .stops li { min-height: var(--row); padding: 2px 0 0 calc(var(--b) + 16px); }
+  .line { left: calc(var(--b) / 2 - 2px); right: auto; top: calc(var(--b) / 2); bottom: calc(var(--row) - var(--b) / 2); width: 4px; height: auto; }
+  .fill { bottom: 0; width: auto; height: auto; transform-origin: 50% 0; transform: scaleY(var(--t)); }
+  .run { left: calc(var(--b) / 2); right: auto; top: calc(var(--b) / 2); bottom: calc(var(--row) - var(--b) / 2); width: 0; height: auto; transform: translateY(calc(var(--t) * 100%)); }
+  .train { left: -6px; top: -13px; width: 12px; height: 26px; border-radius: 6px;
+    background: repeating-linear-gradient(to bottom, var(--berlin-board) 0 3px, transparent 3px 6px) 4px 5px / 4px 15px no-repeat, var(--berlin-gold); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .badge { transition: none; }
+}

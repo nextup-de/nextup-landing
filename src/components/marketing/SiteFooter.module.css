@@ -1,11 +1,30 @@
-/* The footer on the page's wrap. On the home page (footer.closing, globals.css) it is one screen: the close at
-   the top, the links at its foot. Elsewhere the links alone. */
+/* The footer on the page's wrap. On '/' and '/product' (footer.closing, globals.css) it opens with the close; on
+   '/' that is one screen with the links at its foot. Elsewhere the links alone. */
 .footer { padding: var(--s-8) 0 var(--s-6); background: var(--g-main); color: var(--ink); font-size: 15px; line-height: 22px; border-top: 1px solid var(--hair); }
 .footer:global(.closing) { border-top: 0; }
 .footer:global(.closing) > :global(.wrap) { gap: var(--s-8); }
 
-.close { display: grid; }
-.close :global(.section-head) { margin-bottom: var(--s-7); }
+.close { display: grid; gap: var(--s-6); }
+.close :global(.section-head) { margin-bottom: 0; }
+/* The close's small line above the heading: a terminus bar in the line's teal, then the word. */
+.close .kicker {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--nh-mono); font-size: 12px; line-height: 16px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--nh-brand);
+}
+.close .kicker i { width: 18px; height: 7px; border-radius: 4px; background: var(--nh-brand); box-shadow: 0 0 0 2px var(--g-main), 0 0 0 3.5px var(--nh-brand); }
+.calm .close .kicker i { width: 11px; height: 11px; border-radius: 999px; box-shadow: none; background: var(--berlin-gold); }
+/* /product's close is calm: no board, no skyline, a shorter screen. */
+.footer.calm { --h: 0.78; --hm: 0.9; }
+.solo > :first-child { grid-column: 1 / span 8; }
+/* The close's top: the heading on 6 columns, the departure board on 6. */
+.closeTop { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--s-5); row-gap: var(--s-6); align-items: end; }
+.closeTop > :first-child { grid-column: 1 / span 6; }
+.board { grid-column: 7 / span 6; }
+/* The links under the terminus skyline: they keep their height; the close above takes the rest of the screen. */
+.footer:global(.closing) > .linksWrap { flex: none; padding-top: var(--s-6); }
+.footer:global(.closing) { padding-bottom: var(--s-6); }
+/* Without the skyline between them, the calm close and the links part at a hairline. */
+.footer.calm > .linksWrap { margin-top: var(--s-8); padding-top: var(--s-7); border-top: 1px solid var(--hair); }
 
 .links { margin-top: auto; display: grid; gap: var(--s-7); }
 .cols { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--s-5); row-gap: var(--s-6); }
@@ -14,9 +33,23 @@
 .brand a:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 4px; }
 .brand img { height: 28px; width: auto; }
 .brand p { max-width: 30ch; color: var(--muted); }
+/* Each column is a short line with its stops: a bullet with the title, a thin teal line down the left and a tick
+   for every link; the tick fills when the link is pointed at. */
 .col { grid-column: span 2; }
-.col h4 { margin-bottom: var(--s-3); font-size: 13px; line-height: 18px; font-weight: 500; letter-spacing: 0; color: var(--muted); }
-.col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-2); }
+.col h4 {
+  display: flex; align-items: center; gap: 8px; margin-bottom: var(--s-3);
+  font-family: var(--nh-mono); font-size: 11px; line-height: 16px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+}
+.col h4 i { flex: none; width: 12px; height: 12px; border-radius: 4px; background: var(--nh-brand); }
+.col ul { position: relative; list-style: none; margin: 0; padding: 2px 0 2px 20px; display: grid; gap: var(--s-2); }
+.col ul::before { content: ""; position: absolute; left: 5px; top: 0; bottom: 0; width: 2px; border-radius: 1px; background: var(--nh-brand-line); }
+.col li { position: relative; }
+.col li::before {
+  content: ""; position: absolute; left: -19px; top: 50%; width: 8px; height: 8px; margin-top: -4px; border-radius: 999px;
+  background: var(--g-main); box-shadow: inset 0 0 0 2px var(--nh-brand);
+  transition: background var(--m-out) var(--m-ease), transform var(--m-out) var(--m-ease);
+}
+.col li:hover::before, .col li:focus-within::before { background: var(--nh-brand); transform: scale(1.25); }
 .col a { color: var(--ink); }
 .col a:hover { color: var(--nh-brand); }
 .col a:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 2px; border-radius: 2px; }
@@ -27,11 +60,14 @@
 }
 
 @media (max-width: 1023px) {
+  .closeTop > :first-child, .board, .solo > :first-child { grid-column: 1 / -1; }
   .brand { grid-column: 1 / -1; }
   .col { grid-column: span 3; }
 }
 @media (max-width: 639px) {
   .footer:global(.closing) > :global(.wrap) { gap: var(--s-7); }
   .col { grid-column: span 6; }
+  .footer.calm { --hm: 0.85; }
   .legal { flex-direction: column; }
 }
+@media (prefers-reduced-motion: reduce) { .col li::before { transition: none; } }

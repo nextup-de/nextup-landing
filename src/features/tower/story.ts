@@ -198,11 +198,13 @@ function stations(input: Input): Station[] {
   const far = wide ? 1 : 1.42; // a phone stands further back and looks through a taller frame
   const view = (target: Vec3, dir: Vec3, dist: number): Vec3 => [target[0] + dir[0] * dist * far, target[1] + dir[1] * dist * far, target[2] + dir[2] * dist * far];
   const sx = wide ? 0.17 : 0, sy = wide ? 0 : 0.15;
+  // The opening shot looks over Friedrichshain from above its roofs: the tower, the trains on the Stadtbahn
+  // viaduct, the Fernsehturm down the line. A phone's narrow frame turns until the Fernsehturm stands beside it.
   const hero: Vec3 = [-4, 70, 0];
   const whole: Vec3 = [EAST, floorY(21), 0];
   return [
-    { at: 0, target: hero, from: view(hero, [0.648, -0.085, 0.757], 352), fov: wide ? 30 : 34, shift: [wide ? 0.17 : 0, wide ? -0.03 : 0.11] },
-    { at: BEAT.approach[0], target: hero, from: view(hero, [0.67, -0.08, 0.737], 330), fov: wide ? 30 : 34, shift: [wide ? 0.17 : 0, wide ? -0.03 : 0.11], ease: EASE.linear },
+    { at: 0, target: hero, from: view(hero, wide ? [0.64, 0.13, 0.757] : [0.79, 0.1, 0.616], 360), fov: wide ? 30 : 34, shift: [wide ? 0.17 : 0, wide ? -0.03 : 0.11] },
+    { at: BEAT.approach[0], target: hero, from: view(hero, wide ? [0.665, 0.1, 0.737] : [0.8, 0.08, 0.6], 336), fov: wide ? 30 : 34, shift: [wide ? 0.17 : 0, wide ? -0.03 : 0.11], ease: EASE.linear },
     { at: BEAT.approach[1], target: [EAST, ySend, 5.5], from: view([EAST, ySend, 5.5], [0.86, 0.09, 0.5], 62), fov: 28, shift: [sx, sy] },
     { at: BEAT.emerge[1] + 0.012, target: [EAST, ySend + 0.4, 5.5], from: view([EAST, ySend + 0.4, 5.5], [0.875, 0.08, 0.477], 57), fov: 28, shift: [sx, sy], ease: EASE.linear },
     { at: BEAT.widen[1], target: whole, from: view(whole, [0.9, 0.05, 0.433], 212), fov: 30, shift: [sx, sy * 0.6] },
