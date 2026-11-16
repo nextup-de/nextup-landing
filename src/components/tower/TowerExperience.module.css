@@ -1,0 +1,199 @@
+/* The tower scene: a scroll track --h screens tall (the page system's [data-pin], globals.css) with one sticky
+   screen in it. On that screen, back to front: the poster, the canvas, a scrim for the words, labels pinned to
+   the building, the words, the chapter rail. The scene is blue hour, so everything on it is light on dark; as
+   the story ends the scene lifts into the page's light ground (--day goes 0 to 1) and the words turn to ink.
+   This is the one dark surface of the site, and it is a picture, not a panel. */
+.tower {
+  --day: 0; --p: 0;
+  --sky: #16284f;
+  --on: color-mix(in srgb, #fff calc((1 - var(--day)) * 100%), var(--ink));
+  --on-soft: color-mix(in srgb, rgb(255 255 255 / 0.78) calc((1 - var(--day)) * 100%), var(--muted));
+  margin-top: calc(-1 * var(--nh-head)); /* the screen lies under the fixed header, as the hero always did */
+  background: var(--sky); color: #fff;
+}
+:global(main) > .tower { background: var(--sky); }
+
+.stage { position: sticky; top: 0; height: var(--nh-screen-h); min-height: 480px; overflow: hidden; isolation: isolate; }
+
+/* The poster: what shows before the scene is ready, without WebGL, and behind the canvas while it fades in.
+   For now it is the scene's sky as a plain gradient; a rendered still of the first frame is to replace it. */
+.poster, .canvas, .scrim { position: absolute; inset: 0; width: 100%; height: 100%; }
+.poster { background: linear-gradient(to bottom, #12224a 0%, #27477f 34%, #6f93bf 58%, #e9a988 70%, #2a3046 71%, #171c2c 100%); }
+.canvas { display: block; opacity: 0; transition: opacity 900ms var(--m-ease); }
+.tower[data-shows="live"] .canvas { opacity: 1; }
+
+/* The scrim keeps words readable over streets and lit windows: dark toward the lower left, clear over the tower. */
+.scrim {
+  pointer-events: none; opacity: calc(1 - var(--day));
+  background:
+    linear-gradient(to top, rgb(6 11 28 / 0.82) 0%, rgb(6 11 28 / 0.5) 22%, rgb(6 11 28 / 0) 50%),
+    linear-gradient(to right, rgb(6 11 28 / 0.46) 0%, rgb(6 11 28 / 0) 44%),
+    linear-gradient(to bottom, rgb(6 11 28 / 0.34) 0%, rgb(6 11 28 / 0) 18%);
+}
+
+/* ---------------------------------------------------------------------------------------------------------- */
+/* The words. One caption per chapter, all in the page; the current one shows. They share one cell, so a
+   caption appears where the last one stood: low on the left, like a film's titles. */
+.words {
+  position: absolute; inset: 0; margin-inline: auto; pointer-events: none;
+  display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto auto; row-gap: var(--s-5);
+  padding-block: calc(var(--nh-head) + var(--s-6)) clamp(40px, 8vh, 88px);
+}
+.caption {
+  grid-area: 2 / 1; align-self: end; max-width: 31rem; display: grid; gap: var(--s-4);
+  opacity: 0; transform: translateY(14px); visibility: hidden;
+  transition: opacity 380ms var(--m-ease), transform 620ms var(--m-ease), visibility 0s 380ms;
+}
+.caption[data-on="true"] { opacity: 1; transform: none; visibility: visible; transition-delay: 120ms, 120ms, 0s; }
+.caption h1, .caption h2 { color: var(--on); font-weight: 500; text-wrap: balance; text-shadow: 0 1px 24px rgb(6 11 28 / calc(0.5 * (1 - var(--day)))); }
+.tower .caption h1 { font-size: clamp(42px, 2.6vw + 30px, 72px); line-height: 1.02; letter-spacing: -0.04em; color: var(--on); }
+.caption h2 { font-size: clamp(30px, 1.5vw + 22px, 46px); line-height: 1.06; letter-spacing: -0.035em; }
+.caption p { font-size: 18px; line-height: 28px; color: var(--on-soft); max-width: 44ch; text-wrap: pretty; }
+.caption em { font-style: normal; color: var(--on); }
+.kicker { font-size: 15px !important; line-height: 20px !important; font-weight: 500; color: var(--on-soft); }
+.lead { font-size: 20px !important; line-height: 30px !important; max-width: 36ch !important; }
+.quote { font-size: 22px !important; line-height: 31px !important; color: var(--on) !important; font-weight: 500; letter-spacing: -0.01em; max-width: 30ch !important; }
+.then { opacity: 0; transition: opacity 420ms var(--m-ease); }
+.then[data-on="true"] { opacity: 1; }
+
+/* The line under the headline that says there is more: a short stroke that breathes, and what scrolling does. */
+.hint { display: flex; align-items: center; gap: 12px; margin-top: var(--s-2); font-size: 14px !important; line-height: 20px !important; color: rgb(255 255 255 / 0.66) !important; }
+.hint i { width: 1px; height: 28px; background: linear-gradient(to bottom, rgb(255 255 255 / 0), #fff); transform-origin: top; animation: draw 2.6s var(--m-ease) infinite; }
+@keyframes draw { 0% { transform: scaleY(0); opacity: 0; } 30% { opacity: 1; } 70% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
+
+/* The count of days: the one big number of the scene, in the product's mono. */
+.count { display: flex; align-items: flex-end; gap: var(--s-4); margin-top: var(--s-2); }
+.count b { font-family: var(--nh-mono); font-size: 72px; line-height: 0.82; font-weight: 500; letter-spacing: -0.04em; color: var(--on); font-variant-numeric: tabular-nums; min-width: 2ch; }
+.count span { display: grid; gap: 2px; font-size: 16px; line-height: 22px; color: var(--on); }
+.count small { font-size: 14px; line-height: 20px; color: var(--on-soft); opacity: 0; transition: opacity 420ms var(--m-ease); }
+.count small[data-on="true"] { opacity: 1; }
+
+/* What the visitor can do: another request, the overdue case. Quiet glass buttons; the chosen one is white. */
+.tools { grid-area: 3 / 1; min-height: 44px; display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); pointer-events: auto; }
+.picks { display: inline-flex; flex-wrap: wrap; gap: 6px; padding: 4px; border-radius: 999px; background: rgb(255 255 255 / 0.1); backdrop-filter: blur(10px); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16); }
+.picks button, .what {
+  height: 36px; padding: 0 14px; border: 0; border-radius: 999px; background: transparent; color: rgb(255 255 255 / 0.86);
+  font-size: 14px; line-height: 18px; font-weight: 500; white-space: nowrap; cursor: pointer;
+  transition: background var(--m-out) var(--m-ease), color var(--m-out) var(--m-ease);
+}
+.picks button:hover { background: rgb(255 255 255 / 0.14); color: #fff; transition-duration: var(--m-in); }
+.picks button[aria-pressed="true"] { background: #fff; color: var(--nh-brand-deep); }
+.what { background: rgb(255 255 255 / 0.1); backdrop-filter: blur(10px); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22); }
+.what:hover { background: rgb(255 255 255 / 0.18); color: #fff; transition-duration: var(--m-in); }
+.what[aria-pressed="true"] { background: #fff; color: var(--nh-brand-deep); box-shadow: none; }
+.picks button:focus-visible, .what:focus-visible, .rail button:focus-visible, .skip:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* ---------------------------------------------------------------------------------------------------------- */
+/* Labels pinned to the building. The director moves each to its point; a leader line, then a chip in the
+   product's own look: a face, a name, a role, a status pill. */
+.labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; opacity: calc(1 - var(--day) * 2); }
+.label { position: absolute; left: 0; top: 0; opacity: 0; transition: opacity 360ms var(--m-ease); will-change: transform; }
+.label[data-on="true"] { opacity: 1; }
+.label[data-behind="true"] { opacity: 0; }
+.label::before { content: ""; position: absolute; left: 3px; top: 0; width: 30px; height: 1px; background: rgb(255 255 255 / 0.75); }
+.label::after { content: ""; position: absolute; left: -3px; top: -3px; width: 7px; height: 7px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 3px rgb(255 255 255 / 0.2); }
+.chip {
+  position: absolute; left: 36px; top: 0; transform: translateY(-50%); display: flex; align-items: center; gap: 8px;
+  padding: 5px 12px 5px 5px; border-radius: 999px; background: rgb(255 255 255 / 0.96); color: var(--nh-ink);
+  font-family: var(--nh-ui); white-space: nowrap; box-shadow: 0 10px 28px -10px rgb(4 8 22 / 0.6);
+}
+.chip > span { display: grid; }
+.chip b { font-size: 12.5px; line-height: 16px; font-weight: 600; }
+.chip small { font-size: 11px; line-height: 14px; color: var(--nh-mute); }
+.label[data-flip="true"]::before { left: auto; right: 3px; }
+.label[data-flip="true"] .chip { left: auto; right: 36px; }
+.label[data-kind="hop"] .chip { padding: 5px 12px; background: rgb(255 244 240 / 0.96); }
+.label[data-kind="hop"] .chip small { color: var(--nh-danger); }
+.label[data-kind="hop"][data-work="true"] .chip { background: rgb(255 255 255 / 0.96); }
+.label[data-kind="hop"][data-work="true"] .chip small { color: var(--nh-ok); }
+.label[data-kind="owner"] .chip { padding-right: 6px; transition: box-shadow 420ms var(--m-ease); }
+.label[data-kind="owner"][data-full="true"] .chip { box-shadow: 0 0 0 2px #f2cb55, 0 14px 34px -10px rgb(4 8 22 / 0.7); }
+.label[data-kind="owner"] .chip > :last-child:not(span) { margin-left: 4px; }
+
+/* ---------------------------------------------------------------------------------------------------------- */
+/* The chapter rail, under the header on the left: play, a tick per chapter, the current chapter's name. */
+.rail {
+  position: absolute; z-index: 2; left: max(var(--gut), calc((100% - var(--wrap)) / 2)); top: calc(var(--nh-head) + var(--s-5));
+  display: flex; align-items: center; gap: var(--s-3); opacity: calc(1 - var(--day) * 1.6);
+}
+.rail ol { list-style: none; margin: 0; padding: 0; display: flex; }
+.rail ol button { display: grid; place-items: center; width: 30px; height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.rail ol i { width: 22px; height: 2px; border-radius: 1px; background: rgb(255 255 255 / 0.42); transition: background var(--m-out) var(--m-ease), transform var(--m-out) var(--m-ease); }
+.rail ol button:hover i { background: #fff; transform: scaleY(2); }
+.rail ol button[aria-current] i { background: #fff; transform: scaleY(1.5); }
+.now { font-size: 13px; line-height: 16px; font-weight: 500; color: #fff; text-shadow: 0 1px 12px rgb(6 11 28 / 0.8); }
+.play {
+  width: 36px; height: 36px; border-radius: 999px; border: 0; display: grid; place-items: center; cursor: pointer;
+  background: rgb(255 255 255 / 0.12); color: #fff; backdrop-filter: blur(10px); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.24);
+  transition: background var(--m-out) var(--m-ease), transform var(--m-out) var(--m-ease);
+}
+.play:hover { background: rgb(255 255 255 / 0.22); transform: translateY(-1px); transition-duration: var(--m-in); }
+
+.note, .skip {
+  position: absolute; z-index: 2; bottom: clamp(16px, 3vh, 28px); font-size: 12px; line-height: 16px; color: rgb(255 255 255 / 0.6);
+  opacity: 0; transition: opacity 360ms var(--m-ease);
+}
+.note { left: max(var(--gut), calc((100% - var(--wrap)) / 2)); }
+.skip { right: max(var(--gut), calc((100% - var(--wrap)) / 2)); color: rgb(255 255 255 / 0.78); text-decoration: underline; text-underline-offset: 3px; pointer-events: none; }
+.note[data-on="true"] { opacity: 1; }
+.skip[data-on="true"] { opacity: 1; pointer-events: auto; }
+.skip:hover { color: #fff; }
+
+/* ---------------------------------------------------------------------------------------------------------- */
+/* The page after the scene rises over its last screen like a sheet of the page's own ground, its upper edge
+   feathered; behind it the scene lifts into the same colour, so there is no seam when the screen lets go.
+   Only while the scene is pinned: still and plain, the next section simply follows. */
+.tower:not([data-still="true"]):not([data-shows="none"]) + :global(.section) { margin-top: calc(-0.75 * var(--nh-screen-h)); z-index: 1; }
+.tower:not([data-still="true"]):not([data-shows="none"]) + :global(.section)::before {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 180px; pointer-events: none;
+  background: linear-gradient(to bottom, rgb(240 245 249 / 0), var(--g-alt));
+}
+
+/* Narrow and tall screens: the tower stands above, the words in a band below it; the rail lies across the top. */
+@media (max-width: 760px), (max-aspect-ratio: 4/5) {
+  .words { padding-block: calc(var(--nh-head) + 56px) 52px; row-gap: var(--s-4); }
+  .caption { max-width: none; gap: var(--s-3); }
+  .tower .caption h1 { font-size: clamp(36px, 9.6vw, 48px); }
+  .caption h2 { font-size: clamp(27px, 7.4vw, 34px); }
+  .caption p { font-size: 16px; line-height: 24px; }
+  .lead { font-size: 17px !important; line-height: 26px !important; }
+  .quote { font-size: 18px !important; line-height: 26px !important; }
+  .count b { font-size: 56px; }
+  .hint { display: none; }
+  .scrim { background: linear-gradient(to top, rgb(6 11 28 / 0.9) 0%, rgb(6 11 28 / 0.66) 28%, rgb(6 11 28 / 0) 56%), linear-gradient(to bottom, rgb(6 11 28 / 0.4) 0%, rgb(6 11 28 / 0) 20%); }
+  .tools { min-height: 40px; gap: var(--s-2); }
+  .picks { width: 100%; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; border-radius: 22px; }
+  .picks button { flex: none; height: 40px; }
+  .what { height: 44px; }
+  .rail { left: var(--gut); right: var(--gut); top: calc(var(--nh-head) + 10px); gap: var(--s-2); }
+  .rail ol button { width: 26px; }
+  .rail ol i { width: 18px; height: 3px; }
+  .play { width: 44px; height: 44px; }
+  .note { left: var(--gut); right: var(--gut); bottom: 14px; }
+  .skip { display: none; }
+  .label::before { left: auto; right: 3px; width: 14px; }
+  .chip { left: auto; right: 20px; padding: 4px 10px 4px 4px; }
+  .chip b { font-size: 11.5px; line-height: 14px; }
+  .chip small { font-size: 10px; line-height: 13px; }
+}
+
+/* ---------------------------------------------------------------------------------------------------------- */
+/* Still: reduced motion, or a screen too short to pin. One screen, no track; the rail cuts between chapters. */
+.tower[data-still="true"] { height: auto; }
+.tower[data-still="true"] .caption, .tower[data-still="true"] .canvas, .tower[data-still="true"] .label { transition: none; transform: none; }
+.tower[data-still="true"] .hint { display: none; }
+
+/* No WebGL: the poster, and the story as plain steps under one another. Nothing is pinned, nothing is hidden. */
+.tower[data-shows="none"] { height: auto; }
+.tower[data-shows="none"] .stage { position: relative; height: auto; min-height: var(--nh-screen-h); }
+.tower[data-shows="none"] .canvas, .tower[data-shows="none"] .labels { display: none; }
+.tower[data-shows="none"] .scrim { background: linear-gradient(to top, rgb(6 11 28 / 0.94) 0%, rgb(6 11 28 / 0.8) 55%, rgb(6 11 28 / 0.2) 100%); }
+.tower[data-shows="none"] .words { position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: var(--s-7); min-height: var(--nh-screen-h); }
+.tower[data-shows="none"] .caption { opacity: 1; transform: none; visibility: visible; }
+.tower[data-shows="none"] .note { position: relative; left: auto; bottom: auto; opacity: 1; padding: 0 var(--gut) var(--s-5); }
+.tower[data-shows="none"] .skip { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hint i { animation: none; }
+  .play:hover { transform: none; }
+}
