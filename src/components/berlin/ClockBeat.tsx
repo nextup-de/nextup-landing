@@ -8,7 +8,7 @@
 //             hatched gap that is not counted. A gold disc rides from "Raised" to "Answered" in step with the flaps,
 //             and the deputy branch at the due day is drawn as the rule: what happens on day 5 without an answer
 // Numbers come from SITE.promiseDays and ANSWERED_DAY (features/tower/story); the ghost 19 behind the counter is
-// TODAY_DAYS, struck through as in #why. Illustrative: one fictional request.
+// TODAY_DAYS, struck through as in #why. Illustrative: one fictional idea.
 // Reduced motion or no script: the final state (answered on day 2 with 3 days to spare, the disc on its stop, the
 // branch drawn). Before the branch draws, its column stands faint, so the timetable card is balanced at rest.
 // Below 760px the timetable runs down the left edge.
@@ -107,7 +107,7 @@ export function ClockBeat() {
               <Flaps text={String(left)} cells={1} size="xl" tone={answered ? "ok" : undefined} step={45} className={styles.big} />
             </div>
             <div className={styles.side} aria-hidden="true">
-              <span className={styles.kicker}><i />Clock · €300 parts order</span>
+              <span className={styles.kicker}><i />Clock · Leak detector</span>
               <Flaps text={answered ? DONE_LABEL : LEFT_LABEL} cells={LABEL_CELLS} size="s" tone={answered ? "ok" : undefined} className={styles.label} />
               <span className={styles.answeredOn} data-on={answered || undefined}>Answered on day {A} of {P}</span>
               <span className={styles.was}>Was {TODAY_DAYS} days on the ring</span>
@@ -152,7 +152,7 @@ export function ClockBeat() {
             The answer goes back to the person who asked, with a name on it. In this story: {TODAY_DAYS} days on the ring,{" "}
             <strong>{A} days on the line.</strong>
           </p>
-          <p className={styles.note}>One fictional request. Weekends are not counted.</p>
+          <p className={styles.note}>One fictional idea. Weekends are not counted.</p>
         </div>
       </div>
     </section>

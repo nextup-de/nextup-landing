@@ -200,7 +200,7 @@ function PlaceArt({ place }: { place: string }) {
 }
 
 function FieldArt({ uid }: { uid: string }) {
-  const rows: Array<[string, string]> = [["SPEND < €5K", "Team lead"], ["LOGINS", "Engineering lead"], ["TOLERANCES", "Quality lead"]];
+  const rows: Array<[string, string]> = [["SPEND < €5K", "Team lead"], ["TEST-RIG TIME", "Engineering lead"], ["TOLERANCES", "Quality lead"]];
   return (
     <svg viewBox="0 0 200 150" className={styles.svg} focusable="false">
       <defs>
@@ -211,7 +211,7 @@ function FieldArt({ uid }: { uid: string }) {
       </defs>
       <rect className={styles.box} x={8} y={14} width={184} height={32} rx={16} stroke={`url(#${uid}-gold)`} />
       <g clipPath={`url(#${uid}-type)`}>
-        <text className={styles.boxText} x={22} y={34}>€300 parts order</text>
+        <text className={styles.boxText} x={22} y={34}>€2,400 leak detector</text>
         <rect className={styles.cover} x={20} y={18} width={136} height={24} />
       </g>
       <circle className={styles.send} cx={174} cy={30} r={10} />

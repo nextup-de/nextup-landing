@@ -60,10 +60,10 @@ export function ProductTeaser() {
                 <span className={styles.bar} aria-hidden="true">
                   <Image src="/brand/nextup-logo-white.png" alt="" width={494} height={212} />
                   <span className={styles.tabs}>{["Ideas", "Inbox", "Feed", "Projects"].map((t) => <span key={t} data-on={t === "Ideas" || undefined}>{t}</span>)}</span>
-                  <span className={styles.me}>NS</span>
+                  <span className={styles.me}>KA</span>
                 </span>
                 <span className={styles.body} aria-hidden="true">
-                  <span className={styles.hello}>What is stuck, night shift?</span>
+                  <span className={styles.hello}>What would you change?</span>
                   <span className={styles.box}>
                     <span className={styles.input}>{REQUEST}</span>
                     <span className={styles.send}><ArrowUp /></span>

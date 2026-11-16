@@ -81,7 +81,7 @@ export const OWNERS: Owner[] = [
 
 /** The ideas that ride the loop, one to each owner, so an owner's clock never overlaps itself. */
 export const IDEAS: Idea[] = [
-  { title: "€300 parts order", from: 0, to: 0 },
+  { title: "Leak detector", from: 0, to: 0 },
   { title: "Torque records", from: 1, to: 1 },
   { title: "Reusable crates", from: 2, to: 2 },
   { title: "Paint booth filter", from: 1, to: 3 },

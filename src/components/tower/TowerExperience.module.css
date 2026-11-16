@@ -56,10 +56,14 @@
 .then { opacity: 0; transition: opacity 420ms var(--m-ease); }
 .then[data-on="true"] { opacity: 1; }
 
-/* The line under the headline that says there is more: a short stroke that breathes, and what scrolling does. */
-.hint { display: flex; align-items: center; gap: 12px; margin-top: var(--s-2); font-size: 14px !important; line-height: 20px !important; color: rgb(255 255 255 / 0.66) !important; }
-.hint i { width: 1px; height: 28px; background: linear-gradient(to bottom, rgb(255 255 255 / 0), #fff); transform-origin: top; animation: draw 2.6s var(--m-ease) infinite; }
-@keyframes draw { 0% { transform: scaleY(0); opacity: 0; } 30% { opacity: 1; } 70% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
+/* What the idea is worth: the sender's estimate, in the product's mono, so the money reads at a glance. */
+/* What the idea is worth: the one gold thing in the words, as the idea is the one gold thing in the scene. */
+.value {
+  display: inline-flex; align-items: center; gap: 8px; width: fit-content; max-width: 100%; padding: 6px 14px 6px 10px; border-radius: 999px;
+  font-size: 15px !important; line-height: 21px !important; font-weight: 600; color: #1a1406 !important; letter-spacing: -0.01em;
+  background: var(--berlin-gold, #ffcf5a); box-shadow: 0 0 0 4px rgb(255 207 90 / 0.18), 0 10px 30px -10px rgb(255 190 60 / 0.6);
+}
+.value::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 999px; background: #1a1406; opacity: 0.7; }
 
 /* The count of days: the one big number of the scene, in the product's mono. */
 .count { display: flex; align-items: flex-end; gap: var(--s-4); margin-top: var(--s-2); }
@@ -157,7 +161,6 @@
   .lead { font-size: 17px !important; line-height: 26px !important; }
   .quote { font-size: 18px !important; line-height: 26px !important; }
   .count b { font-size: 56px; }
-  .hint { display: none; }
   .scrim { background: linear-gradient(to top, rgb(6 11 28 / 0.9) 0%, rgb(6 11 28 / 0.66) 28%, rgb(6 11 28 / 0) 56%), linear-gradient(to bottom, rgb(6 11 28 / 0.4) 0%, rgb(6 11 28 / 0) 20%); }
   .tools { min-height: 40px; gap: var(--s-2); }
   .picks { width: 100%; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; border-radius: 22px; }
@@ -178,7 +181,6 @@
 /* Still: reduced motion, or a screen too short to pin. One screen, no track; the rail cuts between chapters. */
 .tower[data-still="true"] { height: auto; }
 .tower[data-still="true"] .caption, .tower[data-still="true"] .canvas, .tower[data-still="true"] .label { transition: none; transform: none; }
-.tower[data-still="true"] .hint { display: none; }
 
 /* No WebGL: the poster, and the story as plain steps under one another. Nothing is pinned, nothing is hidden. */
 .tower[data-shows="none"] { height: auto; }
@@ -190,6 +192,5 @@
 .tower[data-shows="none"] .skip { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  .hint i { animation: none; }
   .play:hover { transform: none; }
 }

@@ -1,5 +1,5 @@
 "use client";
-// The ring: the problem, felt. A request nobody owns rides a loop line while a day counter climbs, and the only
+// The ring: the problem, felt. An idea nobody owns rides a loop line while a day counter climbs, and the only
 // way off the ring is someone finally taking it. One pinned screen (the page system's data-pin): the scroll is
 // the story's clock, read, never written.
 //
@@ -11,7 +11,7 @@
 // once. At the end the whole stage fades out first, then the sum rises in on the section's own ground, left on the
 // page's text column: 19 days on the ring, 3 days of work.
 // Every number comes from HOPS, TODAY_DAYS and TODAY_WORK (features/tower/story, read-only); the stage says the
-// request is fictional.
+// idea is fictional.
 //
 // The server markup is the complete picture (the ring drawn, the disc at Head of Production, DAY 19, the five
 // captions as a list, the end frame), and so is reduced motion or a screen under 560px tall. Only when motion is
@@ -41,19 +41,22 @@ const BOARD_CELLS = 25;
 const DESK: Record<string, string> = { "Back to the sender": "Sender", "Head of Production": "Head of prod." };
 const REASON: Record<string, string> = { "not responsible": "not mine", "wrong department": "wrong dept.", "no time, returned": "no time" };
 const BOARD = HOPS.map((h) => `${DESK[h.where] ?? h.where} · ${REASON[h.reason] ?? h.reason}`);
-const BOARD_START = "Night shift · €300 order";
+const BOARD_START = "Leak detector · €2,400";
 
 // The captions, one per hop (the same hop that drives the counter, the board and the lit stop), with the day the
 // request reached that desk: each says where it lies now and what it hears there.
 const CAPTIONS = [
-  "Night shift needs a €300 parts order signed. The shift lead: not responsible.",
+  "Maintenance wants a €2,400 leak detector. The shift lead: not responsible.",
   "On to Purchasing: wrong department.",
   "On to Finance: is it important?",
-  "Back to the night shift. Nobody has time.",
+  "Back to maintenance. Nobody has time.",
   `Up to the head of production, who answers on day ${TODAY_DAYS}.`,
 ].map((text, i) => ({ day: STARTS[i], text }));
 
 const END_LINE = "The rest was waiting for someone to say: this one is mine.";
+// An estimate from the idea's own saving (about €21k a year, story.ts): with NextUp it is answered on day 2, so
+// 17 of the 19 days are extra, and 17 of 365 days of about €21k is about €980.
+const END_COST = "Estimated: about €1,000 more of leaking air while it waited.";
 
 /* ---------------------------------------------------------------------------------------------------------------
    The geometry (viewBox 640 x 640). The loop is a rounded "dog's head" like Berlin's Ringbahn: a superellipse with
@@ -239,8 +242,8 @@ export function RingRide() {
       <div className={styles.stage}>
         <div ref={scene} className={cn("wrap", styles.scene)}>
           <header className={styles.head}>
-            <p className={cn("nh-mono", styles.kicker)}><i aria-hidden="true" />Today · Night shift, 4-series</p>
-            <h2 id="ring-h">A request nobody owns rides in circles.</h2>
+            <p className={cn("nh-mono", styles.kicker)}><i aria-hidden="true" />Today · Maintenance, 4-series</p>
+            <h2 id="ring-h">An idea nobody owns rides in circles.</h2>
           </header>
 
           <ol className={styles.caps} aria-hidden="true">
@@ -250,7 +253,7 @@ export function RingRide() {
               </li>
             ))}
           </ol>
-          <p className={cn("nh-mono", styles.foot)} aria-hidden="true">One fictional request. The days are illustrative.</p>
+          <p className={cn("nh-mono", styles.foot)} aria-hidden="true">One fictional idea. The days and the saving are illustrative.</p>
 
           <div className={styles.ringBox} aria-hidden="true">
             <span className={styles.bullet}><b>?</b><small className="nh-mono">no last stop</small></span>
@@ -279,7 +282,7 @@ export function RingRide() {
               const h = s.i === 0 ? null : RING[s.i - 1];
               return (
                 <Label key={s.i} {...s} on={deskOn(s.i)} past={s.i > 0 && started && hop > s.i - 1} cls={s.i === 0 ? styles.sender : undefined}>
-                  <b>{h ? h.where : "Night shift"}</b>
+                  <b>{h ? h.where : "Maintenance"}</b>
                   <small className="nh-mono">{h ? `${h.days} d · ${h.reason}` : `sender · back here: ${RING[RING.length - 1].days} d`}</small>
                 </Label>
               );
@@ -306,12 +309,13 @@ export function RingRide() {
             <span className={styles.endWork}>{TODAY_WORK} days of work.</span>
           </p>
           <p className={styles.endRest}>{END_LINE}</p>
+          <p className={cn("nh-mono", styles.endCost)}>{END_COST}</p>
         </div>
       </div>
 
       <ol className="nh-sr">
         {CAPTIONS.map((c, i) => <li key={i}>Day {c.day}. {c.text}</li>)}
-        <li>{TODAY_DAYS} days on the ring, {TODAY_WORK} days of work. {END_LINE} One fictional request; the days are illustrative.</li>
+        <li>{TODAY_DAYS} days on the ring, {TODAY_WORK} days of work. {END_LINE} {END_COST} One fictional idea; the days and the saving are illustrative.</li>
       </ol>
     </section>
   );

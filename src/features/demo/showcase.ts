@@ -7,15 +7,16 @@ import { ROUTES } from "./routes";
 /** The demo company's routing map as plain rows for the raise box. The tower's story follows its first row. */
 export const MAP = ROUTES.map((r) => ({ id: r.id, type: r.type, keys: r.keys, owner: r.owner.name, role: r.owner.role, deputy: r.deputy }));
 
-/** The night shift's request: the one the tower, the ring and the raise box all follow. */
-export const REQUEST = "Night shift has no one who can sign a €300 parts order";
+/** The maintenance technician's idea: the one the tower, the ring and the raise box all follow. */
+export const REQUEST = "Buy a €2,400 leak detector - our air leaks cost about €28k a year";
 
-/** What the raise box types by itself, one after another. Each one hits a different row of the map; the tower's
- *  story sends the same three through the building (features/tower/story). */
+/** What the raise box types by itself, one after another: three ideas with an estimated saving each. Each one hits
+ *  a different row of the map and a different owner; the tower's story sends the same three through the building
+ *  (features/tower/story). */
 export const RAISE_EXAMPLES: string[] = [
   REQUEST,
-  "Two apprentices have had no system login for four weeks",
-  "Tolerance drift on station 7 - who owns the gauge calibration?",
+  "Run endurance tests on rig 2 overnight - we pay an outside lab about €48k a year",
+  "Check every 50th piece at the press: tolerance drift scraps about €40k a year",
 ];
 
 /** The ideas list, as the app shows it: what, since when, which stage, on whose desk, status - and what the open
@@ -39,12 +40,12 @@ export const IDEAS: BoardIdea[] = [
   { id: "I-34", what: "Shift handover checklist on one page", dept: "Engineering", deptTone: "violet", since: "Today", stage: 1,
     who: "J. Schmidt", role: "Process engineer", tone: "pink", status: "new", label: "New", by: "C. Ilg", deputy: "M. Roth",
     read: "Three handover sheets are in use. The coach asks which fields the next shift actually reads." },
-  { id: "I-27", what: "System logins for apprentices on day one", dept: "HR & IT", deptTone: "blue", since: "21 d", stage: 4,
-    who: "L. Brandt", role: "HR / IT", tone: "violet", status: "ok", label: "Measured", by: "M. Roth", deputy: "M. Roth",
-    read: "Apprentices waited weeks for a login. Accounts are now made when the contract is signed." },
-  { id: "I-30", what: "Night shift cannot sign a €300 parts order", dept: "Production", deptTone: "green", since: "5 d", stage: 3,
-    who: "T. Vogel", role: "Team lead, 4-series", tone: "green", status: "ok", label: "Answered in 2 d", by: "Night shift", deputy: "M. Roth",
-    read: "Spend under €5k belongs to the team lead. A standing limit for the night shift would settle it for good." },
+  { id: "I-27", what: "Endurance tests on rig 2 overnight", dept: "Engineering", deptTone: "violet", since: "21 d", stage: 4,
+    who: "M. Roth", role: "Engineering lead", tone: "violet", status: "ok", label: "Running", by: "Test technician", deputy: "H. Sander",
+    read: "Rig 2 runs endurance tests at night with a remote alarm and an auto-stop. Outside lab hours are now tracked against the estimate of about €40k a year, net of power and wear." },
+  { id: "I-30", what: "€2,400 leak detector for the air net", dept: "Production", deptTone: "green", since: "5 d", stage: 3,
+    who: "T. Vogel", role: "Team lead, 4-series", tone: "green", status: "ok", label: "Answered in 2 d", by: "K. Arslan", deputy: "M. Roth",
+    read: "Spend under €5k belongs to the team lead. Estimated: leaks waste about €28k of power a year; fixing most of them pays back the detector and fittings in about 2 months." },
 ];
 
 /** A row of the landing's decisions board: whose desk (a role, never a name), what waits there, and its clock.
@@ -59,5 +60,5 @@ export const DECISION_ROWS: DecisionRow[] = [
   { owner: "Head of Inbound Logistics", request: "Reusable crates for door modules", short: "Reusable crates", status: "3 d left" },
   { owner: "Head of Plant Quality", request: "Torque records on the line tablet", short: "Torque records", status: "Needs info" },
   { owner: "Team lead, paint shop", request: "Paint booth filter by sensor", short: "Paint booth filter", status: "4 d left" },
-  { owner: "Team lead, 4-series", request: "Night shift €300 parts order", short: "€300 parts order", status: "Answered in 2 d", tone: "ok" },
+  { owner: "Team lead, 4-series", request: "€2,400 leak detector", short: "Leak detector", status: "Answered in 2 d", tone: "ok" },
 ];

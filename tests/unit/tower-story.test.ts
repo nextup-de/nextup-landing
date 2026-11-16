@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { ROUTES } from "@/features/demo/routes";
+import { RAISE_EXAMPLES, REQUEST } from "@/features/demo/showcase";
 import { propose } from "@/features/routing";
 import { FACES, OPEN_FLOORS, RUNS, levelOf, stretches } from "@/features/tower/building";
 import { BEAT, CHAPTERS, EXAMPLES, HOPS, SENDER, TODAY_DAYS, over, pathsFor, stateAt, viewAt } from "@/features/tower/story";
@@ -64,6 +65,20 @@ describe("tower story", () => {
       expect(e.owner.name).not.toBe(e.deputy.name);
     }
     expect(new Set(EXAMPLES.map((e) => e.owner.name)).size).toBeGreaterThan(1);
+  });
+
+  it("tells three ideas with a value, each to a different owner, the same three the raise box types", () => {
+    expect(EXAMPLES.map((e) => e.owner.name)).toEqual(["T. Vogel", "M. Roth", "H. Sander"]);
+    expect(EXAMPLES[0].type).toMatch(/^Spend under €5k/);
+    for (const e of EXAMPLES) {
+      expect(e.confidence).toBeGreaterThanOrEqual(83);
+      expect(e.text.length).toBeLessThanOrEqual(90);
+      expect(e.text.endsWith(".")).toBe(false); // the tower's quote adds the full stop
+      expect(e.short.length).toBeLessThanOrEqual(28);
+      expect(e.value).toMatch(/^Estimated saving: about €/);
+    }
+    expect(RAISE_EXAMPLES).toEqual(EXAMPLES.map((e) => e.text));
+    expect(REQUEST).toBe(EXAMPLES[0].text);
   });
 
   it("matches the wait ledger: 19 days today", () => {
