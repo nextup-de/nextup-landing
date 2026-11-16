@@ -125,6 +125,7 @@
 .endBig span { display: block; }
 .endWork { color: var(--nh-brand); }
 .endRest { margin-top: var(--s-5); font-size: 20px; line-height: 30px; color: var(--muted); max-width: 36ch; text-wrap: balance; }
+.endCost { margin-top: var(--s-3); font-size: 14px; line-height: 20px; color: var(--ink); max-width: 44ch; text-wrap: balance; }
 /* Armed: a solid layer of the section's ground over the stage, shown only once the stage has gone. */
 .ring[data-armed] .end {
   position: absolute; inset: 0; margin: 0; width: auto; padding: var(--nh-head) max(var(--gut), calc((100% - var(--wrap)) / 2)) 0;

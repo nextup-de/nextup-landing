@@ -98,6 +98,8 @@ export function createDirector({ root, stage, engine, labels, still, onView, onF
       const a = anchors.find((x) => x.id === el.dataset.anchor);
       if (!a) continue;
       engine.project(a.at, at);
+      // A point just past the edge of the frame keeps its label at the edge, hanging inward, never cut off.
+      at.x = Math.max(16, Math.min(at.x, stageW - 16));
       el.style.transform = `translate3d(${at.x.toFixed(1)}px, ${at.y.toFixed(1)}px, 0)`;
       // On a tall screen the words take the lower part: a label there would sit on them, so it waits.
       const behind = at.behind || (layout === "tall" && at.y > stageH * 0.52) ? "true" : "false";

@@ -69,16 +69,27 @@ export const over = (d: Desk): Vec3 => [d.x, floorY(d.floor) + 1.55, d.z];
    the product's matcher (features/routing) on the demo routing map (features/demo/routes), exactly as the raise
    box does it. */
 export type Example = {
-  id: string; text: string; short: string; from: string;
+  id: string; text: string; short: string; from: string; value: string;
   type: string; confidence: number;
   owner: { name: string; role: string; dept: string; floor: number; desk: Desk };
   deputy: { name: string; role: string; dept: string; floor: number; desk: Desk };
 };
 
-const REQUESTS: Array<{ id: string; text: string; short: string; from: string }> = [
-  { id: "spend", text: "Night shift has no one who can sign a €300 parts order", short: "A €300 parts order", from: "Night shift, 4-series" },
-  { id: "access", text: "Two apprentices have had no system login for four weeks", short: "Logins for apprentices", from: "Night shift, 4-series" },
-  { id: "quality", text: "Tolerance drift on station 7 - who owns the gauge calibration?", short: "Tolerance drift, station 7", from: "Night shift, 4-series" },
+// Ideas, not complaints: each one is worth money. The employee's text names the size of the problem; `value` is
+// the estimated saving after what doing it costs (simple arithmetic, never a measured result). Each text routes to
+// a different owner on the demo map: r1, r2 and r3.
+//   spend    leaks waste about €28.8k of power a year; fixing about 3/4 of them saves about €21k, for the €2,400
+//            detector plus about €1k of fittings
+//   rig      about €48k a year of outside lab invoices, less power, wear and a morning check on rig 2
+//   quality  about €40.8k of scrap a year; a drift still costs up to 50 pieces (about €2.4k a year) and the check
+//            takes operator time
+const REQUESTS: Array<{ id: string; text: string; short: string; from: string; value: string }> = [
+  { id: "spend", text: "Buy a €2,400 leak detector - our air leaks cost about €28k a year", short: "A €2,400 leak detector",
+    from: "Maintenance, 4-series", value: "Estimated saving: about €20k a year, for about €3.5k" },
+  { id: "rig", text: "Run endurance tests on rig 2 overnight - we pay an outside lab about €48k a year", short: "Rig 2 overnight tests",
+    from: "Test lab, validation", value: "Estimated saving: about €40k a year, net of power and wear" },
+  { id: "quality", text: "Check every 50th piece at the press: tolerance drift scraps about €40k a year", short: "Check every 50th piece",
+    from: "Press shop, 4-series", value: "Estimated saving: about €35k a year of scrap" },
 ];
 
 function person(name: string, routes: readonly Route[]) {
@@ -276,7 +287,7 @@ export function stateAt(p: number, input: Input): SceneState {
     power = 0.9 + 0.6 * Math.sin(Math.PI * travel);
     size = 1 + 0.5 * Math.sin(Math.PI * travel);
     if (late > 0) {
-      // Nobody answered: the clock runs out on the owner's desk, then the request moves to the deputy.
+      // Nobody answered: the clock runs out on the owner's desk, then the idea moves to the deputy.
       const go = span(late, 0.4, 0.86, EASE.inOut);
       state.detour = { shown: span(late, 0.32, 0.5), head: go > 0 && go < 1 ? go : -1, glow: 1 };
       at = go > 0 ? pointAt(paths.detour, go) : pointAt(paths.route, 1);

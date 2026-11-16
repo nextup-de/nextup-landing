@@ -130,7 +130,7 @@ export function ContactForm({ to }: Props) {
           onChange={(e) => set("email", e.target.value)} onBlur={() => touch("email")} {...a11y("email")} />
       </Field>
       <Field id="decision" label="Which decision keeps waiting?" hint="One sentence is enough. Approving a tool, signing off a change, answering a request." error={errors.decision}>
-        <input className="nh-input" id="decision" name="decision" type="text" placeholder="e.g. tool approvals for the night shift take three weeks" value={values.decision}
+        <input className="nh-input" id="decision" name="decision" type="text" placeholder="e.g. a €2k tool that would save €20k a year waits weeks for a yes" value={values.decision}
           onChange={(e) => set("decision", e.target.value)} onBlur={() => touch("decision")} {...a11y("decision")} />
       </Field>
       <Field id="council" label="Do you have a works council?" hint="Tells us who should be in the first conversation.">

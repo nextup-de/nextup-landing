@@ -163,7 +163,7 @@ export function WaitScene({ request, from, decision, promiseDays, owner, ownerRo
 
   const today = view.side === "today";
   const names: Record<DeskId, [string, string]> = { // [wide, phone]
-    sender: [from, "Night shift"], shift: ["Shift lead", "Shift lead"], purch: ["Purchasing", "Purchasing"], fin: ["Finance", "Finance"],
+    sender: [from, "Maintenance"], shift: ["Shift lead", "Shift lead"], purch: ["Purchasing", "Purchasing"], fin: ["Finance", "Finance"],
     head: ["Head of Production", "Head of Prod."], lead: [ownerRole, "Team lead"], eng: [deputyRole, "Eng. lead"], qual: ["Quality", "Quality"],
   };
   const here: DeskId = !today ? (view.beat >= 2 ? "lead" : "sender") : view.arrived ? HOPS[view.arrived - 1].to : "sender";
@@ -174,8 +174,8 @@ export function WaitScene({ request, from, decision, promiseDays, owner, ownerRo
       <div className={`wrap ${styles.stage}`} ref={stage}>
         <div className={styles.top}>
           <div className="section-head">
-            <h2 id="wait-title">One parts order, routed two ways</h2>
-            <p>Today a small request wanders from desk to desk. With NextUp the routing map finds its owner on day 0.</p>
+            <h2 id="wait-title">One idea, routed two ways</h2>
+            <p>Today a small idea wanders from desk to desk. With NextUp the routing map finds its owner on day 0.</p>
           </div>
           <div className={styles.toggle} role="group" aria-label="Which way the request goes">
             <button type="button" aria-pressed={today} onClick={() => go("today")}>Today</button>

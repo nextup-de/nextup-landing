@@ -130,7 +130,7 @@ export function TowerExperience({ promiseDays, lead }: Props) {
         {/* Labels pinned to the building. Decoration for the eye: the captions say the same in words. */}
         <div ref={labels} className={styles.labels} aria-hidden="true">
           <div className={styles.label} data-anchor="sender" data-on={view.floors || (chapter === 1 && view.mode === "calm")}>
-            <span className={styles.chip}><Avatar name="Night shift" tone="teal" size={22} /><span><b>{ex.from}</b><small>Floor {FLOOR.sender}</small></span></span>
+            <span className={styles.chip}><Avatar name={ex.from.replace(/\d+-?/g, "")} tone="teal" size={22} /><span><b>{ex.from}</b><small>Floor {FLOOR.sender}</small></span></span>
           </div>
           {(["shift", "purchasing", "finance", "sender", "head"] as const).map((id, i) => id === "sender" ? null : (
             <div key={id} className={styles.label} data-anchor={id} data-kind="hop" data-on={seen(i)} data-work={HOPS[i].work ? "true" : undefined}>
@@ -158,13 +158,13 @@ export function TowerExperience({ promiseDays, lead }: Props) {
             <p className={styles.kicker}>Idea management for manufacturing plants</p>
             <h1 id="tower-h">Who owns this decision?</h1>
             <p className={styles.lead}>{lead}</p>
-            <p className={styles.hint} aria-hidden="true"><i />Scroll to follow one idea through a company</p>
           </div>
 
           <div className={styles.caption} data-on={chapter === 1}>
             <h2>It starts with one line.</h2>
             <p className={styles.quote}>&ldquo;{ex.text}.&rdquo;</p>
-            <p>{ex.from} raises it in one box. No form and no category tree.</p>
+            <p className={styles.value}>{ex.value}.</p>
+            <p>From {ex.from}, in one box. No form and no category tree.</p>
           </div>
 
           <div className={styles.caption} data-on={chapter === 2}>
@@ -186,12 +186,13 @@ export function TowerExperience({ promiseDays, lead }: Props) {
             {late ? (
               <>
                 <h2>No answer by day {promiseDays}.</h2>
-                <p>The request moves to the deputy, {ex.deputy.name}. {ex.owner.name} keeps it too: either of them can answer.</p>
+                <p>The idea moves to the deputy, {ex.deputy.name}. {ex.owner.name} keeps it too: either of them can answer.</p>
               </>
             ) : (
               <>
                 <h2>The answer comes back.</h2>
                 <p>Day {ANSWERED_DAY}: yes, do it. {ex.owner.name} decides, the sender sees the answer, and everyone could see where it was.</p>
+                <p className={styles.value}>Decided in {ANSWERED_DAY} days. {ex.value}.</p>
               </>
             )}
           </div>
@@ -200,7 +201,7 @@ export function TowerExperience({ promiseDays, lead }: Props) {
           {!plain && (
             <div className={styles.tools}>
               {(chapter === 3 || chapter === 4) && (
-                <div className={styles.picks} role="group" aria-label="Send another request through the building">
+                <div className={styles.picks} role="group" aria-label="Send another idea through the building">
                   {EXAMPLES.map((e, i) => (
                     <button key={e.id} type="button" aria-pressed={i === pick} onClick={() => choose(i)}>{e.short}</button>
                   ))}

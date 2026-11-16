@@ -28,11 +28,15 @@ const WAITING: Array<[string, Tone, string, Status, string]> = [
   ["Maintenance", "teal", "Standby for welding robots during breaks", "ok", "Running"],
 ];
 
-// "Thu 8 Oct": today plus the promise, in the visitor's own timezone - so it is only known in the browser.
+// "Thu 8 Oct": today plus the promise in working days (Saturday and Sunday not counted), in the visitor's own
+// timezone - so it is only known in the browser.
 const dueFmt = new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short" });
 function dueDate(days: number) {
   const d = new Date();
-  d.setDate(d.getDate() + days);
+  for (let left = days; left > 0; ) {
+    d.setDate(d.getDate() + 1);
+    if (d.getDay() !== 0 && d.getDay() !== 6) left--;
+  }
   return dueFmt.format(d).replace(",", "");
 }
 const never = () => () => {};
@@ -81,15 +85,15 @@ export function RouteDemo({ routes, promiseDays, examples }: Props) {
         <div className={styles.bar} aria-hidden="true">
           <Image src="/brand/nextup-logo-white.png" alt="" width={494} height={212} />
           <span className={styles.tabs}>{["Ideas", "Inbox", "Feed", "Projects"].map((t) => <span key={t} data-on={t === "Ideas"}>{t}</span>)}</span>
-          <span className={styles.me}>NS</span>
+          <span className={styles.me}>KA</span>
         </div>
         <div className={styles.body}>
-          <p className={styles.hello} aria-hidden="true">What is stuck, night shift?</p>
+          <p className={styles.hello} aria-hidden="true">What would you change?</p>
           <form className={styles.box} onSubmit={(e) => { e.preventDefault(); setTyped(text); if (route) setRaised(true); }}>
             <label className="nh-sr" htmlFor={id}>Try it: type a problem or an idea that is stuck</label>
             <textarea
               id={id} name="request" autoComplete="off" className={styles.input} rows={2} maxLength={160} value={text}
-              placeholder="Type something that is stuck at work…"
+              placeholder="Type an idea, or something that is stuck…"
               onChange={(e) => { setRaised(false); setTyped(e.target.value); }}
               onFocus={() => { if (!touched) setTyped(text); }}
               onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); e.currentTarget.form?.requestSubmit(); } }}
