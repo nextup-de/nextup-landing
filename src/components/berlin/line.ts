@@ -1,19 +1,35 @@
-// The Berlin line as data: its stations (the home page's sections, in order) and the pure arithmetic the rail
-// and the departure board run on. No DOM here, so the tests can read it.
+// The Berlin line as data: its stations (a page's sections, in order) and the pure arithmetic the rail and the
+// departure board run on. No DOM here, so the tests can read it.
 
 export type StationKind = "stop" | "interchange" | "terminus";
-/** `dark`: the section is a dark picture (the 3D scene); the rail turns light over it and the narrow band hides. */
-export type Station = { id: string; name: string; kind: StationKind; dark?: boolean };
+/**
+ * `dark`: the section is a dark picture (the 3D scene, the night section); the rail turns light over it and the
+ * narrow band hides. `to`: an interchange to another page - the rail shows a change arrow that goes there.
+ */
+export type Station = { id: string; name: string; kind: StationKind; dark?: boolean; to?: string };
 
-/** The home page as it stands today: every section a station, the scene at the top at Warschauer Strasse. */
-export const HOME_STATIONS: Station[] = [
+/** The home page: the scene at Warschauer Strasse, the ride through the problem and its fix, the terminus. */
+export const LANDING_STATIONS: Station[] = [
   { id: "story", name: "Warschauer Str.", kind: "interchange", dark: true },
+  { id: "ring", name: "Day 0", kind: "stop" },
+  { id: "why", name: "Why it waits", kind: "stop" },
+  { id: "owner", name: "One owner", kind: "stop", dark: true },
+  { id: "clock", name: "One clock", kind: "stop" },
+  { id: "seen", name: "Everyone sees", kind: "stop" },
+  { id: "questions", name: "Questions", kind: "stop" },
+  { id: "product", name: "Product", kind: "interchange", to: "/product" },
+  { id: "pilot", name: "Pilot", kind: "stop" },
+  { id: "close", name: "Your plant", kind: "terminus" },
+];
+
+/** /product: the software, section by section, to the same terminus. */
+export const PRODUCT_STATIONS: Station[] = [
   { id: "try", name: "Raise", kind: "stop" },
   { id: "ideas", name: "Ideas", kind: "stop" },
-  { id: "product", name: "Five steps", kind: "interchange" },
+  { id: "steps", name: "Five steps", kind: "stop" },
   { id: "rules", name: "Rules", kind: "stop" },
+  { id: "security", name: "Hosting", kind: "stop" },
   { id: "pilot", name: "Pilot", kind: "stop" },
-  { id: "questions", name: "Questions", kind: "stop" },
   { id: "close", name: "Your plant", kind: "terminus" },
 ];
 

@@ -1,51 +1,118 @@
-/* The pilot's diagram on the lit frame: a 700 x 460 box, centred, its labels placed in percent of it by the same
-   numbers that draw the lines, and sized in container units so the whole picture scales as one. The inputs are
-   white chips, the hub the brand colour, the owners white cards. A phone stacks them: inputs, hub, owners. */
-.frame { height: 100%; min-height: 380px; display: grid; place-items: center; padding: var(--s-6); }
-.box { position: relative; width: min(100%, 700px); aspect-ratio: 700 / 460; container-type: inline-size; }
-
-.lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.lines path { fill: none; stroke: var(--nh-brand-line); stroke-width: 1.5; stroke-dasharray: 3 5; }
-.pulseIn { fill: var(--nh-blue-bright); }
-.pulseOut { fill: var(--nh-brand); }
-
-.input, .hub, .owner { position: absolute; left: var(--x); top: var(--y); white-space: nowrap; }
-.input {
-  transform: translate(-100%, -50%); display: inline-flex; align-items: center; gap: 1.2cqw; padding: 0.9cqw 1.8cqw 0.9cqw 0.9cqw;
-  border-radius: 999px; background: var(--nh-card); box-shadow: 0 0 0 1px rgb(20 50 90 / 0.06), 0 6px 16px rgb(20 50 90 / 0.08);
-  font-size: max(10px, 2cqw); line-height: 1.3; font-weight: 500; color: var(--ink);
+/* The routing diagram as a night network map: the departure board's dark ground with a faint dot grid, the
+   lines in clear colours, the ideas in the scene's gold. The frame is a size container: wide enough, it shows
+   the left-to-right drawing; narrower than 520px, the top-to-bottom one. Text in the SVG scales with it. */
+.frame {
+  --ink-n: #fff;
+  --mute-n: rgb(255 255 255 / 0.62);
+  --faint-n: rgb(255 255 255 / 0.14);
+  --gold: var(--berlin-gold);
+  position: relative; height: 100%; min-height: 380px; display: flex; flex-direction: column; gap: 4px;
+  padding: 20px 20px 16px; border-radius: var(--r-lg); overflow: hidden; color: var(--ink-n);
+  container-type: inline-size;
+  background:
+    radial-gradient(circle, rgb(255 255 255 / 0.07) 1px, transparent 1.6px) 0 0 / 22px 22px,
+    radial-gradient(45% 40% at 48% 52%, rgb(0 98 110 / 0.55), transparent 75%),
+    radial-gradient(60% 50% at 100% 0%, rgb(255 207 90 / 0.08), transparent 70%),
+    var(--berlin-board);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.04) inset, 0 30px 60px -30px rgb(16 36 42 / 0.6);
 }
-.input i { width: 3.8cqw; height: 3.8cqw; min-width: 18px; min-height: 18px; border-radius: 999px; display: grid; place-items: center; background: var(--nh-blue-tint); color: var(--nh-blue); }
-.input i svg { width: 60%; height: 60%; }
-.hub {
-  transform: translate(-50%, -50%); width: 15.4cqw; height: 15.4cqw; border-radius: 4cqw; display: grid; place-content: center; gap: 0.3cqw; text-align: center;
-  background: var(--nh-brand); color: #fff; box-shadow: 0 0 0 1.2cqw rgb(0 98 110 / 0.1), 0 20px 40px -16px rgb(0 63 71 / 0.6);
-}
-.hub b { font-size: max(11px, 2.85cqw); line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
-.hub small { font-size: max(9px, 1.6cqw); line-height: 1.3; color: rgb(255 255 255 / 0.8); }
-.owner {
-  transform: translate(0, -50%); display: inline-flex; align-items: center; gap: 1.4cqw; padding: 1.1cqw 2cqw 1.1cqw 1.1cqw;
-  border-radius: 1.8cqw; background: var(--nh-card); box-shadow: 0 0 0 1px rgb(20 50 90 / 0.06), 0 6px 16px rgb(20 50 90 / 0.08);
-}
-.owner > :first-child { --s: max(20px, 3.8cqw) !important; }
-.owner > span:last-child { display: grid; }
-.owner strong { font-size: max(10px, 2cqw); line-height: 1.3; font-weight: 500; color: var(--ink); }
-.owner small { font-size: max(9px, 1.7cqw); line-height: 1.3; color: var(--muted); }
 
-.pause { right: 16px; bottom: 16px; }
+.top { display: flex; align-items: center; gap: 10px; padding-right: 44px; }
+.lineBullet {
+  flex: none; width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center;
+  background: #8fd3da; color: var(--berlin-board); font-size: 12px; line-height: 1; font-weight: 700;
+}
+.title { font-size: 15px; line-height: 20px; font-weight: 500; letter-spacing: -0.01em; }
 
+.stage { flex: 1 1 auto; min-height: 0; display: grid; place-items: center; }
+.net { display: block; width: 100%; height: auto; max-height: 100%; overflow: visible; }
+.tall { display: none; }
+@container (max-width: 519px) {
+  .wide { display: none; }
+  .tall { display: block; }
+}
+
+/* Lines. */
+.lineIn, .lineOut, .flow, .comet { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.lineIn { stroke: rgb(143 211 218 / 0.38); stroke-width: 6; }
+.lineOut { stroke: var(--c); stroke-width: 6; opacity: 0.85; }
+/* A faint current runs along every line while the loop plays. */
+.flow { stroke: rgb(255 255 255 / 0.32); stroke-width: 1.2; stroke-dasharray: 2 10; }
+.frame[data-live] .flow { animation: flow 900ms linear infinite; }
+.frame[data-paused] .flow { animation-play-state: paused; }
+@keyframes flow { to { stroke-dashoffset: -12; } }
+/* The lit stretch behind a riding idea: a short gold dash moved by stroke-dashoffset. */
+.comet { stroke: var(--gold); stroke-width: 6; stroke-dasharray: 0.22 2; stroke-dashoffset: 0.22; opacity: 0; filter: none; }
+
+/* The ideas. */
+.disc { opacity: 0; will-change: transform; }
+.discGlow { fill: var(--gold); opacity: 0.22; }
+.discCore { fill: var(--gold); }
+.discEye { fill: #fff; }
+
+/* Sources. */
+.srcHalo, .hubPulse, .ownHalo, .boardLamp { transform-box: fill-box; transform-origin: center; }
+.srcHalo { fill: var(--gold); opacity: 0; }
+.srcRing { fill: var(--berlin-board); stroke: #fff; stroke-width: 3; }
+.srcDot { fill: var(--gold); }
+.srcName { fill: var(--ink-n); font-size: 13px; font-weight: 600; letter-spacing: -0.01em; }
+.note { fill: var(--mute-n); font-family: var(--nh-mono); font-size: 9px; letter-spacing: 0.08em; }
+
+/* The interchange. */
+/* The interchange: the brand's teal with a white ring, as an interchange on a network map. */
+.hub { fill: var(--nh-brand); stroke: #fff; stroke-width: 4; }
+.hubPulse { fill: none; stroke: var(--gold); stroke-width: 4; opacity: 0; }
+.port { fill: #fff; stroke: var(--nh-brand-deep); stroke-width: 1.6; }
+.hubName { fill: #fff; font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+.hubNote { fill: rgb(255 255 255 / 0.86); font-family: var(--nh-mono); font-size: 10px; letter-spacing: 0.03em; }
+
+/* The board. */
+.board { fill: rgb(0 0 0 / 0.32); stroke: rgb(255 255 255 / 0.1); stroke-width: 1; }
+.boardLamp { fill: var(--gold); }
+.board1, .board2 { font-family: var(--nh-mono); font-size: 10.5px; letter-spacing: 0.06em; }
+.board1 { fill: var(--gold); font-weight: 600; }
+.board2 { fill: rgb(255 255 255 / 0.78); font-size: 9.5px; }
+
+/* Owners. */
+.ownHalo { fill: var(--gold); opacity: 0.16; transition: opacity 400ms var(--m-ease); }
+.clockTrack { fill: none; stroke: var(--faint-n); stroke-width: 3; }
+.tick { stroke: rgb(255 255 255 / 0.4); stroke-width: 1.4; stroke-linecap: round; }
+.clock {
+  fill: none; stroke: var(--gold); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 1 1;
+  transform: rotate(-90deg); transition: stroke-dashoffset 420ms var(--m-ease), stroke 300ms var(--m-ease);
+}
+.station { fill: var(--berlin-board); stroke: var(--c); stroke-width: 3.2; }
+.arrived { fill: var(--gold); transform-box: fill-box; transform-origin: center; transition: opacity 300ms var(--m-ease), transform 300ms var(--m-ease); }
+.bullet { fill: var(--c); font-family: var(--nh-mono); font-size: 10px; font-weight: 700; }
+.role { fill: var(--ink-n); font-size: 13px; font-weight: 600; letter-spacing: -0.01em; }
+.people { fill: var(--mute-n); font-size: 11px; }
+.status { fill: var(--gold); font-family: var(--nh-mono); font-size: 10.5px; letter-spacing: 0.04em; transition: fill 300ms var(--m-ease); }
+
+.owner[data-state="answered"] .clock { stroke: #6fdc95; }
+.owner[data-state="answered"] .status { fill: #6fdc95; }
+.owner[data-state="idle"] .ownHalo, .owner[data-state="idle"] .arrived { opacity: 0; }
+.owner[data-state="idle"] .arrived { transform: scale(0.4); }
+.owner[data-state="idle"] .status { fill: rgb(255 255 255 / 0.6); }
+
+/* Legend and pause. */
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; font-size: 12px; line-height: 16px; color: var(--mute-n); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 999px; }
+.keyIdea { background: var(--gold); box-shadow: 0 0 0 4px rgb(255 207 90 / 0.22); }
+.keyClock { border: 2px solid var(--gold); }
+.fine { margin-left: auto; font-family: var(--nh-mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: rgb(255 255 255 / 0.48); }
+.pause { right: 14px; top: 14px; background: rgb(255 255 255 / 0.1); border-color: rgb(255 255 255 / 0.18); color: #fff; }
+.pause:hover { background: rgb(255 255 255 / 0.2); }
+
+/* Below 1024px the diagram stacks under the copy, and its height follows its drawing. */
+@media (max-width: 1023px) {
+  .frame { height: auto; min-height: 0; }
+}
 @media (max-width: 639px) {
-  .frame { min-height: 0; padding: var(--s-5) var(--s-4); }
-  .box { aspect-ratio: auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-  .lines, .pause { display: none; }
-  .input, .hub, .owner { position: static; transform: none; }
-  .input { font-size: 12px; gap: 6px; padding: 4px 10px 4px 4px; }
-  .input i { width: 22px; height: 22px; }
-  .hub { width: 100%; height: auto; margin: 8px 0; padding: 12px; border-radius: var(--r-md); box-shadow: none; }
-  .hub b { font-size: 16px; }
-  .hub small { font-size: 12px; }
-  .owner { flex: 1 1 calc(50% - 4px); gap: 8px; padding: 6px 10px 6px 6px; border-radius: var(--r-sm); }
-  .owner > :first-child { --s: 24px !important; }
-  .owner strong { font-size: 13px; }
-  .owner small { font-size: 11px; }
+  .frame { padding: 16px 12px 14px; }
+  .fine { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .frame .flow { animation: none; }
+  .clock, .ownHalo, .arrived, .status { transition: none; }
 }

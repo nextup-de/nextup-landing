@@ -1,0 +1,90 @@
+/* The questions as stops on one line. Columns: the line (28px), the stop's number, the question, the open/close
+   disc. The answer sits under the question, in its column. The line is pale teal; beside an open answer it
+   lights up in the brand teal (a scaleY on .lit), and the stop fills. Only transform, opacity and the answer
+   row's grid track move. */
+.list { --rail: 36px; --no: 40px; position: relative; list-style: none; margin: 0; padding: 0; }
+.list::before {
+  content: ""; position: absolute; left: calc(var(--rail) / 2 - 1px); top: 0; bottom: 0; width: 2px; border-radius: 1px;
+  background: var(--nh-brand-line);
+}
+
+.item { position: relative; border-bottom: 1px solid var(--hair); }
+.item:first-child { border-top: 1px solid var(--hair); }
+
+/* The lit stretch of line beside an open stop and its answer. */
+.lit {
+  position: absolute; left: calc(var(--rail) / 2 - 1.5px); top: 36px; bottom: -1px; width: 3px; border-radius: 2px;
+  background: var(--nh-brand); transform: scaleY(0); transform-origin: 50% 0;
+  transition: transform 380ms var(--m-ease);
+}
+.item[data-open="true"] .lit { transform: scaleY(1); }
+
+.q { margin: 0; font: inherit; letter-spacing: 0; }
+.toggle {
+  position: relative; width: 100%; display: grid; grid-template-columns: var(--rail) var(--no) minmax(0, 1fr) 36px; align-items: center;
+  padding: 22px 0; border: 0; background: none; text-align: left; cursor: pointer; color: var(--ink);
+}
+.toggle:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 2px; border-radius: var(--r-sm); }
+
+/* The stop: a white tick with a teal ring; open, it fills and a ring goes out from it once. */
+.stop {
+  justify-self: center; position: relative; width: 14px; height: 14px; border-radius: 999px; background: var(--g-main);
+  box-shadow: inset 0 0 0 2.5px var(--nh-brand-line);
+  transition: transform var(--m-out) var(--m-ease), background var(--m-out) var(--m-ease), box-shadow var(--m-out) var(--m-ease);
+}
+.stop::after {
+  content: ""; position: absolute; inset: -6px; border-radius: 999px; border: 2px solid var(--nh-brand); opacity: 0; transform: scale(0.6);
+}
+.toggle:hover .stop { transform: scale(1.2); box-shadow: inset 0 0 0 2.5px var(--nh-brand); }
+.item[data-open="true"] .stop { background: var(--nh-brand); box-shadow: inset 0 0 0 2.5px var(--nh-brand), 0 0 0 3px var(--g-main), 0 0 0 4.5px var(--nh-brand); }
+.item[data-open="true"] .stop::after { animation: ping 640ms var(--m-ease) both; }
+@keyframes ping { 0% { opacity: 0.7; transform: scale(0.6); } 100% { opacity: 0; transform: scale(1.6); } }
+
+.no {
+  font-family: var(--nh-mono); font-size: 12px; line-height: 16px; letter-spacing: 0.08em; color: var(--muted);
+  transition: color var(--m-out) var(--m-ease);
+}
+.text {
+  padding-right: var(--s-4); font-size: 20px; line-height: 28px; font-weight: 500; letter-spacing: -0.015em; text-wrap: balance;
+  transition: color var(--m-out) var(--m-ease);
+}
+.toggle:hover .text, .item[data-open="true"] .text, .item[data-open="true"] .no { color: var(--nh-brand); }
+
+/* The disc: a plus that turns into a minus (its upright bar folds away) on a teal ground. */
+.icon {
+  justify-self: end; position: relative; width: 36px; height: 36px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--hair);
+  background: var(--nh-card); color: var(--nh-brand);
+  transition: background var(--m-out) var(--m-ease), color var(--m-out) var(--m-ease), box-shadow var(--m-out) var(--m-ease), transform var(--m-out) var(--m-ease);
+}
+.icon i { position: absolute; left: 50%; top: 50%; width: 12px; height: 2px; margin: -1px 0 0 -6px; border-radius: 1px; background: currentColor; transition: transform 280ms var(--m-ease); }
+.icon i:last-child { transform: rotate(90deg); }
+.toggle:hover .icon { box-shadow: inset 0 0 0 1px var(--nh-brand-line); transform: translateY(-1px); }
+.item[data-open="true"] .icon { background: var(--nh-brand); color: #fff; box-shadow: none; }
+.item[data-open="true"] .icon i:last-child { transform: rotate(0deg) scaleX(0); }
+
+/* The answer: its row grows from nothing to its height; the text rises in a beat later. */
+.panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 340ms var(--m-ease); }
+.item[data-open="true"] .panel { grid-template-rows: 1fr; }
+.inner { min-height: 0; overflow: hidden; }
+.inner p {
+  max-width: 62ch; margin: 0; padding: 0 52px 26px calc(var(--rail) + var(--no));
+  font-size: 16px; line-height: 26px; color: var(--muted);
+  opacity: 0; transform: translateY(-8px); transition: opacity 200ms var(--m-ease), transform 260ms var(--m-ease);
+}
+.item[data-open="true"] .inner p { opacity: 1; transform: none; transition-delay: 90ms; }
+
+@media (max-width: 759px) {
+  .list { --rail: 30px; --no: 30px; }
+  .lit { top: 30px; }
+  .toggle { grid-template-columns: var(--rail) var(--no) minmax(0, 1fr) 32px; padding: 18px 0; align-items: start; }
+  .stop { margin-top: 5px; width: 12px; height: 12px; }
+  .no { padding-top: 3px; }
+  .text { font-size: 17px; line-height: 24px; }
+  .icon { width: 32px; height: 32px; margin-top: -4px; }
+  .inner p { padding: 0 0 22px calc(var(--rail) + var(--no)); font-size: 15px; line-height: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lit, .stop, .no, .text, .icon, .icon i, .panel, .inner p { transition: none; }
+  .item[data-open="true"] .stop::after { animation: none; }
+  .inner p { transform: none; }
+}

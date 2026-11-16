@@ -28,6 +28,32 @@
   color: inherit; animation: flap 150ms cubic-bezier(0.3, 0.7, 0.4, 1) both; transform-origin: 50% 50%; white-space: pre;
 }
 .row[data-tone="gold"] .ch { color: var(--berlin-gold); }
+
+/* A board with a status column (additive: boards without one are unchanged). The label column can be widened by
+   the caller (--label); each row gets a tick on its left that carries the row's tone. Late and ok are the app's
+   danger and ok, lifted for the dark board so they stay readable (AA on --berlin-board). */
+.board[data-status] { --late: #ff7b7b; --warn: #ffb35c; --ok: #6fdc8c; gap: 8px; }
+.board[data-status] .row {
+  position: relative; grid-template-columns: var(--label, 92px) minmax(0, 1fr) var(--stat, 168px); padding-left: 14px;
+}
+.board[data-status] .row::before {
+  content: ""; position: absolute; left: 0; top: 3px; bottom: 3px; width: 3px; border-radius: 2px; background: rgb(244 241 230 / 0.16);
+  transition: background 400ms var(--m-ease);
+}
+.board[data-status] .label { color: rgb(244 241 230 / 0.72); letter-spacing: 0.06em; }
+.status {
+  display: flex; justify-content: flex-end; min-width: 0; overflow: hidden;
+  font-family: var(--nh-mono); font-size: 13px; line-height: 18px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--berlin-gold); white-space: nowrap;
+}
+.status > span { display: block; overflow: hidden; text-overflow: ellipsis; animation: statusIn 420ms var(--m-ease) both; }
+@keyframes statusIn { from { opacity: 0; transform: translateY(-40%); } }
+.row[data-tone="late"] .status { color: var(--late); }
+.row[data-tone="late"]::before { background: var(--late); }
+.row[data-tone="late"][data-then] .status { color: var(--warn); }
+.row[data-tone="late"][data-then]::before { background: var(--warn); }
+.row[data-tone="ok"] .status { color: var(--ok); }
+.row[data-tone="ok"]::before { background: var(--ok); }
 @keyframes flap { from { transform: rotateX(-88deg); opacity: 0.35; } }
 
 @media (max-width: 639px) {
@@ -35,4 +61,12 @@
   .row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
   .cells { gap: 1.5px; }
 }
-@media (prefers-reduced-motion: reduce) { .ch { animation: none; } }
+/* Below 760px a status board puts the flaps first, then the label and the status on one line under them. */
+@media (max-width: 759px) {
+  .board[data-status] { gap: 14px; }
+  .board[data-status] .row { grid-template-columns: minmax(0, 1fr) auto; gap: 6px 10px; padding-left: 12px; }
+  .board[data-status] .cells { grid-column: 1 / -1; order: -1; }
+  .board[data-status] .label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 10.5px; }
+  .status { font-size: 11px; line-height: 14px; }
+}
+@media (prefers-reduced-motion: reduce) { .ch, .status > span { animation: none; } }

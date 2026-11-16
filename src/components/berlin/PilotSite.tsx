@@ -3,9 +3,10 @@
 //   Scope  the plan is drawn on the ground: its outline, the surveyor's stakes
 //   Build  a tower crane lifts the floors in, one by one
 //   Run    the lights come on floor by floor and the line's flag goes up on the roof
-// The phases stand under it as three stations on a line. The current phase is also written on the enclosing
-// <section> (data-phase="1|2|3"), so the page can mark the matching phase in its own list.
-// Decorative: the picture is hidden from assistive technology; the phase names below it are plain text.
+// The phases stand under it as three stations on one line, each with its title and sentence: the station of the
+// phase being built lights gold, the phases already done get a filled stop and a "done" mark, and no text is ever
+// dimmed. The current phase is also written on the enclosing <section> (data-phase="1|2|3").
+// Decorative: the picture is hidden from assistive technology; the phases below it are a plain ordered list.
 // Reduced motion: the building stands finished and lit, every phase reached, nothing on the section.
 import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils/cn";
@@ -45,7 +46,7 @@ function Floor({ k }: { k: number }) {
 }
 
 /**
- * phases   the pilot's phases as [short name, title, body] (PILOT_PHASES); the short names label the stations
+ * phases   the pilot's phases as [short name, title, body] (PILOT_PHASES): one station each, with title and body
  * className  extra class on the figure
  */
 export function PilotSite({ phases, className }: { phases: ReadonlyArray<readonly [string, string, string]>; className?: string }) {
@@ -139,11 +140,15 @@ export function PilotSite({ phases, className }: { phases: ReadonlyArray<readonl
         <path className={styles.hut} d="M1030 250V214H1110V250M1030 214H1110M1044 224h22v12h-22ZM1084 250V226h16V250" />
       </svg>
       <ol className={styles.stops}>
-        {phases.map(([name], i) => (
+        {phases.map(([name, title, body], i) => (
           <li key={name} data-i={i + 1}>
             <i aria-hidden="true" />
-            <span>Phase {i + 1}</span>
-            <b>{name}</b>
+            <span className={styles.ph}>
+              Phase {i + 1} · {name}
+              <small className={styles.state} aria-hidden="true"><em data-s="done">Done</em><em data-s="now">Now</em><em data-s="next">Next</em></small>
+            </span>
+            <h3>{title}</h3>
+            <p>{body}</p>
           </li>
         ))}
       </ol>

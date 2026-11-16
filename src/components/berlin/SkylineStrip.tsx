@@ -11,6 +11,7 @@ import {
   AEG, CHIMNEY, DOM, FERNSEHTURM, GASOMETER, GLASS_TOWER, MOLECULE_MAN, RATHAUS, REICHSTAG, SIEGESSAULE, TOR,
   crane, oberbaum, plattenbau, viaduct, type Mark,
 } from "./landmarks";
+import { Flaps } from "./Flaps";
 import { clamp01, onFrame, passage, useReducedMotion } from "./motion";
 import { cn } from "@/lib/utils/cn";
 import styles from "./SkylineStrip.module.css";
@@ -200,11 +201,19 @@ function Train() {
  * stretch  which part of Berlin: bridge | alex | museum | government | works | terminus
  * ground   the ground of the section it leads into ("main" #fbfcfd or "alt" #f0f5f9); the strip wears it
  * at       "between" (default) reaches into the next section's top padding; "close" stands on its own, transparent
+ * reverse  the train runs right to left (mirrored): the line played backwards, e.g. the story's rewind
+ * caption  one short line on a flap plate above the deck, fading in as the strip passes the middle of the screen
+ * rise     right after the 3D tower: the strip rises over the scene's last screen (the tower lifts into the alt
+ *          ground there), its sky feathered from clear to the ground, so the bridge arrives while the scene fades
+ *          and no empty frame of fog stands between them. Only while the scene is pinned (SkylineStrip.module.css).
  */
-export function SkylineStrip({ stretch, ground = "main", at = "between" }: { stretch: Stretch; ground?: "main" | "alt"; at?: "between" | "close" }) {
+export function SkylineStrip({ stretch, ground = "main", at = "between", reverse = false, caption, rise = false }: {
+  stretch: Stretch; ground?: "main" | "alt"; at?: "between" | "close"; reverse?: boolean; caption?: string; rise?: boolean;
+}) {
   const s: Scene = SCENES[stretch];
   const root = useRef<HTMLDivElement>(null);
   const train = useRef<SVGGElement>(null);
+  const note = useRef<HTMLParagraphElement>(null);
   const reduced = useReducedMotion();
 
   useEffect(() => {
@@ -223,35 +232,47 @@ export function SkylineStrip({ stretch, ground = "main", at = "between" }: { str
           const r = el.getBoundingClientRect();
           const vh = window.innerHeight;
           let x: number;
-          if (s.arrive) {
+          const along = passage(r, vh);
+          if (reverse && !s.arrive) {
+            x = W + 170 - along * (W + 340);
+          } else if (s.arrive) {
             const p = clamp01((vh - r.top) / (vh * 0.55));
             x = -170 + (1 - (1 - p) ** 3) * (s.rest + 170);
           } else {
-            x = -170 + passage(r, vh) * (W + 340);
+            x = -170 + along * (W + 340);
           }
-          return () => { if (train.current) train.current.style.transform = `translate(${x.toFixed(1)}px, 0)`; };
+          const seen = clamp01((along - 0.3) / 0.3);
+          return () => {
+            if (train.current) train.current.style.transform = `translate(${x.toFixed(1)}px, 0)`;
+            if (note.current) note.current.style.opacity = seen.toFixed(3);
+          };
         });
       } else if (!e.isIntersecting && stop) { stop(); stop = null; }
     }, { rootMargin: "25% 0px" });
     near.observe(el);
     return () => { draw.disconnect(); near.disconnect(); stop?.(); delete el.dataset.armed; };
-  }, [reduced, s]);
+  }, [reduced, s, reverse]);
 
   return (
-    <div ref={root} className={cn(styles.strip, at === "close" && styles.close)} data-ground={ground} aria-hidden="true">
+    <div ref={root} className={cn(styles.strip, at === "close" && styles.close, rise && styles.rise)} data-ground={ground} aria-hidden="true">
       <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMax slice" focusable="false">
         {s.ground?.map(([a, b]) => <path key={`g${a}`} className={styles.ln} pathLength={1} d={`M${a} ${G}H${b}`} />)}
         {s.water && <path className={styles.water} d={water(s.water[0], s.water[1])} />}
         {s.places.map((p, i) => !p.front && <Place key={i} p={p} i={i} />)}
         {s.track !== undefined && (
           <g transform={`translate(0 ${s.track})`}>
-            <g ref={train} className={styles.train} style={{ transform: `translate(${reduced || s.arrive ? s.rest : -170}px, 0)` }}>
-              <Train />
+            <g ref={train} className={styles.train} style={{ transform: `translate(${reduced || s.arrive ? s.rest : reverse ? W + 170 : -170}px, 0)` }}>
+              {reverse ? <g transform="scale(-1 1)"><Train /></g> : <Train />}
             </g>
           </g>
         )}
         {s.places.map((p, i) => p.front && <Place key={i} p={p} i={i} />)}
       </svg>
+      {caption && (
+        <p ref={note} className={styles.caption} style={{ "--above": H - (s.track ?? G) + 38 } as React.CSSProperties}>
+          <Flaps text={caption} cells={caption.length} size="s" tone="gold" step={40} className={styles.capFlaps} />
+        </p>
+      )}
     </div>
   );
 }

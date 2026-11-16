@@ -1,0 +1,41 @@
+/* #seen: the one dark object on a light page. The board hangs from two rods over the platform like a station's
+   departure board, the gold of its flaps reflected faintly on the ground under it. */
+.head { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: var(--s-6) var(--s-8); align-items: end; margin-bottom: var(--s-7); }
+.headTitle { display: grid; gap: var(--s-4); }
+.title { font-size: var(--t-display, clamp(44px, 6.4vw + 8px, 112px)); line-height: 0.94; letter-spacing: -0.05em; font-weight: 500; color: var(--ink); text-wrap: balance; }
+.copy { max-width: 46ch; padding-bottom: 8px; font-size: 18px; line-height: 28px; color: var(--muted); }
+
+.fig { position: relative; margin: 0; display: grid; }
+.hang { display: flex; justify-content: space-between; padding: 0 12%; height: 36px; }
+.hang i { width: 4px; height: 100%; border-radius: 2px; background: linear-gradient(180deg, transparent, var(--berlin-ink) 40%); }
+.board {
+  --label: minmax(150px, 0.34fr); --stat: minmax(130px, 0.22fr);
+  padding: 22px 26px 24px; gap: 12px; border-radius: var(--r-lg);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06), 0 40px 80px -36px rgb(0 40 48 / 0.65), 0 2px 6px rgb(20 33 36 / 0.12);
+}
+.floor {
+  height: 40px; margin: -8px 6% 0; border-radius: 50%;
+  background: radial-gradient(50% 50% at 50% 0%, rgb(255 207 90 / 0.22), transparent 80%);
+}
+
+.foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--s-3) var(--s-6); margin-top: var(--s-2); }
+.foot > span { font-family: var(--nh-mono); font-size: 12px; line-height: 18px; letter-spacing: 0.04em; color: var(--muted); }
+.link { display: inline-flex; align-items: center; gap: 8px; font-size: 16px; line-height: 24px; font-weight: 500; color: var(--nh-brand); }
+.link:hover { color: var(--nh-brand-deep); }
+.link:hover :global(.nh-link) { background-size: 100% 1px; }
+.link :global(.nh-arrow) path:first-child { transform: scaleX(1); }
+.link:hover :global(.nh-arrow) path:last-child { transform: translateX(3px); }
+
+@media (max-width: 1023px) {
+  .head { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .board { --label: 150px; --stat: 120px; padding: 18px 18px 20px; }
+}
+@media (max-width: 759px) {
+  .copy { font-size: 16px; line-height: 25px; }
+  .hang { height: 24px; padding: 0 18%; }
+  .board { padding: 16px 14px 18px; border-radius: var(--r-md); }
+  /* Four rows on a phone: the fourth (a second "days left") steps out, the answered one stays. */
+  .board [data-i="3"] { display: none; }
+  .link { display: inline; }
+  .link :global(.nh-arrow) { display: inline-block; margin-left: 6px; vertical-align: -1px; }
+}

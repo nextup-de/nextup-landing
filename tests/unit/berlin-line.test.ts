@@ -1,11 +1,22 @@
 import { describe, expect, it } from "vitest";
-import { FLAPS, HOME_STATIONS, boardText, flapStep, ride } from "@/components/berlin/line";
+import { FLAPS, LANDING_STATIONS, PRODUCT_STATIONS, boardText, flapStep, ride } from "@/components/berlin/line";
 
 describe("the Berlin line", () => {
   it("starts in the scene and ends at the plant", () => {
-    expect(HOME_STATIONS[0]).toMatchObject({ id: "story", dark: true });
-    expect(HOME_STATIONS.at(-1)).toMatchObject({ id: "close", kind: "terminus" });
-    expect(new Set(HOME_STATIONS.map((s) => s.id)).size).toBe(HOME_STATIONS.length);
+    expect(LANDING_STATIONS[0]).toMatchObject({ id: "story", dark: true });
+    expect(LANDING_STATIONS.at(-1)).toMatchObject({ id: "close", kind: "terminus" });
+    expect(new Set(LANDING_STATIONS.map((s) => s.id)).size).toBe(LANDING_STATIONS.length);
+  });
+
+  it("runs /product from the raise box to the same terminus", () => {
+    expect(PRODUCT_STATIONS[0]).toMatchObject({ id: "try" });
+    expect(PRODUCT_STATIONS.at(-1)).toMatchObject({ id: "close", kind: "terminus" });
+    expect(new Set(PRODUCT_STATIONS.map((s) => s.id)).size).toBe(PRODUCT_STATIONS.length);
+  });
+
+  it("changes to /product only at an interchange", () => {
+    for (const s of [...LANDING_STATIONS, ...PRODUCT_STATIONS]) if (s.to) expect(s.kind).toBe("interchange");
+    expect(LANDING_STATIONS.find((s) => s.id === "product")).toMatchObject({ kind: "interchange", to: "/product" });
   });
 
   it("puts the train between the stations the reading line is between", () => {

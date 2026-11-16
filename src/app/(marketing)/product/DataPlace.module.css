@@ -1,0 +1,92 @@
+/* "Where your data lives": the night board (Separation) and the spec sheet as a stop list (DataStops).
+   Defaults are the finished, still picture (reduced motion, no script); only transform, opacity and
+   stroke-dashoffset move. */
+
+/* ---- The board ---- */
+.board {
+  margin: 0; width: 100%; max-width: 440px; padding: 14px 14px 10px; border-radius: var(--r-lg);
+  background:
+    radial-gradient(70% 55% at 50% 10%, rgb(255 207 90 / 0.14), transparent 70%),
+    radial-gradient(circle, rgb(143 211 218 / 0.12) 1px, transparent 1.6px) 0 0 / 16px 16px,
+    var(--berlin-board);
+  box-shadow: 0 34px 64px -36px rgb(16 36 42 / 0.6), inset 0 0 0 1px rgb(255 255 255 / 0.05);
+}
+.art { display: block; width: 100%; height: auto; overflow: visible; }
+
+.pin { fill: var(--berlin-gold); stroke: var(--berlin-gold-deep); stroke-width: 1; }
+.pinDot { fill: var(--berlin-board); }
+.halo { fill: var(--berlin-gold); opacity: 0.16; }
+.wave { fill: none; stroke: var(--berlin-gold); stroke-width: 1.4; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.place { font-family: var(--nh-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; fill: var(--berlin-gold); }
+
+.track { fill: none; stroke-width: 5; stroke-linecap: round; }
+.lineA { --c: #8fd3da; }
+.lineB { --c: #b9a3e6; }
+.lineA .track, .lineB .track { stroke: var(--c); }
+.term { fill: var(--c); }
+.st { fill: var(--berlin-board); stroke: var(--c); stroke-width: 3; }
+.bullet { fill: var(--c); }
+.bulletText { font-family: var(--nh-font); font-size: 12px; font-weight: 700; fill: var(--berlin-board); }
+.name { font-family: var(--nh-mono); font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em; fill: #fff; }
+.end { font-family: var(--nh-mono); font-size: 9.5px; letter-spacing: 0.08em; fill: rgb(255 255 255 / 0.62); }
+.gap { fill: none; stroke: rgb(255 255 255 / 0.22); stroke-width: 1.2; stroke-dasharray: 3 6; }
+.gapText { font-family: var(--nh-mono); font-size: 9px; letter-spacing: 0.14em; fill: rgb(255 255 255 / 0.62); paint-order: stroke; stroke: var(--berlin-board); stroke-width: 8px; }
+.glow { fill: var(--berlin-gold); opacity: 0.3; }
+.lamp { fill: var(--berlin-gold); }
+/* The finished picture: each light at its own terminus. */
+.ride { transform: translateX(258px); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .wave { animation: wave 2.8s cubic-bezier(0.2, 0.7, 0.3, 1) infinite; }
+  .wave2 { animation-delay: 1.4s; }
+  .lineA .ride { animation: ride 5.2s cubic-bezier(0.55, 0, 0.35, 1) infinite; }
+  .lineB .ride { animation: ride 5.2s cubic-bezier(0.55, 0, 0.35, 1) 1.6s infinite both; }
+}
+@keyframes wave { 0% { opacity: 0.85; transform: scale(1); } 100% { opacity: 0; transform: scale(4.2); } }
+@keyframes ride {
+  0% { transform: translateX(0); opacity: 0; }
+  8% { opacity: 1; }
+  62% { transform: translateX(258px); opacity: 1; }
+  88% { transform: translateX(258px); opacity: 1; }
+  100% { transform: translateX(258px); opacity: 0; }
+}
+
+/* ---- The stop list ---- */
+.stops {
+  --ring: 18px; --fill: 1;
+  position: relative; margin: 0; width: 100%; display: grid; padding-left: calc(var(--ring) + 22px);
+}
+/* The line down the left: a pale track and the brand fill over it, grown by --fill. */
+.stops::before, .stops::after {
+  content: ""; position: absolute; left: calc(var(--ring) / 2 - 2px); top: 26px; bottom: 26px; width: 4px; border-radius: 2px;
+  background: var(--nh-brand-line);
+}
+.stops::after { background: var(--nh-brand); transform-origin: 50% 0; transform: scaleY(var(--fill)); }
+.stops > div {
+  position: relative; display: grid; grid-template-columns: 150px minmax(0, 1fr); column-gap: var(--s-5);
+  padding: 18px 0; border-bottom: 1px solid var(--hair);
+}
+.stops > div:last-child { border-bottom: 0; }
+.stops i {
+  position: absolute; z-index: 1; left: calc(-1 * (var(--ring) + 22px)); top: 21px; width: var(--ring); height: var(--ring); border-radius: 999px;
+  background: var(--nh-brand); box-shadow: inset 0 0 0 3px var(--nh-brand), inset 0 0 0 6px #fff, 0 0 0 4px var(--g-alt);
+  transition: background 300ms var(--m-ease), box-shadow 300ms var(--m-ease), transform 360ms var(--nh-ease);
+}
+.stops > div:hover i { box-shadow: inset 0 0 0 3px var(--nh-brand), inset 0 0 0 6px #fff, 0 0 0 4px var(--g-alt), 0 0 0 7px rgb(255 207 90 / 0.6); }
+.stops dt { padding-top: 4px; font-size: 12px; line-height: 18px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--nh-brand); }
+.stops dd { margin: 0; font-size: 17px; line-height: 26px; color: var(--ink); }
+
+/* Armed: a stop not yet passed is a hollow ring. */
+.stops[data-armed] > div:not([data-lit]) i { background: var(--g-alt); box-shadow: inset 0 0 0 3px var(--nh-brand-line), 0 0 0 4px var(--g-alt); transform: scale(0.85); }
+
+@media (max-width: 759px) {
+  .board { padding: 10px 8px 6px; }
+  .stops { --ring: 16px; padding-left: calc(var(--ring) + 16px); }
+  .stops i { left: calc(-1 * (var(--ring) + 16px)); top: 16px; }
+  .stops > div { grid-template-columns: minmax(0, 1fr); row-gap: 4px; padding: 14px 0; }
+  .stops dt { padding-top: 0; }
+  .stops dd { font-size: 16px; line-height: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stops i { transition: none; }
+}

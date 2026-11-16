@@ -1,0 +1,32 @@
+/* Huge lines. Each sits in its own slot (overflow hidden, a little room below for descenders) and rises into it.
+   The strike is a 3px bar in the line's red, grown from the left; the words go grey under it. Without data-armed
+   (no script, reduced motion) the lines stand, struck if the list strikes. */
+.lines {
+  list-style: none; margin: 0; padding: 0; display: grid;
+  font-size: clamp(44px, 9vw, 136px); line-height: 0.98; font-weight: 500; letter-spacing: -0.045em; color: var(--ink);
+}
+.line { overflow: hidden; padding: 0 0.04em 0.1em 0; margin-bottom: -0.06em; }
+.inner { position: relative; display: inline-block; }
+.inner::after {
+  content: ""; position: absolute; left: -0.02em; right: -0.04em; top: 54%; height: 3px; border-radius: 2px;
+  background: var(--nh-danger); transform-origin: 0 50%; transform: scaleX(0);
+}
+.strike .inner { color: var(--muted); }
+.strike .inner::after { transform: scaleX(1); }
+
+/* Armed: hidden in the slot until the line arrives, unstruck until it is passed. */
+.lines[data-armed] .inner { transform: translateY(104%); color: var(--ink); }
+.lines[data-armed] .inner::after { transform: scaleX(0); }
+.lines[data-armed] .line[data-in] .inner { transform: none; transition: transform 520ms var(--nh-ease); }
+.lines[data-armed] .line[data-struck] .inner { color: var(--muted); }
+.lines[data-armed] .line[data-struck] .inner::after { transform: scaleX(1); transition: transform 420ms var(--nh-ease); }
+
+/* A phone: every line on one line, so the single strike bar runs exactly under its words. */
+@media (max-width: 759px) {
+  .lines { font-size: min(9vw, 44px); line-height: 1.02; }
+  .inner { white-space: nowrap; }
+  .inner::after { height: 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .inner, .inner::after { transition: none !important; }
+}

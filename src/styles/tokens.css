@@ -93,6 +93,10 @@
   --berlin-gold: #ffcf5a;
   --berlin-gold-deep: #e6a919;
   --berlin-board: #10242a;
+  /* The night ground: the one dark section of the landing (data-ground="night"), the departure board's colour. */
+  --g-night: var(--berlin-board);
+  /* The display size: the biggest words of a scene (end frames, counts). */
+  --t-display: clamp(44px, 6.4vw + 8px, 112px);
   /* Radius (soft): controls 8, panels 12, frames and cards 20. */
   --r-sm: 8px; --r-md: 12px; --r-lg: 20px;
   /* Motion (the Taste Skill's hover layer): in 140ms, out 200ms, press 90ms. */

@@ -1,0 +1,60 @@
+/* Split-flap cells: a tile split across its middle, warm white letters on the board's near-black. --fs sets the
+   letter size (by `size`, or by the caller); the cell is sized in em around it. While live, a changed cell drops its
+   old top half over the hinge (the leaf) onto the new letter. Only transform and opacity move. */
+.flaps {
+  --fs: 24px;
+  display: inline-grid; grid-auto-flow: column; grid-auto-columns: 0.72em; gap: 0.06em;
+  font-family: var(--nh-mono); font-size: var(--fs); font-weight: 600; line-height: 1; color: #f4f1e6;
+  font-variant-numeric: tabular-nums; vertical-align: middle;
+}
+.s { --fs: 15px; }
+.m { --fs: 24px; }
+.l { --fs: 64px; }
+.xl { --fs: 120px; }
+@media (max-width: 759px) {
+  .l { --fs: 44px; }
+  .xl { --fs: 88px; }
+}
+
+.cell {
+  position: relative; height: 1.24em; display: grid; place-items: center; overflow: hidden; perspective: 3.2em;
+  border-radius: 0.09em;
+  background: linear-gradient(180deg, #24393f 0%, #1b2e34 49.6%, #12232a 50.4%, #1a2c32 100%);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.28), inset 0 1px 0 rgb(255 255 255 / 0.05);
+}
+/* The hinge: a dark seam across the middle, with its two small axle pins. */
+.cell::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 50%; height: max(1px, 0.025em); background: rgb(0 0 0 / 0.6);
+}
+.cell::before {
+  content: ""; position: absolute; left: 0.03em; right: 0.03em; top: calc(50% - 0.04em); height: 0.08em; z-index: 2;
+  background: radial-gradient(circle at 0 50%, #0b181c 0.035em, transparent 0.04em), radial-gradient(circle at 100% 50%, #0b181c 0.035em, transparent 0.04em);
+}
+.ch { position: relative; white-space: pre; transform-origin: 50% 50%; }
+
+/* The falling leaf: the old letter's top half, hinged at the middle. */
+.leaf {
+  position: absolute; left: 0; right: 0; top: 0; height: 50%; z-index: 1; overflow: hidden; display: none;
+  background: linear-gradient(180deg, #24393f 0%, #1b2e34 100%); border-radius: 0.09em 0.09em 0 0;
+  transform-origin: 50% 100%; backface-visibility: hidden;
+}
+.leaf > span { position: absolute; left: 0; right: 0; top: 0; height: 200%; display: grid; place-items: center; white-space: pre; }
+
+.flaps[data-live] .leaf { display: block; animation: fall var(--step, 120ms) cubic-bezier(0.5, 0, 0.75, 0.4) forwards; }
+.flaps[data-live] .ch { animation: settle var(--step, 120ms) cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@keyframes fall {
+  from { transform: rotateX(0deg); opacity: 1; }
+  to { transform: rotateX(-90deg); opacity: 0.2; }
+}
+@keyframes settle { from { opacity: 0.55; } }
+
+/* Tones */
+.gold { color: var(--berlin-gold); }
+.late { color: #ff8a80; }
+.ok .cell, .ok .leaf { background: linear-gradient(180deg, #2a8a48 0%, var(--nh-ok) 49.6%, #17602d 50.4%, #1c6f35 100%); }
+.ok { color: #fff; }
+
+@media (prefers-reduced-motion: reduce) {
+  .flaps[data-live] .leaf { display: none; animation: none; }
+  .flaps[data-live] .ch { animation: none; }
+}

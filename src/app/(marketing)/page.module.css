@@ -1,114 +1,94 @@
-/* The home page's own layouts. The page system (section heights, the wrap, the heading scale, the lit frame)
-   is in globals.css; the product windows style themselves. */
+/* The landing's own layouts: #why and #pilot (the other sections style themselves). The page system (section
+   heights, the wrap, the heading scale) is in globals.css. */
 
-/* Hero (collage): the words on 5 columns, the lit frame on 6 from column 7, as tall as the hero's content box.
-   The hero is exactly the first screen and lies under the sticky header. */
-:global(main) > .hero {
-  margin-top: calc(-1 * var(--nh-head)); height: var(--nh-screen-h); min-height: 600px;
-  padding: calc(var(--nh-head) + 48px) 0 64px;
+/* The tower's old target, kept right after the scene. */
+.anchor { display: block; height: 0; }
+
+/* ------------------------------------------------------------------------------------------------------------
+   Why it waits: the reasons huge and struck, then the three missing things as stations on a line that never
+   reaches a terminus. As tall as its words (more than a screen); the lines reveal as they pass 80% of it. */
+.kicker {
+  display: inline-flex; align-items: center; gap: 12px; margin-bottom: var(--s-6);
+  font-size: 13px; line-height: 18px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
 }
-.heroGrid { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: minmax(0, 1fr); column-gap: var(--s-5); }
-.heroText { grid-column: 1 / span 5; align-self: start; display: grid; gap: var(--s-5); }
-.heroText h1 { text-box: trim-start cap alphabetic; }
-.lead { font-size: 20px; line-height: 30px; color: var(--muted); max-width: 34ch; }
+.kicker i {
+  width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center;
+  background: var(--ink); color: #fff; font-family: var(--nh-font); font-style: normal; font-size: 15px; font-weight: 700; letter-spacing: 0;
+}
+.nobody {
+  margin-top: var(--s-7); font-size: clamp(22px, 1vw + 14px, 30px); line-height: 1.25; font-weight: 500; letter-spacing: -0.02em;
+  color: var(--muted);
+}
+.nobody b { font-weight: 500; color: var(--ink); }
+
+.missing {
+  position: relative; list-style: none; margin: var(--s-8) 0 0; padding: 40px 0 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--s-5);
+}
+/* The line between the three: dashed, and it fades out before it ever reaches a terminus. */
+.missing::before {
+  content: ""; position: absolute; left: 8px; right: 0; top: 6px; height: 4px; border-radius: 2px;
+  background: repeating-linear-gradient(90deg, var(--nh-line-2) 0 12px, transparent 12px 20px);
+  -webkit-mask-image: linear-gradient(90deg, #000 70%, transparent 98%); mask-image: linear-gradient(90deg, #000 70%, transparent 98%);
+}
+.missing li { position: relative; display: grid; gap: var(--s-2); align-content: start; padding-right: var(--s-5); }
+.missing li::before {
+  content: ""; position: absolute; left: 0; top: -40px; width: 16px; height: 16px; border-radius: 999px;
+  background: var(--g-main); box-shadow: inset 0 0 0 4px var(--nh-line-2);
+}
+.missNo { font-size: 11px; line-height: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--nh-danger); }
+.missing h3 { font-size: clamp(24px, 0.8vw + 18px, 32px); line-height: 1.1; font-weight: 500; letter-spacing: -0.03em; color: var(--ink); }
+.missing p { font-size: 17px; line-height: 26px; color: var(--muted); max-width: 30ch; }
+.fix {
+  justify-self: start; margin-top: var(--s-2); font-size: 15px; line-height: 22px; font-weight: 600; color: var(--nh-brand);
+}
+.fix:hover { color: var(--nh-brand-hover); }
+
+@media (max-width: 759px) {
+  .kicker { margin-bottom: var(--s-5); font-size: 12px; }
+  .nobody { margin-top: var(--s-6); }
+  .missing { grid-template-columns: minmax(0, 1fr); row-gap: var(--s-6); margin-top: var(--s-7); padding: 0 0 0 36px; }
+  .missing::before {
+    left: 6px; right: auto; top: 8px; bottom: 0; width: 4px; height: auto;
+    background: repeating-linear-gradient(180deg, var(--nh-line-2) 0 12px, transparent 12px 20px);
+    -webkit-mask-image: linear-gradient(180deg, #000 75%, transparent); mask-image: linear-gradient(180deg, #000 75%, transparent);
+  }
+  .missing li::before { left: -36px; top: 2px; }
+}
+
+/* ------------------------------------------------------------------------------------------------------------
+   Pilot: the head split on the grid, then the building site across the wrap with the three phases as its stations
+   (PilotSite: titles and sentences under the stops, never dimmed). */
+/* One screen on phones too: PilotSite reads its own box, so a taller section only added empty space. */
+.pilot { --hm: 1; }
+.pilotHead {
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--s-5); align-items: end;
+}
+.pilotTitle { grid-column: 1 / span 7; display: grid; gap: var(--s-4); }
+.pilotCopy { grid-column: 8 / span 5; display: grid; gap: var(--s-3); }
+.pilotKicker {
+  display: inline-flex; align-items: center; gap: 10px; font-size: 12px; line-height: 16px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--nh-brand);
+}
+.pilotKicker i { width: 10px; height: 10px; border-radius: 3px; background: var(--nh-brand); box-shadow: 0 0 0 4px var(--nh-brand-tint); }
+.pilotTitle h2 {
+  font-size: clamp(40px, 3.4vw + 12px, 80px); line-height: 1; font-weight: 500; letter-spacing: -0.045em; color: var(--ink);
+  text-wrap: balance; max-width: 12ch;
+}
+.pilotCopy p { font-size: 18px; line-height: 28px; color: var(--muted); max-width: 44ch; }
+.pilotCopy .isNew { color: var(--ink); }
+.isNew b { font-weight: 600; }
 .actions { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-3); }
-.heroGrid > :last-child { grid-column: 7 / span 6; }
 
-@media (max-width: 1279px) { .heroText { grid-column: 1 / span 6; } }
+.site { margin-top: var(--s-7); }
+
 @media (max-width: 1023px) {
-  .heroGrid { display: flex; flex-direction: column; gap: var(--s-6); }
-  .heroGrid > :last-child { flex: 1 1 0; }
-  .heroText { max-width: 640px; }
+  .pilotTitle, .pilotCopy { grid-column: 1 / -1; }
+  .pilotCopy { margin-top: var(--s-5); }
 }
-@media (max-width: 639px) {
-  :global(main) > .hero { padding: calc(var(--nh-head) + 28px) 0 24px; min-height: 640px; }
-  .heroGrid { gap: var(--s-5); }
-  .heroText { gap: var(--s-4); }
-  .lead { font-size: 17px; line-height: 26px; }
+@media (max-width: 759px) {
+  .pilotTitle h2 { font-size: 38px; line-height: 40px; }
+  .pilotCopy p { font-size: 16px; line-height: 25px; }
   .actions :global(.nh-btn) { width: 100%; }
-}
-
-/* A section head with the h2 left and its line on the right, both on the grid. */
-.headSplit { max-width: none; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--s-5); align-items: end; }
-.headSplit > h2 { grid-column: 1 / span 7; }
-.headSplit > p { grid-column: 9 / span 4; }
-@media (max-width: 1023px) { .headSplit > h2, .headSplit > p { grid-column: 1 / -1; } }
-
-/* Rules: a bento on the grid - one wide tile and one narrow, then three. Two boxes deep: the tile, its picture. */
-.bento { flex: 1 1 auto; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: minmax(0, 1fr); gap: var(--s-5); }
-.tile {
-  grid-column: span 4; min-height: 240px; display: flex; flex-direction: column; justify-content: space-between; gap: var(--s-5);
-  padding: var(--s-6); border-radius: var(--r-lg); background: var(--g-alt); box-shadow: inset 0 0 0 1px var(--hair);
-}
-.wide { grid-column: span 8; }
-.tile h3 { font-size: 22px; line-height: 28px; font-weight: 500; letter-spacing: -0.02em; color: var(--ink); }
-.tile p { margin-top: var(--s-2); font-size: 16px; line-height: 24px; color: var(--muted); max-width: 46ch; }
-.tile > div:last-child > p { margin-top: var(--s-2); }
-
-.talk { display: grid; gap: var(--s-3); justify-items: start; font-family: var(--nh-ui); }
-.asks, .says { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px 10px 12px; border-radius: 14px; font-size: 14px; line-height: 20px; font-weight: 500; }
-.asks { background: var(--nh-card); color: var(--nh-ink); box-shadow: 0 6px 16px rgb(20 50 90 / 0.08); }
-.asks svg { color: var(--nh-blue-bright); }
-.says { margin-left: var(--s-8); background: var(--nh-brand); color: #fff; }
-.five { display: flex; align-items: flex-end; gap: var(--s-3); }
-.five b { font-size: 96px; line-height: 0.8; font-weight: 500; letter-spacing: -0.06em; color: var(--nh-brand); }
-.five span { font-size: 15px; line-height: 19px; color: var(--muted); }
-.role { display: grid; gap: var(--s-3); justify-items: start; font-family: var(--nh-ui); }
-.roleChip { padding: 6px 12px; border-radius: 999px; background: var(--nh-card); font-size: 13px; font-weight: 600; color: var(--nh-ink); box-shadow: 0 6px 16px rgb(20 50 90 / 0.08); }
-.pair { display: inline-flex; align-items: center; gap: 6px; }
-.pair small { margin-left: 6px; font-size: 12px; color: var(--muted); }
-.place { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 500; color: var(--ink); }
-.place i { width: 10px; height: 10px; border-radius: 999px; background: var(--nh-ok); box-shadow: 0 0 0 5px rgb(31 122 58 / 0.15); }
-.mini {
-  align-self: stretch; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 8px 8px 16px;
-  border: 2px solid transparent; border-radius: 999px; font-family: var(--nh-ui); font-size: 14px; color: var(--nh-mute);
-  background: linear-gradient(var(--nh-card), var(--nh-card)) padding-box, var(--nh-gold-ring) border-box;
-}
-.mini i { width: 30px; height: 30px; border-radius: 999px; display: grid; place-items: center; background: var(--nh-brand); color: #fff; }
-
-@media (max-width: 1023px) {
-  .tile, .wide { grid-column: span 6; }
-  .wide { grid-column: 1 / -1; }
-}
-@media (max-width: 639px) {
-  .bento { gap: var(--s-3); grid-auto-rows: auto; }
-  .tile, .wide { grid-column: 1 / -1; min-height: 0; padding: var(--s-5); }
-  .says { margin-left: var(--s-5); }
-  .five b { font-size: 72px; }
-}
-
-/* Pilot: the phases on 5 columns, the diagram on 7. */
-.pilot { flex: 1 1 auto; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--s-5); }
-.pilotText { grid-column: 1 / span 5; display: flex; flex-direction: column; }
-.pilot > :last-child { grid-column: 7 / span 6; }
-.phases { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--hair); }
-.phases li { display: grid; gap: var(--s-2); padding: var(--s-5) 0; border-bottom: 1px solid var(--hair); }
-.phase { font-size: 13px; line-height: 18px; font-weight: 500; color: var(--nh-brand); }
-.phases h3 { font-size: 22px; line-height: 28px; font-weight: 500; letter-spacing: -0.02em; color: var(--ink); }
-.phases p { color: var(--muted); max-width: 44ch; }
-/* The building site under the pilot (berlin/PilotSite) writes the phase it shows on the section: that phase gets
-   the line's mark beside it. */
-.phases li { position: relative; }
-.phases li::before {
-  content: ""; position: absolute; left: -20px; top: var(--s-5); bottom: var(--s-5); width: 3px; border-radius: 2px;
-  background: var(--nh-brand); transform: scaleY(0); transform-origin: 50% 0; transition: transform var(--m-out) var(--m-ease);
-}
-:global(section[data-phase="1"]) .phases li:nth-child(1)::before,
-:global(section[data-phase="2"]) .phases li:nth-child(2)::before,
-:global(section[data-phase="3"]) .phases li:nth-child(3)::before { transform: scaleY(1); }
-@media (max-width: 639px) { .phases li::before { left: -12px; } }
-@media (max-width: 1023px) {
-  .pilot { display: flex; flex-direction: column; gap: var(--s-6); }
-  .pilot > :last-child { flex: 1 1 auto; }
-}
-
-/* Questions: the head on 4 columns, the answers on 8, every answer open. */
-.faq { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--s-5); align-content: start; }
-.faq > :first-child { grid-column: 1 / span 4; align-self: start; }
-.answers { grid-column: 6 / span 7; margin: 0; display: grid; border-top: 1px solid var(--hair); }
-.answers > div { display: grid; gap: var(--s-2); padding: var(--s-5) 0; border-bottom: 1px solid var(--hair); }
-.answers dt { font-size: 19px; line-height: 26px; font-weight: 500; letter-spacing: -0.015em; color: var(--ink); }
-.answers dd { margin: 0; color: var(--muted); max-width: 62ch; }
-@media (max-width: 1023px) {
-  .faq > :first-child, .answers { grid-column: 1 / -1; }
+  .site { margin-top: var(--s-6); }
 }

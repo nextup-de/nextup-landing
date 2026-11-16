@@ -90,42 +90,55 @@ li[data-on="true"] .name { color: var(--nh-brand); }
 
 /* Narrow: a band under the header with the current station's name and the line across. Hidden in the scene. */
 @media (max-width: 1099px) {
-  .rail {
+  .rail:not([data-calm]) {
     left: 0; right: 0; top: var(--nh-head); bottom: auto; width: auto; height: 32px;
     display: flex; align-items: center; gap: 10px; padding: 0 var(--gut);
     background: rgb(251 252 253 / 0.9); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--hair);
     transition: opacity var(--m-out) var(--m-ease), transform var(--m-out) var(--m-ease), visibility 0s;
   }
-  .rail[data-tone="dark"] {
+  .rail:not([data-calm])[data-tone="dark"] {
     opacity: 0; visibility: hidden; transform: translateY(-100%);
     transition: opacity var(--m-out) var(--m-ease), transform var(--m-out) var(--m-ease), visibility 0s var(--m-out);
     --line: var(--nh-brand); --line-ahead: var(--nh-brand-line); --dot: var(--g-main); --text: var(--nh-brand);
   }
-  .bullet { position: static; transform: none; flex: none; width: 18px; height: 18px; border-radius: 5px; font-size: 10px; }
-  .now { display: block; flex: none; min-width: 84px; font-size: 12px; line-height: 16px; font-weight: 600; color: var(--ink); }
-  .track { position: relative; inset: auto; flex: 1; height: 100%; margin: 0 8px; }
-  .track::before, .done { left: 0; right: 0; top: 50%; bottom: auto; width: auto; height: 3px; margin: -1.5px 0 0; }
-  .done { transform-origin: 0 50%; transform: scaleX(0); }
-  .track li { left: calc(var(--f) * 100%); top: 50%; }
-  .track a { left: -12px; top: -15px; width: 24px; height: 30px; border-radius: var(--r-sm); }
-  .dot { width: 9px; height: 9px; box-shadow: inset 0 0 0 2px var(--line); }
-  li[data-kind="interchange"] .dot { width: 11px; height: 11px; box-shadow: inset 0 0 0 2px var(--line), 0 0 0 1.5px var(--dot), 0 0 0 2.5px var(--line); }
-  li[data-kind="terminus"] .dot { width: 6px; height: 14px; border-radius: 3px; }
-  .tag { display: none; }
-  .name { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); opacity: 1; box-shadow: none; }
-  .train {
+  .rail:not([data-calm]) .bullet { position: static; transform: none; flex: none; width: 18px; height: 18px; border-radius: 5px; font-size: 10px; }
+  .rail:not([data-calm]) .now { display: block; flex: none; min-width: 84px; font-size: 12px; line-height: 16px; font-weight: 600; color: var(--ink); }
+  .rail:not([data-calm]) .track { position: relative; inset: auto; flex: 1; height: 100%; margin: 0 8px; }
+  .rail:not([data-calm]) .track::before, .rail:not([data-calm]) .done { left: 0; right: 0; top: 50%; bottom: auto; width: auto; height: 3px; margin: -1.5px 0 0; }
+  .rail:not([data-calm]) .done { transform-origin: 0 50%; transform: scaleX(0); }
+  .rail:not([data-calm]) .track li { left: calc(var(--f) * 100%); top: 50%; }
+  .rail:not([data-calm]) .track a { left: -12px; top: -15px; width: 24px; height: 30px; border-radius: var(--r-sm); }
+  .rail:not([data-calm]) .dot { width: 9px; height: 9px; box-shadow: inset 0 0 0 2px var(--line); }
+  .rail:not([data-calm]) li[data-kind="interchange"] .dot { width: 11px; height: 11px; box-shadow: inset 0 0 0 2px var(--line), 0 0 0 1.5px var(--dot), 0 0 0 2.5px var(--line); }
+  .rail:not([data-calm]) li[data-kind="terminus"] .dot { width: 6px; height: 14px; border-radius: 3px; }
+  .rail:not([data-calm]) .tag { display: none; }
+  .rail:not([data-calm]) .name { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); opacity: 1; box-shadow: none; }
+  .rail:not([data-calm]) .train {
     left: 0; top: 50%; width: 28px; height: 10px; margin: -5px 0 0 -14px; border-radius: 5px;
     background:
       repeating-linear-gradient(to right, transparent 0 4px, var(--berlin-gold) 4px 7px) 4px 3px / 20px 4px no-repeat,
       var(--nh-brand-deep);
   }
-  .train::after { left: auto; right: -3px; top: 50%; bottom: auto; margin: -3px 0 0; }
-  .train[data-dir="up"]::after { right: auto; left: -3px; top: 50%; }
+  .rail:not([data-calm]) .train::after { left: auto; right: -3px; top: 50%; bottom: auto; margin: -3px 0 0; }
+  .rail:not([data-calm]) .train[data-dir="up"]::after { right: auto; left: -3px; top: 50%; }
 }
 @media (max-width: 639px) {
   .now { min-width: 72px; }
 }
+
+/* An interchange to another page: a small change arrow after the name. */
+.to { margin-left: 6px; font-style: normal; color: var(--nh-brand); }
+
+/* Calm (/product): a 1px line, smaller ticks, no train; only from 1024px, where the margin holds it. */
+.rail[data-calm] { --line-ahead: rgb(0 98 110 / 0.18); }
+.rail[data-calm] .track::before, .rail[data-calm] .done { width: 1px; margin-left: -0.5px; }
+.rail[data-calm] .dot { width: 9px; height: 9px; box-shadow: inset 0 0 0 1.5px var(--line); }
+.rail[data-calm] li:not([data-past="true"]):not([data-on="true"]) .dot { box-shadow: inset 0 0 0 1.5px var(--nh-brand-line); }
+.rail[data-calm] li[data-kind="interchange"] .dot { width: 11px; height: 11px; box-shadow: inset 0 0 0 1.5px var(--line), 0 0 0 1.5px var(--dot), 0 0 0 2.5px var(--line); }
+.rail[data-calm] li[data-kind="terminus"] .dot { width: 14px; height: 5px; }
+.rail[data-calm] li[data-on="true"] .dot { background: var(--line); }
+@media (max-width: 1023px) { .rail[data-calm] { display: none; } }
 @media (prefers-reduced-motion: reduce) {
   .rail, .dot, .name, .tag, .done { transition: none; }
 }

@@ -37,38 +37,72 @@
 .site[data-live] .floor:not([data-lit="true"]) .win { fill: var(--nh-card); }
 .site[data-live] .flag:not([data-on="true"]) { opacity: 0; transform: scaleY(0.4); }
 
-/* The phases as stations: a line under them that fills with the site's progress. */
+/* The phases as stations: a 4px line under them that fills with the site's progress, each station with its phase,
+   title and sentence. Text never dims: a phase reached gets a filled stop, the one being built a gold ring and a
+   "Now" mark, the ones done a "Done" mark. */
 .stops {
+  --dot: 18px;
   position: relative; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: var(--s-5);
 }
 .stops::before, .stops::after {
-  content: ""; position: absolute; left: 7px; right: 0; top: 6px; height: 3px; border-radius: 2px; background: var(--nh-brand-line);
+  content: ""; position: absolute; left: 8px; right: 0; top: calc(var(--dot) / 2 - 2px); height: 4px; border-radius: 2px; background: var(--nh-brand-line);
 }
 .stops::after { background: var(--nh-brand); transform-origin: 0 50%; transform: scaleX(var(--p)); }
-.stops li { position: relative; z-index: 1; display: grid; gap: 2px; padding-top: 24px; }
+.stops li { position: relative; z-index: 1; display: grid; gap: var(--s-2); align-content: start; padding-top: calc(var(--dot) + 18px); }
 .stops i {
-  position: absolute; left: 0; top: 0; width: 15px; height: 15px; border-radius: 999px; background: var(--nh-card);
-  box-shadow: inset 0 0 0 2.5px var(--nh-brand); transition: background var(--m-out) var(--m-ease), box-shadow var(--m-out) var(--m-ease);
+  position: absolute; left: 0; top: 0; width: var(--dot); height: var(--dot); border-radius: 999px; background: var(--nh-brand);
+  box-shadow: inset 0 0 0 3px var(--nh-brand), 0 0 0 4px var(--g-alt);
+  transition: background var(--m-out) var(--m-ease), box-shadow var(--m-out) var(--m-ease);
 }
-.stops span { font-size: 13px; line-height: 18px; font-weight: 500; color: var(--nh-brand); }
-.stops b { font-size: 17px; line-height: 24px; font-weight: 500; letter-spacing: -0.01em; color: var(--ink); }
-.site[data-live] .stops li { opacity: 0.5; transition: opacity var(--m-out) var(--m-ease); }
-.site[data-live] .stops i { box-shadow: inset 0 0 0 2.5px var(--nh-brand-line); }
-.site[data-phase="1"] .stops li[data-i="1"],
-.site[data-phase="2"] .stops li:is([data-i="1"], [data-i="2"]),
-.site[data-phase="3"] .stops li { opacity: 1; }
-.site[data-phase="1"] .stops li[data-i="1"] i,
-.site[data-phase="2"] .stops li:is([data-i="1"], [data-i="2"]) i,
-.site[data-phase="3"] .stops li i { box-shadow: inset 0 0 0 2.5px var(--nh-brand); }
+.ph {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px;
+  font-family: var(--nh-mono); font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--nh-brand);
+}
+.stops h3 { font-size: 22px; line-height: 28px; font-weight: 500; letter-spacing: -0.02em; color: var(--ink); }
+.stops p { font-size: 16px; line-height: 25px; color: var(--muted); max-width: 34ch; }
+
+/* The state mark: only while the site is live. */
+.state { display: none; }
+.state em {
+  display: none; padding: 2px 7px; border-radius: 5px; font-style: normal; font-size: 10.5px; line-height: 14px; letter-spacing: 0.08em;
+}
+.state em[data-s="done"] { background: var(--nh-brand); color: #fff; }
+.state em[data-s="now"] { background: var(--berlin-board); color: var(--berlin-gold); }
+.state em[data-s="next"] { background: var(--nh-card); color: var(--muted); box-shadow: inset 0 0 0 1px var(--hair); }
+.site[data-live] .state { display: inline-flex; }
+
+/* Live: stations not reached yet are hollow rings; reached ones filled; the current one ringed in gold. */
+.site[data-live] .stops i { background: var(--nh-card); box-shadow: inset 0 0 0 3px var(--nh-brand-line), 0 0 0 4px var(--g-alt); }
+.site[data-live] .stops li .state em[data-s="next"] { display: block; }
+.site[data-phase="2"] .stops li[data-i="1"] .state em[data-s="next"],
+.site[data-phase="3"] .stops li:is([data-i="1"], [data-i="2"]) .state em[data-s="next"],
+.site[data-phase="1"] .stops li[data-i="1"] .state em[data-s="next"],
+.site[data-phase="2"] .stops li[data-i="2"] .state em[data-s="next"],
+.site[data-phase="3"] .stops li[data-i="3"] .state em[data-s="next"] { display: none; }
+.site[data-phase="2"] .stops li[data-i="1"] .state em[data-s="done"],
+.site[data-phase="3"] .stops li:is([data-i="1"], [data-i="2"]) .state em[data-s="done"] { display: block; }
+.site[data-phase="1"] .stops li[data-i="1"] .state em[data-s="now"],
+.site[data-phase="2"] .stops li[data-i="2"] .state em[data-s="now"],
+.site[data-phase="3"] .stops li[data-i="3"] .state em[data-s="now"] { display: block; }
+.site[data-phase="2"] .stops li[data-i="1"] i,
+.site[data-phase="3"] .stops li:is([data-i="1"], [data-i="2"]) i { background: var(--nh-brand); box-shadow: inset 0 0 0 3px var(--nh-brand), 0 0 0 4px var(--g-alt); }
 .site[data-phase="1"] .stops li[data-i="1"] i,
 .site[data-phase="2"] .stops li[data-i="2"] i,
-.site[data-phase="3"] .stops li[data-i="3"] i { background: var(--nh-brand); box-shadow: inset 0 0 0 2.5px var(--nh-brand), 0 0 0 3px var(--g-alt), 0 0 0 5px var(--berlin-gold); }
+.site[data-phase="3"] .stops li[data-i="3"] i { background: var(--berlin-gold); box-shadow: inset 0 0 0 3px var(--nh-brand-deep), 0 0 0 4px var(--g-alt), 0 0 0 7px rgb(255 207 90 / 0.55); }
 
+@media (max-width: 759px) {
+  .stops { grid-template-columns: minmax(0, 1fr); row-gap: var(--s-5); padding-left: calc(var(--dot) + 18px); }
+  .stops::before, .stops::after { left: calc(var(--dot) / 2 - 2px); right: auto; top: 8px; bottom: 0; width: 4px; height: auto; }
+  .stops::after { transform-origin: 50% 0; transform: scaleY(var(--p)); }
+  .stops li { padding-top: 0; }
+  .stops i { left: calc(-1 * (var(--dot) + 18px)); top: 0; }
+  .stops h3 { font-size: 19px; line-height: 25px; }
+  .stops p { font-size: 15px; line-height: 23px; }
+}
 @media (max-width: 639px) {
   .site { margin-top: var(--s-6); }
-  .stops b { font-size: 15px; line-height: 21px; }
-  .stops span { font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .floor, .win, .flag, .trolley, .stakes, .stops li, .stops i { transition: none; }
+  .floor, .win, .flag, .trolley, .stakes, .stops i { transition: none; }
 }
