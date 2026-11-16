@@ -5,16 +5,23 @@
 .tour { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--s-5); }
 .side { grid-column: 1 / span 4; display: flex; flex-direction: column; min-height: 0; }
 
-/* The steps: a hairline rail on the left; the chosen step's bar slides along it. Each step is one line, the
-   chosen one opens its sentence. */
-.steps { position: relative; display: grid; border-left: 1px solid var(--hair); }
-.step { position: relative; padding-left: var(--s-5); }
+/* The steps: five stations on one line. The line runs through the middles of the numbers (13px in) from the
+   first station to the last; the part already travelled is the brand teal, the rest pale. Each station is a
+   white disc with a ring; the chosen one is filled, with a gold halo, and the train stands under it. Each step
+   is one line; the chosen one opens its sentence. */
+.steps { --c: 27px; position: relative; display: grid; }
+.step { position: relative; }
 .step::before {
-  content: ""; position: absolute; left: -1px; top: 0; bottom: 0; width: 2px; background: var(--nh-brand);
-  transform: scaleY(0); transform-origin: top; transition: transform var(--m-out) var(--m-ease);
+  content: ""; position: absolute; left: 11.5px; top: 0; bottom: 0; width: 3px; background: var(--nh-brand-line);
+  transition: background var(--m-out) var(--m-ease);
 }
-.step[data-on="true"]::before { transform: scaleY(1); }
+.step:first-of-type::before { top: var(--c); }
+.step:last-of-type::before { bottom: auto; height: var(--c); }
+.step[data-past="true"]::before { background: var(--nh-brand); }
+.step[data-on="true"]::before { background: linear-gradient(var(--nh-brand) 0 var(--c), var(--nh-brand-line) var(--c)); }
+.step:last-of-type[data-on="true"]::before { background: var(--nh-brand); }
 .step button {
+  position: relative; z-index: 2;
   width: 100%; display: flex; align-items: center; gap: var(--s-3); padding: 14px 0; border: 0; background: none; cursor: pointer; text-align: left;
   font-family: var(--nh-font); font-size: 20px; line-height: 26px; font-weight: 500; letter-spacing: -0.02em; color: var(--muted);
   transition: color var(--m-out) var(--m-ease);
@@ -24,10 +31,27 @@
 .step button:focus-visible { outline: 2px solid var(--nh-brand); outline-offset: 2px; border-radius: 4px; }
 .num {
   flex: none; width: 26px; height: 26px; border-radius: 999px; display: grid; place-items: center;
-  font-size: 13px; line-height: 1; font-weight: 500; letter-spacing: 0; background: var(--g-alt); color: var(--muted);
-  transition: background var(--m-out) var(--m-ease), color var(--m-out) var(--m-ease);
+  font-size: 13px; line-height: 1; font-weight: 600; letter-spacing: 0; background: var(--nh-card); color: var(--muted);
+  box-shadow: inset 0 0 0 2.5px var(--nh-brand-line);
+  transition: background var(--m-out) var(--m-ease), color var(--m-out) var(--m-ease), box-shadow var(--m-out) var(--m-ease), transform var(--m-out) var(--m-ease);
 }
-.step[data-on="true"] .num { background: var(--nh-brand); color: #fff; }
+.step[data-past="true"] .num { color: var(--nh-brand); box-shadow: inset 0 0 0 2.5px var(--nh-brand); }
+.step[data-on="true"] .num {
+  background: var(--nh-brand); color: #fff;
+  box-shadow: inset 0 0 0 2.5px var(--nh-brand), 0 0 0 3px var(--nh-card), 0 0 0 5px var(--berlin-gold);
+}
+.step button:hover .num { transform: scale(1.08); }
+
+/* The train: a capsule under the chosen station, its windows lit; it rides along the line to a new choice. */
+.train {
+  position: absolute; z-index: 1; left: 13px; top: 0; width: 18px; height: 52px; margin: -26px 0 0 -9px; border-radius: 9px;
+  background:
+    repeating-linear-gradient(to bottom, var(--berlin-gold) 0 3px, transparent 3px 7px) 6px 4px / 6px 9px no-repeat,
+    repeating-linear-gradient(to bottom, var(--berlin-gold) 0 3px, transparent 3px 7px) 6px 39px / 6px 9px no-repeat,
+    var(--nh-brand-deep);
+  box-shadow: 0 0 0 3px var(--g-alt), 0 6px 18px rgb(0 63 71 / 0.3);
+  transform: translateY(var(--ty, var(--c))); transition: transform 620ms var(--m-ease);
+}
 .body { display: none; }
 .step[data-on="true"] .body { display: block; padding: 0 0 var(--s-4) 38px; font-size: 16px; line-height: 25px; color: var(--muted); max-width: 40ch; }
 
@@ -129,6 +153,7 @@
   .frame { min-height: 460px; flex: 1 1 auto; }
 }
 @media (max-width: 639px) {
+  .steps { --c: 21px; }
   .step button { font-size: 17px; line-height: 22px; padding: 10px 0; }
   .step[data-on="true"] .body { font-size: 15px; line-height: 23px; padding-left: 38px; }
   .frame { min-height: 260px; }
@@ -155,4 +180,4 @@
   .numbers .card { height: 134px; }
   .numbers strong { font-size: 45px; line-height: 45px; }
 }
-@media (prefers-reduced-motion: reduce) { .screen { animation: none; } .step::before { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .screen { animation: none; } .step::before, .train, .num { transition: none; } }

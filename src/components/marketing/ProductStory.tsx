@@ -2,9 +2,11 @@
 // The product in five steps, from the first word to the measured result. The steps stand on the left as tabs,
 // each named by what a person does there; the one chosen opens its line and shows its screen on the right, in
 // one app window on the lit frame. Clicks and arrow keys choose a step; nothing changes by itself or by scroll.
+// The steps are five stations on one line (the Berlin line of the page): a train stands at the chosen one and
+// rides to the next when another is chosen.
 // Every screen is real product UI built from the app's elements, with the demo company's own names.
 import Image from "next/image";
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { ArrowUp, Avatar, Clock, Dept, Pill, Progress, Spark } from "@/components/product/elements";
 import { cn } from "@/lib/utils/cn";
 import styles from "./ProductStory.module.css";
@@ -144,10 +146,30 @@ function Window({ which, tab }: { which: string; tab: Tab }) {
   );
 }
 
+const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
+
 export function ProductStory() {
   const id = useId();
   const [at, setAt] = useState(0);
   const tabs = useRef<Array<HTMLButtonElement | null>>([]);
+  const line = useRef<HTMLDivElement>(null);
+
+  // The train stands at the chosen station: the middle of its button, measured, as the open step's sentence
+  // changes the heights. Written straight to the style - a measurement, not state.
+  useIsoLayoutEffect(() => {
+    const el = line.current;
+    if (!el) return;
+    const place = () => {
+      const b = tabs.current[at];
+      if (!b) return;
+      const y = b.getBoundingClientRect().top - el.getBoundingClientRect().top + b.offsetHeight / 2;
+      el.style.setProperty("--ty", `${Math.round(y)}px`);
+    };
+    place();
+    const ro = new ResizeObserver(place);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [at]);
 
   // Arrow keys move along the steps, as in any tab list; Home and End jump to either end.
   function onKey(e: React.KeyboardEvent, i: number) {
@@ -168,9 +190,10 @@ export function ProductStory() {
         <div className="section-head">
           <h2 id={`${id}-h`}>From the first word to the measured result</h2>
         </div>
-        <div className={styles.steps} role="tablist" aria-orientation="vertical" aria-labelledby={`${id}-h`} style={{ "--i": at } as React.CSSProperties}>
+        <div ref={line} className={styles.steps} role="tablist" aria-orientation="vertical" aria-labelledby={`${id}-h`} style={{ "--i": at } as React.CSSProperties}>
+          <span className={styles.train} aria-hidden="true" />
           {CHAPTERS.map((ch, i) => (
-            <div key={ch.key} className={styles.step} data-on={i === at}>
+            <div key={ch.key} className={styles.step} data-on={i === at} data-past={i < at}>
               <button
                 ref={(el) => { tabs.current[i] = el; }} type="button" role="tab" id={`${id}-t${i}`}
                 aria-selected={i === at} aria-controls={`${id}-p`} tabIndex={i === at ? 0 : -1}

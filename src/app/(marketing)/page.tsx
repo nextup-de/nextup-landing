@@ -8,6 +8,10 @@
 //   questions  the questions before a pilot, every answer open
 // The close and the footer follow as the last screen (SiteFooter). Every picture of the product is product UI
 // built from the app's own elements with the demo company's names - no screenshots to retake.
+import { HOME_STATIONS } from "@/components/berlin/line";
+import { LineRail } from "@/components/berlin/LineRail";
+import { PilotSite } from "@/components/berlin/PilotSite";
+import { SkylineStrip } from "@/components/berlin/SkylineStrip";
 import { IdeasBoard, type BoardIdea } from "@/components/marketing/IdeasBoard";
 import { PilotDiagram } from "@/components/marketing/PilotDiagram";
 import { ProductStory } from "@/components/marketing/ProductStory";
@@ -66,10 +70,13 @@ const IDEAS: BoardIdea[] = [
 export default function LandingPage() {
   return (
     <>
+      <LineRail stations={HOME_STATIONS} />
       <TowerExperience
         promiseDays={P}
         lead={`Raise a problem or an idea in one box. NextUp names who owns it, gives them ${P} working days to answer and shows everyone what is waiting on whom.`}
       />
+
+      <SkylineStrip stretch="bridge" ground="alt" />
 
       {/* The story lands in the product: the raise box, routing what a visitor types the way the app does. */}
       <section className="section" id="try" data-ground="alt" aria-labelledby="try-h">
@@ -87,6 +94,7 @@ export default function LandingPage() {
         </div></div>
       </section>
 
+      <SkylineStrip stretch="alex" />
       <section className="section" id="ideas" aria-labelledby="ideas-h">
         <div className="wrap">
           <div className={cn("section-head", styles.headSplit)}>
@@ -97,12 +105,14 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <SkylineStrip stretch="museum" ground="alt" />
       <section className="section" id="product" data-ground="alt" aria-label="The product in five steps">
         <div className="wrap">
           <ProductStory />
         </div>
       </section>
 
+      <SkylineStrip stretch="government" />
       {/* On a phone the stacked tiles, phases and answers take two screens (--hm). */}
       <section className="section" id="rules" aria-labelledby="rules-h" style={{ "--hm": 2 } as React.CSSProperties}>
         <div className="wrap">
@@ -140,6 +150,7 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <SkylineStrip stretch="works" ground="alt" />
       <section className="section" id="pilot" data-ground="alt" aria-labelledby="pilot-h" style={{ "--hm": 2 } as React.CSSProperties}>
         <div className="wrap"><div className={styles.pilot}>
           <div className={styles.pilotText}>
@@ -158,7 +169,9 @@ export default function LandingPage() {
             </ol>
           </div>
           <PilotDiagram />
-        </div></div>
+        </div>
+        <PilotSite phases={PILOT_PHASES} />
+        </div>
       </section>
 
       <section className="section" id="questions" aria-labelledby="questions-h" style={{ "--hm": 2 } as React.CSSProperties}>

@@ -86,6 +86,17 @@
 .phase { font-size: 13px; line-height: 18px; font-weight: 500; color: var(--nh-brand); }
 .phases h3 { font-size: 22px; line-height: 28px; font-weight: 500; letter-spacing: -0.02em; color: var(--ink); }
 .phases p { color: var(--muted); max-width: 44ch; }
+/* The building site under the pilot (berlin/PilotSite) writes the phase it shows on the section: that phase gets
+   the line's mark beside it. */
+.phases li { position: relative; }
+.phases li::before {
+  content: ""; position: absolute; left: -20px; top: var(--s-5); bottom: var(--s-5); width: 3px; border-radius: 2px;
+  background: var(--nh-brand); transform: scaleY(0); transform-origin: 50% 0; transition: transform var(--m-out) var(--m-ease);
+}
+:global(section[data-phase="1"]) .phases li:nth-child(1)::before,
+:global(section[data-phase="2"]) .phases li:nth-child(2)::before,
+:global(section[data-phase="3"]) .phases li:nth-child(3)::before { transform: scaleY(1); }
+@media (max-width: 639px) { .phases li::before { left: -12px; } }
 @media (max-width: 1023px) {
   .pilot { display: flex; flex-direction: column; gap: var(--s-6); }
   .pilot > :last-child { flex: 1 1 auto; }

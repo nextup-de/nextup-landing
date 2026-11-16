@@ -1,0 +1,131 @@
+/* The line through the page. Transit-map vocabulary only: a coloured line, round station ticks, rings for the
+   interchanges, a bar for the terminus. The line is the brand teal; the train carries the scene's gold.
+   Wide (>= 1100px): fixed in the left margin, 52px left of the wrap. Narrow: a slim band under the header. */
+.rail {
+  --line: var(--nh-brand);
+  --line-ahead: var(--nh-brand-line);
+  --dot: var(--g-main);
+  --text: var(--nh-brand);
+  position: fixed; z-index: 15;
+  left: calc(max(var(--gut), (100vw - var(--wrap)) / 2) - 52px);
+  top: calc(var(--nh-head) + 64px); bottom: 48px; width: 24px;
+  transition: opacity var(--m-out) var(--m-ease);
+}
+/* Over the scene's blue hour the line turns light. */
+.rail[data-tone="dark"] {
+  --line: #8fd3da;
+  --line-ahead: rgb(255 255 255 / 0.28);
+  --dot: #14264a;
+  --text: rgb(255 255 255 / 0.82);
+}
+
+/* The line's bullet above its first station, as on a network map. */
+.bullet {
+  position: absolute; left: 50%; top: -40px; transform: translateX(-50%);
+  width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center;
+  background: var(--line); color: var(--dot); font-size: 12px; line-height: 1; font-weight: 700; letter-spacing: 0;
+  transition: background var(--m-out) var(--m-ease), color var(--m-out) var(--m-ease);
+}
+.now { display: none; }
+
+.track { position: absolute; inset: 0; }
+.track::before, .done {
+  content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 3px; margin-left: -1.5px; border-radius: 2px;
+  background: var(--line-ahead); transition: background var(--m-out) var(--m-ease);
+}
+.done { background: var(--line); transform-origin: 50% 0; transform: scaleY(0); }
+
+.track ol { list-style: none; margin: 0; padding: 0; }
+.track li { position: absolute; left: 50%; top: calc(var(--f) * 100%); width: 0; height: 0; }
+.track a {
+  position: absolute; left: -14px; top: -14px; width: 28px; height: 28px; display: grid; place-items: center;
+  border-radius: 999px; z-index: 2;
+}
+.track a:focus-visible { outline: 2px solid var(--line); outline-offset: 1px; }
+
+.dot {
+  width: 11px; height: 11px; border-radius: 999px; background: var(--dot); box-shadow: inset 0 0 0 2.5px var(--line);
+  transition: transform var(--m-out) var(--m-ease), background var(--m-out) var(--m-ease), box-shadow var(--m-out) var(--m-ease);
+}
+li:not([data-past="true"]):not([data-on="true"]) .dot { box-shadow: inset 0 0 0 2.5px var(--line-ahead); }
+/* An interchange: a white ring with a second ring around it. */
+li[data-kind="interchange"] .dot { width: 15px; height: 15px; box-shadow: inset 0 0 0 2.5px var(--line), 0 0 0 2px var(--dot), 0 0 0 3.5px var(--line); }
+/* The terminus: a bar across the line. */
+li[data-kind="terminus"] .dot { width: 18px; height: 7px; border-radius: 4px; }
+li[data-on="true"] .dot { background: var(--line); transform: scale(1.25); }
+.track a:hover .dot { transform: scale(1.35); }
+
+/* The station's name: the current one stands along the line; all of them open beside it on hover or focus. */
+.tag {
+  position: absolute; left: 14px; top: 0; transform: translateY(-50%) rotate(180deg); writing-mode: vertical-rl;
+  font-family: var(--nh-mono); font-size: 10px; line-height: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+  white-space: nowrap; color: var(--text); opacity: 0; pointer-events: none;
+  transition: opacity var(--m-out) var(--m-ease);
+}
+li[data-on="true"] .tag { opacity: 1; }
+.name {
+  position: absolute; left: 24px; top: 50%; transform: translate(-6px, -50%); padding: 5px 10px; border-radius: var(--r-sm);
+  background: var(--nh-card); color: var(--ink); box-shadow: 0 0 0 1px var(--hair), 0 8px 20px rgb(20 50 90 / 0.12);
+  font-size: 13px; line-height: 16px; font-weight: 500; white-space: nowrap; opacity: 0; pointer-events: none;
+  transition: opacity var(--m-out) var(--m-ease), transform var(--m-out) var(--m-ease);
+}
+li[data-on="true"] .name { color: var(--nh-brand); }
+.rail:hover .name, .rail:focus-within .name { opacity: 1; transform: translate(0, -50%); pointer-events: auto; }
+.rail:hover .tag, .rail:focus-within .tag { opacity: 0; }
+
+/* The train: a short capsule with lit windows and a gold light at the end it travels toward. */
+.train {
+  position: absolute; left: 50%; top: 0; width: 12px; height: 32px; margin: -16px 0 0 -6px; border-radius: 6px; z-index: 1;
+  background:
+    repeating-linear-gradient(to bottom, transparent 0 4px, var(--berlin-gold) 4px 7px) 3px 5px / 6px 22px no-repeat,
+    var(--nh-brand-deep);
+  box-shadow: 0 0 0 2px var(--dot), 0 4px 14px rgb(0 63 71 / 0.35);
+  will-change: transform;
+}
+.train::after {
+  content: ""; position: absolute; left: 50%; bottom: -3px; width: 6px; height: 6px; margin-left: -3px; border-radius: 999px;
+  background: var(--berlin-gold); box-shadow: 0 0 10px 3px rgb(255 207 90 / 0.65);
+}
+.train[data-dir="up"]::after { bottom: auto; top: -3px; }
+
+/* Narrow: a band under the header with the current station's name and the line across. Hidden in the scene. */
+@media (max-width: 1099px) {
+  .rail {
+    left: 0; right: 0; top: var(--nh-head); bottom: auto; width: auto; height: 32px;
+    display: flex; align-items: center; gap: 10px; padding: 0 var(--gut);
+    background: rgb(251 252 253 / 0.9); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--hair);
+    transition: opacity var(--m-out) var(--m-ease), transform var(--m-out) var(--m-ease), visibility 0s;
+  }
+  .rail[data-tone="dark"] {
+    opacity: 0; visibility: hidden; transform: translateY(-100%);
+    transition: opacity var(--m-out) var(--m-ease), transform var(--m-out) var(--m-ease), visibility 0s var(--m-out);
+    --line: var(--nh-brand); --line-ahead: var(--nh-brand-line); --dot: var(--g-main); --text: var(--nh-brand);
+  }
+  .bullet { position: static; transform: none; flex: none; width: 18px; height: 18px; border-radius: 5px; font-size: 10px; }
+  .now { display: block; flex: none; min-width: 84px; font-size: 12px; line-height: 16px; font-weight: 600; color: var(--ink); }
+  .track { position: relative; inset: auto; flex: 1; height: 100%; margin: 0 8px; }
+  .track::before, .done { left: 0; right: 0; top: 50%; bottom: auto; width: auto; height: 3px; margin: -1.5px 0 0; }
+  .done { transform-origin: 0 50%; transform: scaleX(0); }
+  .track li { left: calc(var(--f) * 100%); top: 50%; }
+  .track a { left: -12px; top: -15px; width: 24px; height: 30px; border-radius: var(--r-sm); }
+  .dot { width: 9px; height: 9px; box-shadow: inset 0 0 0 2px var(--line); }
+  li[data-kind="interchange"] .dot { width: 11px; height: 11px; box-shadow: inset 0 0 0 2px var(--line), 0 0 0 1.5px var(--dot), 0 0 0 2.5px var(--line); }
+  li[data-kind="terminus"] .dot { width: 6px; height: 14px; border-radius: 3px; }
+  .tag { display: none; }
+  .name { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); opacity: 1; box-shadow: none; }
+  .train {
+    left: 0; top: 50%; width: 28px; height: 10px; margin: -5px 0 0 -14px; border-radius: 5px;
+    background:
+      repeating-linear-gradient(to right, transparent 0 4px, var(--berlin-gold) 4px 7px) 4px 3px / 20px 4px no-repeat,
+      var(--nh-brand-deep);
+  }
+  .train::after { left: auto; right: -3px; top: 50%; bottom: auto; margin: -3px 0 0; }
+  .train[data-dir="up"]::after { right: auto; left: -3px; top: 50%; }
+}
+@media (max-width: 639px) {
+  .now { min-width: 72px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rail, .dot, .name, .tag, .done { transition: none; }
+}

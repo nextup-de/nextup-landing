@@ -1,0 +1,45 @@
+/* A skyline strip between two sections. It wears the ground of the section it leads into and reaches into that
+   section's top padding (the lower 40% of the strip), so the city stands just above the next heading. The SVG
+   keeps its height and is cut at the sides on narrow screens (slice): the middle of every scene holds its main
+   landmark. Lines are pathLength 1, so drawing in is one dash moving from 1 to 0. */
+.strip {
+  --bg: var(--g-main);
+  --sh: clamp(132px, 15.3vw, 220px);
+  position: relative; z-index: 1; height: var(--sh); margin-bottom: calc(var(--sh) * -0.4);
+  background: var(--bg); pointer-events: none; overflow: hidden;
+}
+.strip[data-ground="alt"] { --bg: var(--g-alt); }
+/* In the close: full width, at the foot of the close and above the links. */
+.close { margin: 0; background: transparent; }
+.strip svg { display: block; width: 100%; height: 100%; overflow: hidden; }
+
+.sil { fill: var(--bg); stroke: none; }
+.ln {
+  fill: none; stroke: var(--berlin-ink); stroke-width: calc(1.5 / var(--s, 1)); stroke-linecap: round; stroke-linejoin: round;
+}
+.far .ln { stroke: var(--berlin-far); }
+.gold { fill: var(--berlin-gold); stroke: var(--berlin-gold-deep); stroke-width: calc(0.8 / var(--s, 1)); stroke-linejoin: round; }
+.water { fill: none; stroke: var(--berlin-water); stroke-width: 1.5; stroke-linecap: round; }
+
+/* The train: the ground's colour with ink lines, lit windows, a gold lamp at the front. */
+.train { will-change: transform; }
+.car { fill: var(--bg); stroke: var(--nh-brand-deep); stroke-width: 1.4; stroke-linejoin: round; }
+.win { fill: var(--berlin-gold); stroke: none; }
+.lamp { fill: #fff6d8; }
+.glow { fill: var(--berlin-gold); opacity: 0.35; }
+
+/* Drawing in: armed by script (so without script the city is simply there), drawn once in view. */
+.strip[data-armed] .ln { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+.strip[data-armed] .gold, .strip[data-armed] .water { opacity: 0; }
+.strip[data-armed][data-drawn] .ln {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1600ms var(--m-ease) calc(var(--i, 0) * 110ms + var(--k, 0) * 70ms);
+}
+.strip[data-armed][data-drawn] .gold, .strip[data-armed][data-drawn] .water {
+  opacity: 1; transition: opacity 600ms var(--m-ease) 1100ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strip .ln { stroke-dasharray: none; stroke-dashoffset: 0; transition: none; }
+  .strip .gold, .strip .water { opacity: 1; transition: none; }
+}

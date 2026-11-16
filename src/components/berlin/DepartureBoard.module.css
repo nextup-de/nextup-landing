@@ -1,0 +1,38 @@
+/* The departure board: a dark panel (the site's one board, like the scene's one dark surface), rows of flaps in
+   warm white on near-black, the destination in the scene's gold. A flap is a tile split across its middle; a new
+   letter falls in on its hinge. The flaps share the row's width (--n cells) and size their letters by it. */
+.board {
+  display: grid; gap: 10px; padding: 18px 20px 20px; border-radius: var(--r-md);
+  background: linear-gradient(180deg, #16313a 0%, var(--berlin-board) 100%);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06), 0 24px 56px -28px rgb(0 40 48 / 0.6), 0 2px 6px rgb(20 33 36 / 0.12);
+  color: #f4f1e6;
+}
+.head {
+  display: flex; justify-content: space-between; gap: 12px; padding-bottom: 8px; border-bottom: 1px solid rgb(255 255 255 / 0.1);
+  font-family: var(--nh-mono); font-size: 11px; line-height: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: rgb(244 241 230 / 0.6);
+}
+.head span:first-child { display: inline-flex; align-items: center; gap: 8px; }
+.head i { width: 7px; height: 7px; border-radius: 999px; background: var(--berlin-gold); box-shadow: 0 0 8px 1px rgb(255 207 90 / 0.6); }
+
+.row { display: grid; grid-template-columns: 92px minmax(0, 1fr); align-items: center; gap: 12px; }
+.label { font-family: var(--nh-mono); font-size: 11px; line-height: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: rgb(244 241 230 / 0.55); }
+.cells { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 2px; container-type: inline-size; }
+.cell {
+  position: relative; aspect-ratio: 0.72; display: grid; place-items: center; overflow: hidden; perspective: 140px;
+  border-radius: 2px; background: linear-gradient(180deg, #23383f 0%, #1b2e34 49.5%, #13252a 50.5%, #1a2c32 100%);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.25);
+}
+.cell::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgb(0 0 0 / 0.55); }
+.ch {
+  font-family: var(--nh-mono); font-weight: 600; line-height: 1; font-size: calc(100cqw / var(--n) * 0.92);
+  color: inherit; animation: flap 150ms cubic-bezier(0.3, 0.7, 0.4, 1) both; transform-origin: 50% 50%; white-space: pre;
+}
+.row[data-tone="gold"] .ch { color: var(--berlin-gold); }
+@keyframes flap { from { transform: rotateX(-88deg); opacity: 0.35; } }
+
+@media (max-width: 639px) {
+  .board { padding: 14px 12px 14px; gap: 10px; }
+  .row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .cells { gap: 1.5px; }
+}
+@media (prefers-reduced-motion: reduce) { .ch { animation: none; } }
