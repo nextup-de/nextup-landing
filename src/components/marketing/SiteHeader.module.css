@@ -1,8 +1,39 @@
-/* The top bar in the brand colour, on the page's wrap: the words left, the logo in the exact middle, the actions
-   right. 72px, 56px on a phone. The Button on it is the white one, the one filled action of the bar. It is fixed
-   over the top of the page (the marketing layout pads <main> by its height; the home page's hero lies under it). */
-.bar { position: fixed; top: 0; left: 0; right: 0; z-index: 20; height: var(--nh-head); background: var(--nh-brand); color: #fff; }
-.in { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: var(--s-5); }
+/* The top bar: a rounded pane of dark glass floating 10px under the top of the window, as wide as the page's wrap.
+   56px tall (48px on a phone) inside a --nh-head band; the marketing layout pads <main> by that band and the home
+   page's scene lies under it. The band itself lets clicks through; only the pane takes them. */
+.bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 20; height: var(--nh-head); pointer-events: none; color: #fff;
+  transition: transform 460ms var(--m-ease);
+}
+.bar[data-hidden="true"]:not(:focus-within) { transform: translateY(calc(-100% - 12px)); }
+.frame {
+  pointer-events: auto; position: relative; height: 56px; margin: 10px auto 0; width: min(calc(100% - 2 * var(--gut)), var(--wrap));
+  border-radius: 999px; background: rgb(10 20 40 / 0.6);
+  -webkit-backdrop-filter: blur(18px) saturate(1.5); backdrop-filter: blur(18px) saturate(1.5);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.13), inset 0 1px 0 rgb(255 255 255 / 0.12), 0 18px 40px -20px rgb(4 10 28 / 0.7);
+  transition: background 520ms var(--m-ease), box-shadow 520ms var(--m-ease), -webkit-backdrop-filter 520ms var(--m-ease), backdrop-filter 520ms var(--m-ease);
+}
+.bar[data-open="true"] .frame { background: rgb(10 20 40 / 0.94); }
+.in { height: 100%; padding: 0 8px 0 28px; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: var(--s-5); }
+
+/* The ride: a hairline along the pane's foot that fills from teal to gold as the page goes by. */
+.ride { position: absolute; left: 30px; right: 30px; bottom: 0; height: 2px; border-radius: 2px; overflow: hidden; background: rgb(255 255 255 / 0.08); transition: opacity 520ms var(--m-ease); }
+.ride i {
+  display: block; height: 100%; transform-origin: 0 50%; transform: scaleX(var(--p, 0));
+  background: linear-gradient(90deg, rgb(94 214 200 / 0.15), rgb(94 214 200 / 0.9) 72%, var(--berlin-gold, #ffcf5a));
+}
+
+/* The home page's opening: no pane yet, only the logo and the main action over the scene. The words and Log in
+   wait just above their places and come in when the pane forms. */
+.bar[data-intro="true"]:not([data-open="true"]) .frame {
+  background: rgb(10 20 40 / 0); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0), 0 0 0 0 rgb(0 0 0 / 0);
+  -webkit-backdrop-filter: blur(0) saturate(1); backdrop-filter: blur(0) saturate(1);
+}
+.bar[data-intro="true"]:not([data-open="true"]) .links,
+.bar[data-intro="true"]:not([data-open="true"]) .login,
+.bar[data-intro="true"]:not([data-open="true"]) .ride { opacity: 0; transform: translateY(-6px); pointer-events: none; }
+.links, .login { transition: opacity 420ms var(--m-ease), transform 420ms var(--m-ease); }
+.bar[data-intro="true"] .logo img { filter: drop-shadow(0 2px 10px rgb(4 10 28 / 0.45)); }
 
 .links { display: flex; align-items: center; gap: var(--s-6); }
 .link {
@@ -18,10 +49,11 @@
 .logo:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
 
 .actions { justify-self: end; display: flex; align-items: center; gap: var(--s-5); }
+.actions :global(.nh-btn) { border-radius: 999px; height: 40px; padding: 0 18px; }
 
 /* The menu button: two lines that turn into a cross. */
 .toggle {
-  display: none; position: relative; width: 40px; height: 40px; border-radius: var(--r-sm); border: 1px solid rgb(255 255 255 / 0.32);
+  display: none; position: relative; width: 40px; height: 40px; border-radius: 999px; border: 1px solid rgb(255 255 255 / 0.32);
   background: transparent; color: #fff; cursor: pointer; transition: background var(--m-out) var(--m-ease);
 }
 .toggle:hover { background: rgb(255 255 255 / 0.12); }
@@ -99,15 +131,18 @@
 }
 /* Below 860: the logo left; Book a pilot and the menu button right. */
 @media (max-width: 859px) {
-  .in { grid-template-columns: auto minmax(0, 1fr); }
+  .frame { height: 48px; margin-top: 4px; width: calc(100% - 2 * 12px); }
+  .in { grid-template-columns: auto minmax(0, 1fr); padding: 0 4px 0 18px; }
+  .ride { left: 22px; right: 22px; }
   .links, .login { display: none; }
   .logo { grid-column: 1; grid-row: 1; }
   .logo img { height: 26px; }
   .actions { grid-column: 2; grid-row: 1; gap: var(--s-3); }
-  .actions :global(.nh-btn) { height: 40px; padding: 0 14px; font-size: 14px; }
+  .actions :global(.nh-btn) { height: 38px; padding: 0 14px; font-size: 14px; }
   .toggle { display: block; }
 }
 @media (min-width: 860px) { .sheet { display: none; } }
 @media (prefers-reduced-motion: reduce) {
   .sheet, .sheetIn > *, .rows > li, .toggle span { transition: none; transform: none; }
+  .bar, .frame, .links, .login, .ride { transition: none; }
 }

@@ -129,13 +129,11 @@
 }
 .play:hover { background: rgb(255 255 255 / 0.22); transform: translateY(-1px); transition-duration: var(--m-in); }
 
-.note, .skip {
+.skip {
   position: absolute; z-index: 2; bottom: clamp(16px, 3vh, 28px); font-size: 12px; line-height: 16px; color: rgb(255 255 255 / 0.6);
   opacity: 0; transition: opacity 360ms var(--m-ease);
 }
-.note { left: max(var(--gut), calc((100% - var(--wrap)) / 2)); }
 .skip { right: max(var(--gut), calc((100% - var(--wrap)) / 2)); color: rgb(255 255 255 / 0.78); text-decoration: underline; text-underline-offset: 3px; pointer-events: none; }
-.note[data-on="true"] { opacity: 1; }
 .skip[data-on="true"] { opacity: 1; pointer-events: auto; }
 .skip:hover { color: #fff; }
 
@@ -169,7 +167,6 @@
   .rail ol button { width: 26px; }
   .rail ol i { width: 18px; height: 3px; }
   .play { width: 44px; height: 44px; }
-  .note { left: var(--gut); right: var(--gut); bottom: 14px; }
   .skip { display: none; }
   .label::before { left: auto; right: 3px; width: 14px; }
   .chip { left: auto; right: 20px; padding: 4px 10px 4px 4px; }
@@ -190,7 +187,6 @@
 .tower[data-shows="none"] .scrim { background: linear-gradient(to top, rgb(6 11 28 / 0.94) 0%, rgb(6 11 28 / 0.8) 55%, rgb(6 11 28 / 0.2) 100%); }
 .tower[data-shows="none"] .words { position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: var(--s-7); min-height: var(--nh-screen-h); }
 .tower[data-shows="none"] .caption { opacity: 1; transform: none; visibility: visible; }
-.tower[data-shows="none"] .note { position: relative; left: auto; bottom: auto; opacity: 1; padding: 0 var(--gut) var(--s-5); }
 .tower[data-shows="none"] .skip { display: none; }
 
 @media (prefers-reduced-motion: reduce) {

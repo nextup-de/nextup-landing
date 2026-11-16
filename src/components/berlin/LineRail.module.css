@@ -97,6 +97,7 @@ li[data-on="true"] .name { color: var(--nh-brand); }
     border-bottom: 1px solid var(--hair);
     transition: opacity var(--m-out) var(--m-ease), transform var(--m-out) var(--m-ease), visibility 0s;
   }
+  :global(html[data-nav="hidden"]) .rail:not([data-calm]):not([data-tone="dark"]) { transform: translateY(calc(-1 * var(--nh-head))); }
   .rail:not([data-calm])[data-tone="dark"] {
     opacity: 0; visibility: hidden; transform: translateY(-100%);
     transition: opacity var(--m-out) var(--m-ease), transform var(--m-out) var(--m-ease), visibility 0s var(--m-out);
