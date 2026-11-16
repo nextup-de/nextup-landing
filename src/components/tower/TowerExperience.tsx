@@ -242,8 +242,7 @@ export function TowerExperience({ promiseDays, lead }: Props) {
           </nav>
         )}
 
-        <p className={styles.note} data-on={chapter > 0 && chapter < 5}>A fictional company and fictional people. Days are illustrative.</p>
-        <a className={styles.skip} href="#try" data-on={chapter > 0 && chapter < 5}>Skip to the product</a>
+        <a className={styles.skip} href="#try" data-on={chapter > 0 && chapter < 5}>Skip the story</a>
       </div>
     </section>
   );
