@@ -1,18 +1,18 @@
-// LANDING. The page is a stack of screens (the Taste Skill's layout): the hero, then one section a screen.
-//   hero       what NextUp is and for whom; the raise box routes what a visitor types, live (collage)
+// LANDING. The page opens with one scene and goes on as a stack of screens (the Taste Skill's layout).
+//   story      a Berlin office tower at blue hour; scrolling follows one request through it, today and with NextUp
+//   try        the raise box routes what a visitor types, live: the story's last frame, in the product
 //   ideas      every idea and whose desk it is on, in one app window; a row opens, an idea can be decided
-//   wait       the one scroll moment, two screens: one request both ways, today and with NextUp
 //   product    the five steps as tabs, each with its screen
 //   rules      the five rules the product keeps
 //   pilot      the three phases, and what the pilot builds as a diagram
 //   questions  the questions before a pilot, every answer open
-// The close and the footer follow as the last screen (SiteFooter). Every picture is product UI built from the
-// app's own elements with the demo company's names - no screenshots to retake.
+// The close and the footer follow as the last screen (SiteFooter). Every picture of the product is product UI
+// built from the app's own elements with the demo company's names - no screenshots to retake.
 import { IdeasBoard, type BoardIdea } from "@/components/marketing/IdeasBoard";
 import { PilotDiagram } from "@/components/marketing/PilotDiagram";
 import { ProductStory } from "@/components/marketing/ProductStory";
 import { RouteDemo } from "@/components/marketing/RouteDemo";
-import { WaitScene } from "@/components/marketing/WaitScene";
+import { TowerExperience } from "@/components/tower/TowerExperience";
 import { ArrowUp, Avatar, Spark } from "@/components/product/elements";
 import { Arrow, Button } from "@/components/ui/Button";
 import { FAQ, PILOT_PHASES, SITE } from "@/config/site";
@@ -22,12 +22,11 @@ import styles from "./page.module.css";
 
 const P = SITE.promiseDays;
 
-// The demo company's routing map as plain rows for the hero. The story in the wait scene follows its first row.
+// The demo company's routing map as plain rows for the raise box. The tower's story follows its first row.
 const MAP = ROUTES.map((r) => ({ id: r.id, type: r.type, keys: r.keys, owner: r.owner.name, role: r.owner.role, deputy: r.deputy }));
-const SPEND = ROUTES[0];
-const roleOf = (name: string) => ROUTES.find((r) => r.owner.name === name)?.owner.role ?? "Deputy";
 
-// What the hero's box types by itself, one after another. Each one hits a different row of the map.
+// What the raise box types by itself, one after another. Each one hits a different row of the map; the tower's
+// story sends the same three through the building (features/tower/story).
 const REQUEST = "Night shift has no one who can sign a €300 parts order";
 const EXAMPLES = [
   REQUEST,
@@ -67,24 +66,28 @@ const IDEAS: BoardIdea[] = [
 export default function LandingPage() {
   return (
     <>
-      <section className={cn("section hero", styles.hero)} aria-labelledby="hero-h">
+      <TowerExperience
+        promiseDays={P}
+        lead={`Raise a problem or an idea in one box. NextUp names who owns it, gives them ${P} working days to answer and shows everyone what is waiting on whom.`}
+      />
+
+      {/* The story lands in the product: the raise box, routing what a visitor types the way the app does. */}
+      <section className="section" id="try" data-ground="alt" aria-labelledby="try-h">
         <div className="wrap"><div className={styles.heroGrid}>
           <div className={styles.heroText}>
-            <h1 id="hero-h">Idea management for manufacturing plants</h1>
-            <p className={cn("hero__lead", styles.lead)}>
-              Raise a problem or an idea in one box. NextUp names who owns it, gives them {P} working days to answer and shows
-              everyone what is waiting on whom.
-            </p>
-            {/* Book a pilot stands in the header, right above: the hero's one action goes on into the product. */}
+            <div className="section-head">
+              <h2 id="try-h">Now raise your own</h2>
+              <p>Type something that is stuck at work. The box reads it against the demo company&rsquo;s routing map and names the owner, the date and the deputy. Nothing you type leaves your browser.</p>
+            </div>
             <div className={styles.actions}>
-              <Button href="#product" size="lg">See the product<Arrow /></Button>
+              <Button href="#product" variant="tint" size="lg">See the five steps<Arrow /></Button>
             </div>
           </div>
           <RouteDemo routes={MAP} promiseDays={P} examples={EXAMPLES} />
         </div></div>
       </section>
 
-      <section className="section" id="ideas" data-ground="alt" aria-labelledby="ideas-h">
+      <section className="section" id="ideas" aria-labelledby="ideas-h">
         <div className="wrap">
           <div className={cn("section-head", styles.headSplit)}>
             <h2 id="ideas-h">Every idea, and whose desk it is on</h2>
@@ -93,11 +96,6 @@ export default function LandingPage() {
           <IdeasBoard ideas={IDEAS} promiseDays={P} />
         </div>
       </section>
-
-      <WaitScene
-        request={`${REQUEST}.`} from="Night shift, 4-series" decision={SPEND.type} promiseDays={P}
-        owner={SPEND.owner.name} ownerRole={SPEND.owner.role} deputy={SPEND.deputy} deputyRole={roleOf(SPEND.deputy)}
-      />
 
       <section className="section" id="product" data-ground="alt" aria-label="The product in five steps">
         <div className="wrap">
